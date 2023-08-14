@@ -1,0 +1,7 @@
+ENV/
+BUILD/
+DOCUMENTATIONDEVELOPER/
+
+__pycache__/
+build/
+.vscode
