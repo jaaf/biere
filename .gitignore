@@ -1,7 +1,8 @@
 ENV/
 BUILD/
 DOCUMENTATIONDEVELOPER/
-
+package/
+dist/
 __pycache__/
 build/
 .vscode
