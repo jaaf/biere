@@ -6,3 +6,5 @@ dist/
 __pycache__/
 build/
 .vscode
+*.deb
+*.rpm
