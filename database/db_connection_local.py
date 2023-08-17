@@ -6,15 +6,13 @@ from cryptography.fernet import Fernet
 from os import path
 import sys
 from getpass import getpass
+from shutil import which
 
 db_name='video'
 if sys.platform.startswith('linux'):
     path_to_cred=path.abspath(path.join(path.dirname(__file__),'../cred/linux'))
 else:
     path_to_cred =path.abspath(path.join(path.dirname(__file__),'../cred/windows'))
-#print('printing path to cred')
-#print(path_to_cred)
-#e first search a previously saved key
 
 try:
    
@@ -44,11 +42,12 @@ except Exception as e:
     with open(path_to_cred+'/password.bin','wb') as fileObj:
         fileObj.write(encrypted_password)
     fileObj.close()
-#print('password is '+password)
+#check mysql server is installed
+if not which('mysql') :
+    print("Vous n’avez pas installé de serveur mysql. L’application ne peut fonctionner sans ce serveur. Merci de l’installer avant de continuer")
+while not which('mysql'):
+    pass
 db_url="mysql+pymysql://root:"+password+"@localhost:3306/"+db_name
-#print(db_url) 
-
-#db_url="mysql+pymysql://root:+-buntalO!389swibltn@localhost:3306/"+db_name
 try:
     if not database_exists(db_url):
         create_database(db_url)
@@ -69,7 +68,8 @@ except Exception as e:
                 create_database(db_url)  
             end=True 
         except:
-            print('Connexion au serveur de base de données refusée. Vérifiez le mot de passe!')        
+            print('Connexion au serveur de base de données refusée. Vérifiez le mot de passe!')  
+
 engine = create_engine(db_url,pool_size=5,pool_recycle=3600)
 Session =sessionmaker(bind=engine,expire_on_commit=False)
 session =Session()

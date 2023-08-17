@@ -1,6 +1,7 @@
 ENV/
 BUILD/
 DOCUMENTATIONDEVELOPER/
+Project/
 package/
 dist/
 __pycache__/
