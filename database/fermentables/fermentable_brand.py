@@ -35,7 +35,7 @@ def add_fbrand(fbrand):
                 return 'OK'
             else:
                 #print(f"the brand {fbrand.name }  already exists! Nothing done!")
-                return 'duplicate'
+                return 'cette marque existe probablement déjà  '
     except Exception as err:
         #print('An exception arose while attempting to add a fermentable brand', err)
         return str(err)

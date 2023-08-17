@@ -64,35 +64,6 @@ class ImportDialog(QDialog):
         self.ui.comboBox.insertSeparator(16)
         self.ui.comboBox.addItem('styles')
         self.ui.comboBox.addItem("paliers d'empâtage")
-        '''
-            match self.what:
-            case 'fermentable':
-                self.ui.titleLabel.setText('Importer des fermentables')
-            case 'hop':
-                self.ui.titleLabel.setText('Importer des houblons')
-            case 'hop_supplier':
-                self.ui.titleLabel.setText('Importer des vendeurs de houblons')
-            case 'yeast':
-                self.ui.titleLabel.setText('Importer des levures')
-            case 'rest':
-                self.ui.titleLabel.setText('Importer des paliers d\'empâtage')
-            case 'style':
-                self.ui.titleLabel.setText('Importer des styles')
-            case 'country':
-                self.ui.titleLabel.setText('Importer des pays')
-            case 'fermentable_brand':
-                self.ui.titleLabel.setText('Importer des marques de fermentables')
-            case 'ybrand':
-                self.ui.titleLabel.setText('Importer des fabricants de levures')  
-            case 'source_water':
-                self.ui.titleLabel.setText('Importer des profils d\'eau source')  
-            case 'target_water':
-                self.ui.titleLabel.setText('Importer des profils d\'eau cible')    
-            case 'equipment_profile':
-                self.ui.titleLabel.setText('Importer des profils d\'équipement')
-            case 'misc':
-                self.ui.titleLabel.setText('Importer des ingrédients divers')
-        '''
 
 
         #help text 
@@ -835,7 +806,7 @@ class ImportDialog(QDialog):
                             self.ui.textEdit.append(result)
                             self.ui.textEdit.append('-----')
                 if(end):
-                    self.ui.textEdit.append('<span style="color:red;font-weight: bold;">Cette opération nécessite le redémarrage de l’application, sinon les fermentables ajoutés ne seront pas accessibles.</span>')
+                    
                     break
 
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------------   
@@ -888,7 +859,7 @@ class ImportDialog(QDialog):
                         self.ui.textEdit.append('Importation de '+name+' code '+country_code+ ' <span style="color:green;">réussie !</span>')
                         self.ui.textEdit.append('-----')
                     else:
-                        self.ui.textEdit.append('Importation de '+name+' code '+country_code+ '<span style="color:red;"> échouée ! </span>') 
+                        self.ui.textEdit.append('Importation de '+name+' code '+country_code+ '<span style="color:red;"> ignorée ! </span>') 
                         self.ui.textEdit.append(result)
                         self.ui.textEdit.append('-----')
                 if(end):
