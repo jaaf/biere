@@ -1234,6 +1234,7 @@ class SelectorWidget(QWidget):
         if(self.source_selection and not self.destination_selection):
             result=self.add()
             if result ==True:
+                print('result of adding rest was true')
                 if(self.what == 'rest'):
                     self.destination_model.items.sort(key=lambda x: float(x.temperature)) 
                 self.clear_selection('both')
@@ -1618,10 +1619,12 @@ class SelectorWidget(QWidget):
                 self.clean_other_thickness_reference('add')
             rest=Rest(self.source_selection.id,self.source_selection.name, temperature,duration,thickness_reference) 
             self.destination_model.items.append(rest)
+            
         
-        self.clear_selection('source')
-        self.destination_model.layoutChanged.emit()
-        self.reset_form()
+            self.clear_selection('source')
+            self.destination_model.layoutChanged.emit()
+            self.reset_form()
+            return True
     #----------------------------------------------------------------------------------
     def clean_other_thickness_reference(self,mode):
         #when setting thickness_reference for an item, clean others
@@ -1659,13 +1662,13 @@ class SelectorWidget(QWidget):
             case 'fermentable':
                 result=self.add_fermentable()
             case 'hop':
-                self.add_hop()
+                result=self.add_hop()
             case 'yeast':
-                self.add_yeast()    
+                result=self.add_yeast()    
             case 'misc':
-                self.add_misc()
+                result=self.add_misc()
             case  'rest':
-                self.add_rest()    
+                result=self.add_rest()    
         return result        
 
     #--------------------------------------------------------------------------------------------
