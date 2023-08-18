@@ -9,7 +9,7 @@ from database.commons.country import all_country,find_country_by_code
 from PyQt6.QtGui import QDoubleValidator,QRegularExpressionValidator,QIntValidator
 from PyQt6 import QtGui
 import sys, datetime
-
+from database.profiles.watertarget import delete_water,find_water_by_id,find_water_by_name
 
 class StyleDialog(QDialog):
     def __init__(self, parent=None):
@@ -227,15 +227,25 @@ class StyleDialog(QDialog):
             index = indexes[0]
             selected_item= self.model.styles[index.row()]
             #delete from database
+            associated_water=find_water_by_name(selected_item.name)
+
+            if associated_water:
+                print(associated_water)
+                delete_water(associated_water.id)
+            else:
+                print("no associated water")
+            
+
             result=delete_style(selected_item.id)
             if (result == 'OK'):
-                self.set_message_public('success', 'Le style a été correctement supprimé')
+                self.set_message_public('success', "Le style a été correctement supprimé ainsi que son éventuel profil d'eau associé.")
                 self.ui.labelMessage.setVisible(True)
                 # Remove the item and refresh.
                 del self.model.styles[index.row()]
                 self.model.layoutChanged.emit()
                 # Clear the selection (as it is no longer valid).
                 self.ui.styleList.clearSelection()
+                self.parent().waterTargetDialogWidget.refresh()
             else:
                 self.set_message_public('failure', result)
                 self.ui.labelMessage.setVisible(True)    

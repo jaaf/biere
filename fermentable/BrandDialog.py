@@ -1,7 +1,7 @@
 from fermentable.BrandDialogBase import Ui_BrandDialog
 from PyQt6.QtWidgets import QDialog
 from PyQt6 import QtCore
-from database.fermentables.fermentable_brand import FBrand, all_fbrand, add_fbrand, find_fbrand_by_id,find_fbrand_by_name,update_fbrand
+from database.fermentables.fermentable_brand import FBrand, all_fbrand, add_fbrand, find_fbrand_by_id,find_fbrand_by_name,update_fbrand,delete_fbrand
 
 from PyQt6.QtCore import Qt,QRegularExpression,QTimer
 from parameters import fermentable_forms, raw_ingredients, fermentable_categories
@@ -41,6 +41,7 @@ class BrandDialog(QDialog):
    
         self.ui.newButton.clicked.connect(lambda  :self.show_group_box('add'))
         self.ui.editButton.clicked.connect(lambda: self.show_group_box('update'))
+        self.ui.deleteButton.clicked.connect(self.delete_fbrand)
         selmodel =self.ui.listView.selectionModel()
         #selmodel.currentRowChanged.connect(self.load_brand)
         self.ui.listView.clicked.connect(self.load_brand)
@@ -77,6 +78,15 @@ class BrandDialog(QDialog):
             brand.country_code=br.country_code
             self.fbrands.sort(key=lambda x: (x.country_code,x.name))
             self.model.layoutChanged.emit()    
+
+    def delete_fbrand(self)    :
+        br=self.read_brand()
+        br.id=self.ui.idEdit.text()
+        result = delete_fbrand(br.id) 
+        if result == "OK"  :
+            print('fbrand deleted')
+        else:
+            print('fbrand not deleted')
         
     def setMessage(self, style, text):
         self.ui.labelMessage.setText(text)

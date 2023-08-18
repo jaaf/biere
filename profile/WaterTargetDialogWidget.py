@@ -6,8 +6,8 @@ from PyQt6.QtGui import (QDoubleValidator, QIntValidator,QRegularExpressionValid
 from PyQt6.QtWidgets import  QWidget
 from database.profiles.watertarget import (WaterTarget, add_water, all_water,delete_water, find_water_by_id,update_water)
 
-
-
+from database.profiles.style import Style,all_style
+import time
 class WaterTargetDialogWidget(QWidget):
     resized = QtCore.pyqtSignal()
     def __init__(self, parent=None):
@@ -27,9 +27,11 @@ class WaterTargetDialogWidget(QWidget):
         for item in mylist:
             item.setFont(app_font)
        
- #initialize the various comboBox-----------------------------------------------------------------------------
+        #initialize the various comboBox-----------------------------------------------------------------------------
     
-        
+        self.styles=all_style()
+        self.reset_name_combo(self.styles)
+ 
 
   
         
@@ -80,7 +82,7 @@ class WaterTargetDialogWidget(QWidget):
         #set auto clean connection for reset of the controls-----------------------------------------------
         
 
-        self.ui.nameEdit.textChanged.connect(lambda :self.cleanEdit('name'))
+        self.ui.styleNameCombo.currentTextChanged.connect(lambda :self.cleanEdit('name'))
         self.ui.caMinEdit.textChanged.connect(lambda :self.cleanEdit('ca_min'))
         self.ui.mgMinEdit.textChanged.connect(lambda :self.cleanEdit('mg_min'))
         self.ui.naMinEdit.textChanged.connect(lambda :self.cleanEdit('na_min'))
@@ -94,8 +96,38 @@ class WaterTargetDialogWidget(QWidget):
         self.ui.so4MaxEdit.textChanged.connect(lambda :self.cleanEdit('so4_max'))
         self.ui.alcaMaxEdit.textChanged.connect(lambda :self.cleanEdit('alca_max'))
 
+    #----------------------------------------------------------------------------
+    def reset_name_combo(self, list):
+        self.ui.styleNameCombo.clear()
+        self.ui.styleNameCombo.addItem('')
+        self.ui.styleNameCombo.addItem('')
+        for style in list:
+            self.ui.styleNameCombo.addItem(style.name) 
+    #------------------------------------------------------------------------------
+    def clean_all_edit(self):
+        self.cleanEdit('ca_min')
+        self.cleanEdit('mg_min')
+        self.cleanEdit('na_min')
+        self.cleanEdit('cl_min')
+        self.cleanEdit('so4_min')
+        self.cleanEdit('alca_min')
+        self.cleanEdit('ca_max')
+        self.cleanEdit('mg_max')
+        self.cleanEdit('na_max')
+        self.cleanEdit('cl_max')
+        self.cleanEdit('so4_max')
+        self.cleanEdit('alca_max')
 
+    def refresh(self):
+        print('showing up WaterTargetDialog')
         
+        self.styles=all_style()
+        self.reset_name_combo(self.styles)
+        self.water_list=all_water()   
+        self.water_list.sort(key=lambda x: x.name)  
+        self.model.waters=self.water_list
+        self.model.layoutChanged.emit()
+    
     #-----------------------------------------------------------------------------
     def add(self):
         #add a new ingredient to the public list
@@ -105,7 +137,7 @@ class WaterTargetDialogWidget(QWidget):
             if(result == 'OK'):
                 #print('success')
                 self.cleanNewForm()
-                self.set_message_public('success', 'L\'équipement a été correctement enregistré')
+                self.set_message_public('success', "Le profil d'eau cible a été correctement enregistré")
                 self.ui.labelMessage.setVisible(True)
                 self.model.waters.append(data)
                 self.water_list.sort(key=lambda x: x.name)
@@ -180,9 +212,14 @@ class WaterTargetDialogWidget(QWidget):
         indexes = self.ui.waterList.selectedIndexes()
         if indexes:
             index=indexes[0]
-            selected_item=self.model.waters[index.row()]
+           
+            selected_item=self.model.waters[index.row()] 
+            print(selected_item)
+            print(str(selected_item.id))
             self.ui.idEdit.setText(str(selected_item.id))
-            self.ui.nameEdit.setText(selected_item.name)
+            print(selected_item.name)
+            self.ui.styleNameCombo.setCurrentText(str(selected_item.name))
+            #time.sleep(5)
             self.ui.caMinEdit.setText(str(selected_item.ca_min))
             self.ui.mgMinEdit.setText(str(selected_item.mg_min))
             self.ui.naMinEdit.setText(str(selected_item.na_min))
@@ -225,9 +262,9 @@ class WaterTargetDialogWidget(QWidget):
     #read the new water form and check inputs are validated
     #returns False if not validated, returns new water otherwise
         validated=True
-        name=self.ui.nameEdit.text().upper()
+        name=self.ui.styleNameCombo.currentText()
         if(name == ''):
-            self.ui.nameEdit.setStyleSheet(self.font_style_prefix+'background-color: red; color:white;')
+            self.ui.styleNameCombo.setStyleSheet(self.font_style_prefix+'background-color: red; color:white;')
             validated = False
 
         ca_min=self.ui.caMinEdit.text()
@@ -338,15 +375,40 @@ class WaterTargetDialogWidget(QWidget):
         match what:
            
             case 'name':
-                self.ui.nameEdit.setStyleSheet(self.font_style_prefix+'background-color: white;color:black;')  
-   
+                self.ui.styleNameCombo.setStyleSheet(self.font_style_prefix+'background-color: white;color:black;')  
+            case 'ca_min':
+                self.ui.caMinEdit.setStyleSheet(self.font_style_prefix+'background-color: white;color:black;')  
+            case 'mg_min':
+                self.ui.mgMinEdit.setStyleSheet(self.font_style_prefix+'background-color: white;color:black;')
+            case 'na_min':
+                self.ui.naMinEdit.setStyleSheet(self.font_style_prefix+'background-color: white;color:black;')  
+            case 'so4_min':
+                self.ui.so4MinEdit.setStyleSheet(self.font_style_prefix+'background-color: white;color:black;')
+            case 'cl_min':
+                self.ui.clMinEdit.setStyleSheet(self.font_style_prefix+'background-color: white;color:black;')
+            case 'alca_min':
+                self.ui.alcaMinEdit.setStyleSheet(self.font_style_prefix+'background-color: white;color:black;')
+
+            case 'ca_max':
+                self.ui.caMaxEdit.setStyleSheet(self.font_style_prefix+'background-color: white;color:black;')  
+            case 'mg_max':
+                self.ui.mgMaxEdit.setStyleSheet(self.font_style_prefix+'background-color: white;color:black;')
+            case 'na_max':
+                self.ui.naMaxEdit.setStyleSheet(self.font_style_prefix+'background-color: white;color:black;')  
+            case 'so4_max':
+                self.ui.so4MaxEdit.setStyleSheet(self.font_style_prefix+'background-color: white;color:black;')
+            case 'cl_max':
+                self.ui.clMaxEdit.setStyleSheet(self.font_style_prefix+'background-color: white;color:black;')
+            case 'alca_max':
+                self.ui.alcaMaxEdit.setStyleSheet(self.font_style_prefix+'background-color: white;color:black;')
 
   
   
     #------------------------------------------------------------------------------------------                       
     def cleanNewForm(self):
         #clean the form for adding or updating a public ingredient
-        self.ui.nameEdit.setText('')
+        self.clean_all_edit()
+        self.ui.styleNameCombo.setCurrentText('')
         self.ui.caMinEdit.setText('')
         self.ui.mgMinEdit.setText('')
         self.ui.naMinEdit.setText('')

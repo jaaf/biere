@@ -117,6 +117,11 @@ def find_water_by_id(id):
     with session as sess:
         result = (sess.query(WaterTarget).filter(WaterTarget.id == id).first())
         return result
-        
+
+def find_water_by_name(name):
+    with session as sess:
+        result =(sess.query(WaterTarget).filter(WaterTarget.name == name).first())     
+        return result   
+    
               
    

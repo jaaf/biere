@@ -51,7 +51,7 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>400</width>
+           <width>999999</width>
            <height>16777215</height>
           </size>
          </property>
@@ -285,14 +285,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="nameEdit">
-          <property name="font">
-           <font>
-            <family>Carlito</family>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-         </widget>
+         <widget class="QComboBox" name="styleNameCombo"/>
         </item>
        </layout>
       </item>

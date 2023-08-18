@@ -55,12 +55,15 @@ def update_fbrand(fbrand):
            #print('An error arose when attempting to update a fermentable brand',err)
 
 def delete_fbrand(id):
-    with session as sess:
-        result= (sess.query(FBrand).filter(FBrand.id == id).first())
-        if(result != None):
-            sess.delete(result) 
-            sess.commit()      
-             
+    try:
+        with session as sess:
+            result= (sess.query(FBrand).filter(FBrand.id == id).first())
+            if(result != None):
+                sess.delete(result) 
+                sess.commit()    
+                return "OK"  
+    except Exception as e:
+        return (str(e))       
 
 def all_fbrand():
     with session as sess:
