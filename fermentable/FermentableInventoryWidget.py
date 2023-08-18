@@ -313,14 +313,14 @@ class FermentableInventoryWidget(QWidget):
         self.quantity_validator=QDoubleValidator(0.0,100.0,2)
         self.quantity_validator.setLocale(locale)
         self.quantity_validator.setNotation(QtGui.QDoubleValidator.Notation.StandardNotation)
-        self.ui.quantityEdit.setValidator(QRegularExpressionValidator(QRegularExpression("[0-9]{1,2}[\\.][0-9]{0,3}")))
-        self.ui.invQuantityEdit.setValidator(QRegularExpressionValidator(QRegularExpression("[0-9]{1,2}[\\.][0-9]{0,3}")))
+        self.ui.quantityEdit.setValidator(QRegularExpressionValidator(QRegularExpression("[0-9]{0,2}[\\.][0-9]{0,3}")))
+        self.ui.invQuantityEdit.setValidator(QRegularExpressionValidator(QRegularExpression("[0-9]{0,2}[\\.][0-9]{0,3}")))
         
         self.cost_validator=QDoubleValidator(0.0,500.0,2)
         self.cost_validator.setLocale(locale)
         self.cost_validator.setNotation(QtGui.QDoubleValidator.Notation.StandardNotation)
-        self.ui.costEdit.setValidator(QRegularExpressionValidator(QRegularExpression("[0-4]?[0-9]{1,2}[\\.][0-9]{0,2}")))
-        self.ui.invCostEdit.setValidator(QRegularExpressionValidator(QRegularExpression("[0-4]?[0-9]{1,2}[\\.][0-9]{0,2}")))
+        self.ui.costEdit.setValidator(QRegularExpressionValidator(QRegularExpression("[0-4]?[0-9]{0,2}[\\.][0-9]{0,2}")))
+        self.ui.invCostEdit.setValidator(QRegularExpressionValidator(QRegularExpression("[0-4]?[0-9]{0,2}[\\.][0-9]{0,2}")))
     #------------------------------------------------------------------------------------------------------
     def select_destination(self):
         #select an element in the destination list either for deletion, or update, or replacement

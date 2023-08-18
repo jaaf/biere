@@ -364,8 +364,8 @@ class YeastInventoryWidget(QWidget):
         self.cost_validator=QDoubleValidator(0.0,500,2)
         self.cost_validator.setLocale(locale)
         self.cost_validator.setNotation(QtGui.QDoubleValidator.Notation.StandardNotation)
-        self.ui.costEdit.setValidator( QRegularExpressionValidator(QRegularExpression("[0-4]?[0-9]{1,2}")))
-        self.ui.invCostEdit.setValidator( QRegularExpressionValidator(QRegularExpression("[0-4]?[0-9]{1,2}")))
+        self.ui.costEdit.setValidator( QRegularExpressionValidator(QRegularExpression("[0-9]{0,3}[\\.]?[0-9]{2}")))
+        self.ui.invCostEdit.setValidator( QRegularExpressionValidator(QRegularExpression("[0-9]{0,3}[\\.]?[0-9]{2}")))
       
     #------------------------------------------------------------------------------------------------------
     def select_destination(self):

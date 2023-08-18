@@ -332,7 +332,7 @@ class HopInventoryWidget(QWidget):
         self.alpha_validator = QDoubleValidator(0.0,20.0,1)
         self.alpha_validator.setLocale(locale)   
         self.alpha_validator.setNotation(QtGui.QDoubleValidator.Notation.StandardNotation)
-        self.ui.alphaEdit.setValidator(QRegularExpressionValidator(QRegularExpression("[0-1]?[0-9]{1}[\\.][0-9]")))
+        self.ui.alphaEdit.setValidator(QRegularExpressionValidator(QRegularExpression("[0-1]?[0-9]{0,1}[\\.][0-9]")))
         
       
         self.quantity_validator=QDoubleValidator(0.0,1000.0,1)
