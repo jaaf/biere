@@ -1236,17 +1236,19 @@ class SelectorWidget(QWidget):
             if result ==True:
                 if(self.what == 'rest'):
                     self.destination_model.items.sort(key=lambda x: float(x.temperature)) 
-            self.clear_selection('both')
-            self.signal_changes()
+                self.clear_selection('both')
+                self.signal_changes()
+                self.parent.hide_message()
             return
-
+  
         #UPDATE OPERATION
         if(self.destination_selection and not self.source_selection):
             self.update()
             if(self.what == 'rest'):
                 self.destination_model.items.sort(key=lambda x: float(x.temperature)) 
             self.clear_selection('both')
-            self.signal_changes()           
+            self.signal_changes()  
+                     
             return  
 
         #REPLACE OPERATION
@@ -1275,12 +1277,19 @@ class SelectorWidget(QWidget):
             if (source.form !='Extrait liquide' and source.form !='Extrait sec' and source.form!='Sucre') and combo.currentText() == "ébullition":      
                 self.parent.set_message('failure', "L'usage 'ébullition' est réservé aux extraits et aux sucres. Choisissez 'trempage' ou 'empâtage' ") 
                 return False
+            if ((source.category.startswith("Base") or source.category.startswith("Munich") or source.category.startswith("Vienne")) and  (combo.currentText() =="trempage"  or combo.currentText()=="ébullition")):
+                self.parent.set_message('failure',"Un malt de cette catégorie ne doit être ni trempé ni bouilli mais empâté.")
+                return False
+            
         if (destination and not source)   :
             if (destination.fermentable.form =='Extrait liquide' or destination.fermentable.form=='Extrait sec' or destination.fermentable.form =='Sucre') and combo.currentText() != "ébullition":  
                 self.parent.set_message('failure', "L'usage pour un extrait ou un sucre doit être 'ébullition' ") 
                 return False  
             if (destination.fermentable.form !='Extrait liquide' and destination.fermentable.form !='Extrait sec' and destination.fermentable.form !='Sucre') and combo.currentText() == "ébullition":      
                 self.parent.set_message('failure', "L'usage 'ébullition' est réservé aux extraits et aux sucres. Choisissez 'trempage' ou 'empâtage' ") 
+                return False
+            if ((destination.fermentable.category.startswith("Base") or destination.fermentable.category.startswith("Munich") or destination.fermentable.category.startswith("Vienne")) and  (combo.currentText() =="trempage"  or combo.currentText()=="ébullition")):
+                self.parent.set_message('failure',"Un malt de cette catégorie ne doit être ni trempé ni bouilli mais empâté.")
                 return False
         return True            
     #-------------------------------------------------------------------------------------------------    
@@ -1310,8 +1319,7 @@ class SelectorWidget(QWidget):
             self.ui.fermentableQuantityEdit.setStyleSheet("background-color:red; color:white")
             return False
 
-        self.clear_selection('source')
-        #self.clear_selection('destination')
+        
         self.destination_model.layoutChanged.emit()
         self.reset_form()
         return True
@@ -1320,7 +1328,7 @@ class SelectorWidget(QWidget):
         #self.parent.hide_message()
         steep_potential=None
         if not self.check_usage_compatibility():
-            return
+            return False
         try:
             quantity=float(self.ui.fermentableQuantityEdit.text())
                 
@@ -1336,7 +1344,7 @@ class SelectorWidget(QWidget):
                 return
             if (usage == 'trempage' and ( steep_potential == 0  or  steep_potential>85 )) :
                 self.ui.fermentableSteepingEdit.setStyleSheet("background-color:red; color:white")   
-                return
+                return False
                 
             self.destination_selection.quantity=round(float(self.ui.fermentableQuantityEdit.text()),3) 
             self.destination_selection.usage=self.ui.fermentableUsageCombo.currentText()  
@@ -1346,7 +1354,7 @@ class SelectorWidget(QWidget):
             self.prepare_form_for_update() #to be ready for an other update on the same item
         except:
             self.ui.fermentableQuantityEdit.setStyleSheet('background-color:red; color:white')
-            return
+            return False
     #---------------------------------------------------------------------------------
     def update_all_hops(self,temperature, minutes):
         #called after updating or adding a hop to equalize temperature and minutes
@@ -1649,7 +1657,7 @@ class SelectorWidget(QWidget):
     def add(self):
         match self.what:
             case 'fermentable':
-                self.add_fermentable()
+                result=self.add_fermentable()
             case 'hop':
                 self.add_hop()
             case 'yeast':
@@ -1658,13 +1666,14 @@ class SelectorWidget(QWidget):
                 self.add_misc()
             case  'rest':
                 self.add_rest()    
+        return result        
 
     #--------------------------------------------------------------------------------------------
     def update(self):
         #update an item in the destination list
         match self.what:
             case 'fermentable':
-                self.update_fermentable() 
+                result=self.update_fermentable() 
             case  'hop':
                 self.update_hop()
             case 'yeast':
@@ -1675,6 +1684,7 @@ class SelectorWidget(QWidget):
                 self.update_rest()
             
         self.destination_model.layoutChanged.emit()
+        return result
 
     #---------------------------------------------------------------------------------------------
     def clean_all_quantities(self):
