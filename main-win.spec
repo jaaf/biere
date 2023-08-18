@@ -26,8 +26,8 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='bière',
-    icon='./base-data/icons/iconBière2-64.ico',
+    name='iconBière2',
+    icon='./base-data/icons/biere-64x64.ico',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -47,5 +47,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='main',
+    name='bière',
 )
