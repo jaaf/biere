@@ -1,2 +1,4 @@
 Fichier d’importation des styles à revoir
 Lors la création ou édition d'une recette si on ajoute un fermentable à la liste publique, il n'est pas immédiatement visible dans la recette
+Lors de l'ajout d'un houblon à l'ébullition vérifier que la durée ne dépassa pas le temps d'ébullition
+Dans le dialogue des recettes voir pourquoi les champs non documentés sont bleus et non pas rouges.

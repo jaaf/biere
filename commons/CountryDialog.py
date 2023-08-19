@@ -141,7 +141,7 @@ class CountryModel(QtCore.QAbstractListModel):
     def data(self,index,role):
         c=self.countries[index.row()] 
         if (role ==Qt.ItemDataRole.DisplayRole):
-            return c.name
+            return c.name.strip()
         if (role == Qt.ItemDataRole.DecorationRole):
             filename='./w20/'+c.country_code+'.png'
             return QtGui.QImage(filename)

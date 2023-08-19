@@ -1678,13 +1678,13 @@ class SelectorWidget(QWidget):
             case 'fermentable':
                 result=self.update_fermentable() 
             case  'hop':
-                self.update_hop()
+                result=self.update_hop()
             case 'yeast':
-                self.update_yeast()    
+                result=self.update_yeast()    
             case 'misc':
-                self.update_misc()      
+                result=self.update_misc()      
             case 'rest':
-                self.update_rest()
+                result=self.update_rest()
             
         self.destination_model.layoutChanged.emit()
         return result

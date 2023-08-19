@@ -14,7 +14,7 @@ import json
 import os
 import sys
 import time
-
+from datetime import date
 import jsonpickle
 from PyQt6 import QtCore, QtGui, QtWidgets,QtPrintSupport
 
@@ -1570,7 +1570,8 @@ class BrewWidget(MyWidget):
     
         
        
-        brew_date=self.dateEdit.date().toString('yyyy-MM-dd')
+        #brew_date=self.dateEdit.date().toString('yyyy-MM-dd')
+        brew_date=date.fromisoformat(self.dateEdit.date().toString('yyyy-MM-dd'))
         rtype=self.ui.typeCombo.currentText()
         if(rtype ==''):
             self.ui.typeCombo.setStyleSheet(self.font_style_prefix+"background-color:red; color: white;")

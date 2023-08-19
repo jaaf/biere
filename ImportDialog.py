@@ -31,7 +31,7 @@ from dateUtils import DateUtils
 from PyQt6.QtCore import Qt,QRegularExpression,QTimer,QFile,QTextStream
 from parameters import equipment_type,cooler_type,fermentable_forms, fermentable_categories, raw_ingredients
 from database.commons.country import all_country,find_country_by_code
-
+from datetime import date
 import chardet,os
 #from help.RecipeHelp import recipe_help
 from SignalObject import SignalObject
@@ -1009,8 +1009,12 @@ class ImportDialog(QDialog):
                 id=None 
                 brand=x_array[1]
                 name=x_array[2]        
-                manufacture_date=x_array[3]        
-                expiration_date=x_array[4]  
+                #this is with mysql
+                #manufacture_date=x_array[3]        
+                #expiration_date=x_array[4]  
+                #QtCore.QDate.fromString(str(date_from_db),'yyyy-MM-dd')  
+                manufacture_date=date.fromisoformat(x_array[3])
+                expiration_date=date.fromisoformat(x_array[4])
                 pack_unit=x_array[5]  
                 cells_per_pack=x_array[6]  
                 form=x_array[7]  
@@ -1379,7 +1383,7 @@ class ImportDialog(QDialog):
                     return
                 id=None
                 name=x_array[1]
-                country_code=x_array[2].lower()
+                country_code=x_array[2].lower().strip()
             
             
                 country=Country(id, name,country_code)

@@ -7,6 +7,7 @@ from os import path
 import sys
 from getpass import getpass
 from shutil import which
+import sqlite3
 
 db_name='video'
 if sys.platform.startswith('linux'):
@@ -48,6 +49,7 @@ if not which('mysql') :
 while not which('mysql'):
     pass
 db_url="mysql+pymysql://root:"+password+"@localhost:3306/"+db_name
+db_url="sqlite:////home/jaaf/db1"
 try:
     if not database_exists(db_url):
         create_database(db_url)
@@ -70,7 +72,7 @@ except Exception as e:
         except:
             print('Connexion au serveur de base de données refusée. Vérifiez le mot de passe!')  
 
-engine = create_engine(db_url,pool_size=5,pool_recycle=3600)
+engine = create_engine(db_url)#,pool_size=5,pool_recycle=3600)
 Session =sessionmaker(bind=engine,expire_on_commit=False)
 session =Session()
 
