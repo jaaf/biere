@@ -9,8 +9,8 @@ import sys
 from getpass import getpass
 from shutil import which
 import sqlite3
-#home_directory = os.path.expanduser( '~' )
-home_directory = os.environ['USERPROFILE']
+home_directory = os.path.expanduser( '~' )
+#home_directory = os.environ['USERPROFILE']
 print("Home dir is "+home_directory)
 db_name='video2'
 if sys.platform.startswith('linux'):
