@@ -9,7 +9,8 @@ import sys
 from getpass import getpass
 from shutil import which
 import sqlite3
-home_directory = os.path.expanduser( '~' )
+#home_directory = os.path.expanduser( '~' )
+home_directory = os.environ['USERPROFILE']
 print("Home dir is "+home_directory)
 db_name='video2'
 if sys.platform.startswith('linux'):
@@ -102,14 +103,16 @@ if choice =='sqlite':
         db_url="sqlite:///"+home_directory+"/.biere/db1"
     else:
         try:
-            os.mkdir(home_directory+"\AppData\Local\\biere")
-        except:
-            pass    
-        db_url="sqlite:///"+home_directory+"\AppData\Local\\biere\db1"
+            #os.makedirs(home_directory+"\\testpython\\biere",mode=0o777)
+            os.makedirs(home_directory+"\AppData\\Local\\biere7\\",mode=0o777)
+            
+        except Exception as e:
+         
+            print(str(e))
+        db_url="sqlite:///"+home_directory+"\AppData\\Local\\biere7\db2"
+        #db_url="sqlite:///"+home_directory+"\\testpython\\biere\db1"
+        
 
-
-                               
-    
 
 
 print ("The db_url is "+db_url)
