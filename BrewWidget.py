@@ -5,7 +5,7 @@ This program is free software: you can redistribute it and/or modify it under th
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License alongdate with this program. If not, see <https://www.gnu.org/licenses/>.
 '''
 
 import copy
@@ -22,10 +22,10 @@ from PyQt6 import QtCore, QtGui, QtWidgets,QtPrintSupport
 from PyQt6.QtCore import (QFile, QObject, QRegularExpression, QSize, Qt,
                           QTextStream, QTimer, pyqtSignal)
 from PyQt6.QtGui import (QColor, QDoubleValidator, QIcon, QIntValidator,
-                         QPalette, QRegularExpressionValidator)
+                         QPalette, QRegularExpressionValidator,)
 from PyQt6.QtWidgets import (QDateEdit, QDialog, QFrame, QGroupBox,QInputDialog,
                              QHBoxLayout, QLabel, QLayout, QLineEdit,
-                             QListView, QPushButton, QTextEdit, QVBoxLayout,
+                             QListView, QPushButton, QTextEdit, QVBoxLayout,QMessageBox,
                              QWidget)
 from FeedbackWidget import FeedbackWidget
 from BrewUtils import BrewUtils
@@ -203,6 +203,8 @@ class BrewWidget(MyWidget):
         self.HlBg=HighlightBg.name()
         self.HlFg=HighlightFg.name()
 
+        
+
         #set style of disabled inputs
         mylist=self.ui.general1GroupBox.findChildren(QWidget)
         mylist+=self.ui.general2GroupBox.findChildren(QWidget)
@@ -226,10 +228,8 @@ class BrewWidget(MyWidget):
         self.ui.calculatedOGEdit.setVisible(False)
         self.ui.calculatedOGLabel.setVisible(False)
         self.ui.calculatedOGUnitLabel.setVisible(False)
-        self.ui.messageGroupBox.setMaximumWidth(self.geometry().width()-50)
         self.style=None
         self.ui.targetOGUnitCombo.setVisible(False)#not used at the moment
-        self.ui.messageGroupBox.setVisible(False)
         #create a toolbar
         toolbarLayout=QHBoxLayout()
         self.closeButton=QPushButton()
@@ -634,11 +634,9 @@ class BrewWidget(MyWidget):
         self.closeButton.clicked.connect(self.close)
         self.deleteButton.clicked.connect(self.delete)
         self.lockButton.clicked.connect(self.before_lock)
-        self.ui.closeMessageButton.clicked.connect(self.hide_message)
         self.ui.equipmentRefreshButton.clicked.connect(self.refresh_equipment)
 
         self.ui.styleCombo.currentTextChanged.connect(self.set_style)
-        self.ui.closeMessageButton.clicked.connect(self.hide_message)
 
 
         self.nameEdit.textChanged.connect(lambda :self.clean_edit('name'))
@@ -839,8 +837,6 @@ class BrewWidget(MyWidget):
                 confirm=msgBox.exec()   
                 if(confirm == 1):
                     self.manage_closure()
-                    #index=self.parent.parent.swapWidget('brew')
-                    #self.parent.parent.stackedWidget.setCurrentIndex(index)
         except Exception as e:
             #the reading of the form was not good
             msgBox=ConfirmationDialog()
@@ -870,12 +866,10 @@ class BrewWidget(MyWidget):
                     #to reset changes to no change
                     self.initial_brew=copy.deepcopy(read_brew)
                     self.set_message('success','La session de brassage a été correctement sauvegardée')
-                    self.ui.messageLabel.setVisible(True)
                     self.lock()
 
                 else:
-                    self.set_message('failure', result),
-                    self.ui.messageLabel.setVisible(True)      
+                    self.set_message('failure', result),     
 
     def lock(self):
         message=''
@@ -1187,10 +1181,6 @@ class BrewWidget(MyWidget):
         self.rtype_update()
         self.batch_volume_update()
         self.bitterness_update()
-        
-        #self.change_equipment()
-        #self.abv_update()
-        #self.color_update()
         self.boil_time_update()
         self.og_update()
         Calculator.weighted_average_potential(self) 
@@ -1199,8 +1189,7 @@ class BrewWidget(MyWidget):
     def rtype_update(self):
         read_rtype=self.ui.typeCombo.currentText()
         self.ui.typeCombo.setStyleSheet(self.font_style_prefix+'background-color:'+self.enabled_edit_bgcolor+'; color:'+self.enabled_edit_color+';')  
-        #self.ui.typeLabel.setStyleSheet(self.font_style_prefix+'background-color:'+self.enabled_edit_bgcolor+'; color:'+self.enabled_edit_color+';')  
-        
+
     #--------------------------------------------------------------    
     def batch_volume_update(self):    
         try:
@@ -1346,12 +1335,9 @@ class BrewWidget(MyWidget):
             self.bitterness_as_target=True
             self.ui.targetIBUEdit.setVisible(True)
             try:
-                #print('bitterness is '+str(self.bitterness))
                 self.ui.targetIBUEdit.setText(str(round(self.bitterness,0)))
             except:
-                #print('exception '+self.ui.calculatedIBUEdit.text())
                 pass
-            #self.ui.targetIBUCheckBox.setChecked(2)
             self.ui.targetIBUEdit.setVisible(True)
             self.ui.targetIBULabel.setVisible(True)
             self.ui.calculatedIBUEdit.setText('')
@@ -1373,7 +1359,6 @@ class BrewWidget(MyWidget):
             self.ibu_indicator.setValues(self.style.ibu_min,self.style.ibu_max,0)
             self.og_indicator.setValues(self.style.og_min,self.style.og_max,1.0)
             self.srm_indicator.setValues(self.style.srm_min,self.style.srm_max,0)
-            #self.waterAdjustmentDialog.load_style_water(self.style.id)
         else:
             #print('resetting indicators')
             self.abv_indicator.reset()
@@ -1491,7 +1476,6 @@ class BrewWidget(MyWidget):
             self.fermentable_selector.destination_model.set_initialized(True)
             self.fermentable_selector.ui.fermentableMassUnitLabel.setText(' kg')
             self.fermentable_selector.ui.fermentableMassUnitLabel.setVisible(True)
-            #self.fermentable_selector.ui.destinationList.setStyleSheet(self.font_style_prefix+'color:black')
             self.start_from_scratch=False
 
     #----------------------------------------------------------------------------    
@@ -1526,7 +1510,6 @@ class BrewWidget(MyWidget):
         additions_temperature=None
         reference_set=False#rest for which mash thickness is defined
         if(self.equipment ):
-            #self.equipment is an Equipment object, to be stored as a string
             equipment=jsonpickle.encode(self.equipment)  
         else:
             self.ui.equipmentCombo.setStyleSheet(self.font_style_prefix+'background-color: red; color:white;')  
@@ -1762,7 +1745,6 @@ class BrewWidget(MyWidget):
                 self.set_message('failure',"Votre équipement a été modifié. Rafraichissez-le avec le bouton à flèche circulaire près de sélecteur, puis enregistrez votre session de brassage.",15000)
            
                 self.ui.equipmentRefreshButton.setVisible(True)
-                #self.ui.equipmentCombo.setStyleSheet(self.font_style_prefix+'background-color: red')
         else:
             print('equipment not found' )
             self.set_message('failure',"Votre équipement n'est plus en base de données. Peut-être l'avez-vous effacé ou renommé. Veuillez le choisir à nouveau, puis enregistrer votre session de brassage.",15000)
@@ -1772,8 +1754,6 @@ class BrewWidget(MyWidget):
             for equipment in equipments:
                 print(equipment.name)
                 self.ui.equipmentCombo.addItem(equipment.name)
-            #self.ui.equipmentRefreshButton.setVisible(True)
-            #print('setting equipmentCombo red bg line 1076')
             self.ui.equipmentCombo.setStyleSheet(self.font_style_prefix+'background-color: red')
         
 
@@ -1837,10 +1817,6 @@ class BrewWidget(MyWidget):
             self.ui.targetOGCheckBox.setChecked(2)
             #to be dealt with later
             self.boil_sugar=0
-
-            
-
-            #self.ui.colorEdit.setText(str(brew.color))
             self.color=brew.color
 
             self.ui.boilTimeEdit.setText(str(brew.boil_time))
@@ -1855,7 +1831,6 @@ class BrewWidget(MyWidget):
             self.grain_temperature=brew.grain_temperature
             self.additions_temperature=brew.additions_temperature
             
-            #self.ui.abvEdit.setText(str(brew.abv))
             self.abv=brew.abv
             attenuation=self.attenuation()
             self.abv=self.calculate_ABV(self.og,attenuation,6,0.015)
@@ -1896,7 +1871,6 @@ class BrewWidget(MyWidget):
                 self.equipment=None
                 self.initial_brew.equipment=None
                 self.batch_volume=None
-                #self.initial_brew.batch_volume=recipe.batch_volume
                 self.ui.styleCombo.setCurrentText(recipe.style)
                 self.set_style()
                 self.initial_brew.style=recipe.style
@@ -1915,15 +1889,8 @@ class BrewWidget(MyWidget):
                 self.ui.targetOGCheckBox.setChecked(2)
                 #to be dealt with later
                 self.boil_sugar=0
-                #self.initial_brew.boil_sugar=recipe.boil_sugar
-
-                #.setText(str(recipe.abv))
                 self.abv=recipe.abv
                 self.initial_brew.abv=recipe.abv
-
-                #self.ui.colorEdit.setText(str(recipe.color))
-                #self.color=recipe.color
-                #print('self.color from recipe is '+str(self.color))
                 self.initial_brew.color=recipe.color
 
                 self.ui.boilTimeEdit.setText(str(recipe.boil_time))
@@ -2065,11 +2032,9 @@ class BrewWidget(MyWidget):
                     #to reset changes to no change
                     self.initial_brew=copy.deepcopy(read_brew)
                     self.set_message('success','La session de brassage a été correctement sauvegardée')
-                    self.ui.messageLabel.setVisible(True)
 
                 else:
-                    self.set_message('failure', result),
-                    self.ui.messageLabel.setVisible(True)      
+                    self.set_message('failure', result)     
             else:
                 print('adding a brew in add')
                 result=add_brew(read_brew)
@@ -2079,42 +2044,24 @@ class BrewWidget(MyWidget):
                     #to reset changes to no change
                     self.initial_brew=copy.deepcopy(read_brew)
                     self.set_message('success','La session de brassage a été correctement sauvegardée')
-                    self.ui.messageLabel.setVisible(True)
                     self.parent.model.brews.append(read_brew)
                     self.parent.model.layoutChanged.emit()
-                    #brew=find_brew_by_id(self.id)
-                    #if brew:
-                    #    self.id=brew.id
                 else:
                     if('Duplicate entry' in result):
                         self.set_message('failure','Une session de brassage de même nom et de même date de brassage existe déjà. Merci de modifier l\'un des deux.')
                     else:    
-                        self.set_message('failure', result),
-                    self.ui.messageLabel.setVisible(True)     
-        #else:
-            #self.set_message('failure', 'Les saisies sont incomplètes ou incorrectes. Vous ne pouvez sauvegarder.'),
-            #self.ui.messageLabel.setVisible(True)   
-    #---------------------------------------------------------------------------------------
-    def set_message(self, style, text,time=5000):
-        self.ui.messageLabel.setText(text)
-        if(style =='success'):
-            self.ui.messageLabel.setStyleSheet(self.font_style_prefix+'background-color:green; color: white;padding:10px; font-weight:bold;')
-            self.ui.closeMessageButton.setVisible(False)
-            self.ui.messageGroupBox.setVisible(True)
-            self.timer=QTimer()
-            self.timer.timeout.connect(self.hide_message)
-            self.timer.start(time) 
-        if(style == 'failure'):
-                self.ui.messageLabel.setStyleSheet(self.font_style_prefix+'background-color:red; color: white;padding:10px; font-weight:bold;')
-                self.ui.messageGroupBox.setVisible(True)
-                self.ui.closeMessageButton.setVisible(True)
-                self.timer=QTimer()
-                self.timer.timeout.connect(self.hide_message)
-                self.timer.start(time) 
+                        self.set_message('failure', result)    
+
                 
-    #---------------------------------------------------------------------------------------
-    def hide_message(self):
-        self.ui.messageGroupBox.setVisible(False)
+    def set_message(self,style,text,time=500):
+        print(text)
+        if style =="success":
+            messagePopup=QMessageBox(QMessageBox.Icon.Information,style,text,QMessageBox.StandardButton.Ok,self,Qt.WindowType.FramelessWindowHint)
+        else:
+             messagePopup=QMessageBox(QMessageBox.Icon.Critical,style,text,QMessageBox.StandardButton.Ok,self,Qt.WindowType.FramelessWindowHint)
+        messagePopup.exec()
+        
+ 
 
     #--------------------------------------------------------------------------------------
     def clean_edit(self,what):
