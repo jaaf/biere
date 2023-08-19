@@ -3,12 +3,14 @@ from sqlalchemy_utils import create_database, database_exists
 from sqlalchemy.orm import sessionmaker, scoped_session
 from database.orm_base import Base
 from cryptography.fernet import Fernet
+import os
 from os import path
 import sys
 from getpass import getpass
 from shutil import which
 import sqlite3
-
+home_directory = os.path.expanduser( '~' )
+print("Home dir is "+home_directory)
 db_name='video2'
 if sys.platform.startswith('linux'):
     path_to_cred=path.abspath(path.join(path.dirname(__file__),'../cred/linux'))
@@ -92,10 +94,22 @@ if choice =='mysql':
                 print('Connexion au serveur de base de données refusée. Vérifiez le mot de passe!')  
 
 if choice =='sqlite':
-    db_url="sqlite:////home/jaaf/db1"
+    if sys.platform.startswith("linux"):
+        os.mkdir(home_directory+"/.biere")
+        db_url="sqlite:"+home_directory+"/.biere/db1"
+    else:
+        try:
+            os.mkdir(home_directory+"\AppData\Local\\biere")
+        except:
+            pass    
+        db_url="sqlite:///"+home_directory+"\AppData\Local\\biere\db1"
 
 
+                               
+    
 
+
+print ("The db_url is "+db_url)
 engine = create_engine(db_url)#,pool_size=5,pool_recycle=3600)
 Session =sessionmaker(bind=engine,expire_on_commit=False)
 session =Session()
