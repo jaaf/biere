@@ -95,8 +95,11 @@ if choice =='mysql':
 
 if choice =='sqlite':
     if sys.platform.startswith("linux"):
-        os.mkdir(home_directory+"/.biere")
-        db_url="sqlite:"+home_directory+"/.biere/db1"
+        try:
+            os.mkdir(home_directory+"/.biere")
+        except:
+            pass    
+        db_url="sqlite:///"+home_directory+"/.biere/db1"
     else:
         try:
             os.mkdir(home_directory+"\AppData\Local\\biere")
