@@ -646,6 +646,7 @@ class BrewWidget(MyWidget):
         self.ui.typeCombo.currentIndexChanged.connect(lambda :self.clean_edit('type'))
         self.ui.styleCombo.currentIndexChanged.connect(lambda :self.clean_edit('style'))
         self.ui.targetIBUEdit.textChanged.connect(self.bitterness_update)
+        self.ui.colorEdit.textChanged.connect(lambda : self.clean_edit('color'))
 
         self.ui.targetOGEdit.textChanged.connect(self.og_update)
         self.ui.targetIBUEdit.textChanged.connect(self.bitterness_update)
@@ -1587,7 +1588,7 @@ class BrewWidget(MyWidget):
             validated=False
 
         if not self.abv:
-            self.ui.abvEdit.setStyleSheet(self.font_style_prefix+'background-color: red; color:white;')
+            self.ui.abvEdit.setStyleSheet(self.font_style_prefix+'border: 2px solid red;')
             #print('bad abv')
             validated=False
 
@@ -1597,7 +1598,7 @@ class BrewWidget(MyWidget):
             
             #print('bad color')
         except:    
-            self.ui.colorEdit.setStyleSheet(self.font_style_prefix+'background-color: red; color:white;')
+            self.ui.colorEdit.setStyleSheet(self.font_style_prefix+'border: 2px solid red;')
             validated=False
 
         if not self.boil_time:
@@ -2068,8 +2069,10 @@ class BrewWidget(MyWidget):
         print(text)
         if style =="success":
             messagePopup=QMessageBox(QMessageBox.Icon.Information,style,text,QMessageBox.StandardButton.Ok,self,Qt.WindowType.FramelessWindowHint)
+            messagePopup.setStyleSheet("background-color:green;color: white;font-weight:bold")
         else:
              messagePopup=QMessageBox(QMessageBox.Icon.Critical,style,text,QMessageBox.StandardButton.Ok,self,Qt.WindowType.FramelessWindowHint)
+             messagePopup.setStyleSheet("background-color:red;color: white;font-weight:bold")
         messagePopup.exec()
         
  
@@ -2090,6 +2093,8 @@ class BrewWidget(MyWidget):
                 self.ui.targetIBUEdit.setStyleSheet(self.font_style_prefix+'color:'+self.enabled_edit_color+'; background-color:'+self.enabled_edit_bgcolor+'; border: 1px solid '+self.enabled_edit_color+';')   
             case 'equipment':
                 self.ui.equipmentCombo.setStyleSheet(self.font_style_prefix+'color:'+self.enabled_edit_color+'; background-color:'+self.enabled_edit_bgcolor+'; border: 1px solid '+self.enabled_edit_color+';')  
+            case 'color':
+                self.ui.colorEdit.setStyleSheet("border: 1px solid gray;")
 
     def balise(self,balise,text):
         return "<"+balise+">"+text+"</"+balise+">"

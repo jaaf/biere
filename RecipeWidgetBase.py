@@ -317,7 +317,7 @@ class Ui_RecipeWidget(object):
         self.targetOGLabel.setToolTip(_translate("RecipeWidget", "Cible de densité d’origine"))
         self.targetOGLabel.setText(_translate("RecipeWidget", "Cible de DO"))
         self.abvLabel.setText(_translate("RecipeWidget", "Alcool estimé"))
-        self.abvEdit.setToolTip(_translate("RecipeWidget", "Valeur entre 0 et 20"))
+        self.abvEdit.setToolTip(_translate("RecipeWidget", "Valeur entre 1 et 20"))
         self.abvEdit.setText(_translate("RecipeWidget", "5.5"))
         self.abvUnitLabel.setText(_translate("RecipeWidget", "%"))
         self.abvHelpButton.setText(_translate("RecipeWidget", "?"))

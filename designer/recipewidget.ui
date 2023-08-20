@@ -428,7 +428,7 @@
                </font>
               </property>
               <property name="toolTip">
-               <string>Valeur entre 0 et 20</string>
+               <string>Valeur entre 1 et 20</string>
               </property>
               <property name="text">
                <string>5.5</string>

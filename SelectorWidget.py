@@ -71,35 +71,18 @@ class SelectorWidget(QWidget):
                 pass
 
         #---------------------------------
-        pal=QPalette()
-        #pal=self.parent.parent.palette()
-        pal=self.palette()
-        
-
-        pal=self.palette()
-   
-        
-        HighlightBg= pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.Highlight) 
-        WindowBg= pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.Window)
-        WindowFg= pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.WindowText)
-        HighlightFg=pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.HighlightedText)
-        #pal.setColor(QPalette.ColorGroup.Active,QPalette.ColorRole.Base,QColor('honeydew'))
-        #pal.setColor(QPalette.ColorGroup.Active,QPalette.ColorRole.Text,QColor('honeydew'))
-        self.WinFg=WindowFg.name()
-        self.WinBg=WindowBg.name()
-        self.HlBg=HighlightBg.name()
-        self.HlFg=HighlightFg.name()
-        self.setPalette(pal)
-        self.ui.fermentableControlGroupBox.setStyleSheet('color:'+self.WinFg+'; background-color: '+self.WinBg+';')
-        self.ui.hopControlGroupBox.setStyleSheet('color:'+self.WinFg+'; background-color: '+self.WinBg+';')
-        self.ui.yeastControlGroupBox.setStyleSheet('color:'+self.WinFg+'; background-color: '+self.WinBg+';')
-        self.ui.miscControlGroupBox.setStyleSheet('color:'+self.WinFg+'; background-color: '+self.WinBg+';')
-        self.ui.restControlGroupBox.setStyleSheet('color:'+self.WinFg+'; background-color: '+self.WinBg+';')
+     
+    
+        self.ui.fermentableControlGroupBox.setStyleSheet('color:black; background-color: white;')
+        self.ui.hopControlGroupBox.setStyleSheet('color:black; background-color: white;')
+        self.ui.yeastControlGroupBox.setStyleSheet('color:black; background-color: white;')
+        self.ui.miscControlGroupBox.setStyleSheet('color:black; background-color: white;')
+        self.ui.restControlGroupBox.setStyleSheet('color:black; background-color: white;')
 
         if what!='rest':
             self.ui.temperatureTransitionGroupbox.setVisible(False)
 
-        self.ui.titleGroupBox.setStyleSheet('color:'+self.WinFg+'; background-color: '+self.WinBg+';')
+        self.ui.titleGroupBox.setStyleSheet('color:black; background-color:white;')
         
         match self.what:
             case 'fermentable':
@@ -1253,7 +1236,6 @@ class SelectorWidget(QWidget):
                     self.destination_model.items.sort(key=lambda x: float(x.temperature)) 
                 self.clear_selection('both')
                 self.signal_changes()
-                self.parent.hide_message()
             return
   
         #UPDATE OPERATION
@@ -1340,7 +1322,6 @@ class SelectorWidget(QWidget):
         return True
     #---------------------------------------------------------------------------------
     def update_fermentable(self):
-        #self.parent.hide_message()
         steep_potential=None
         if not self.check_usage_compatibility():
             return False
@@ -1719,40 +1700,40 @@ class SelectorWidget(QWidget):
         #used to restore original colors after an input has been marked as missing (generally white on red)
         match what:
             case 'fermentable_quantity':
-                   self.ui.fermentableQuantityEdit.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
+                   self.ui.fermentableQuantityEdit.setStyleSheet('background-color:white; color: black;')
             case 'fermentable_usage':
-                self.ui.fermentableUsageCombo.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
+                self.ui.fermentableUsageCombo.setStyleSheet('background-color:white; color: black;')
                 
             case 'fermentable_steep':
-                self.ui.fermentableSteepingEdit.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
+                self.ui.fermentableSteepingEdit.setStyleSheet('background-color:white; color: black;')
             case 'hop_quantity':
-                   self.ui.hopQuantityEdit.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
+                   self.ui.hopQuantityEdit.setStyleSheet('background-color:white; color: black;')
             case 'hop_usage':
-                self.ui.hopUsageCombo.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
+                self.ui.hopUsageCombo.setStyleSheet('background-color:white; color: black;')
             case 'hop_utilisation':
-                self.ui.hopUtilisationEdit.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
+                self.ui.hopUtilisationEdit.setStyleSheet('background-color:white; color: black;')
             case 'hop_multiplicator':
-                self.ui.hopMultiplicatorEdit.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
+                self.ui.hopMultiplicatorEdit.setStyleSheet('background-color:white; color: black;')
            
             case 'hop_days':
-                self.ui.hopDaysEdit.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
+                self.ui.hopDaysEdit.setStyleSheet('background-color: white; color: black;')
             case 'hop_hours':
-                self.ui.hopHoursEdit.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
-            case 'hop_minutes':
-                self.ui.hopMinutesEdit.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')                
+                self.ui.hopHoursEdit.setStyleSheet('background-color: white; color: black;')
+     
+                self.ui.hopMinutesEdit.setStyleSheet('background-color: white; color: black;')                
             case 'yeast_quantity':
-                   self.ui.hopQuantityEdit.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
+                   self.ui.hopQuantityEdit.setStyleSheet('background-color: white; color: black;')
             case 'misc_quantity':
-                   self.ui.miscQuantityEdit.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
+                   self.ui.miscQuantityEdit.setStyleSheet('background-color: white; color: black;')
             case 'misc_reference_volume':
                 #self.ui.yeastReferencVolumeEdit.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
-                self.ui.miscReferenceVolumeEdit.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
+                self.ui.miscReferenceVolumeEdit.setStyleSheet('background-color:white; color: black;')
             case 'yeast_pitching_rate':
-                self.ui.pitchingRateSpinBox.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
+                self.ui.pitchingRateSpinBox.setStyleSheet('background-color:white; color: black;')
             case 'rest_temperature':
-                self.ui.restTemperatureEdit.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
+                self.ui.restTemperatureEdit.setStyleSheet('background-color:white; color: black;')
             case 'rest_duration':
-                self.ui.restDurationEdit.setStyleSheet('background-color:'+self.parent.WinBg+'; color: '+self.parent.WinFg+';')
+                self.ui.restDurationEdit.setStyleSheet('background-color:white; color: black;')
         
             
                 

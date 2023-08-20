@@ -60,16 +60,7 @@ class RecipeWidget(QWidget):
         
         today=datetime.date.today()
         current_year=today.year
-        pal=QPalette()
-        pal=self.palette()
-        HighlightBg= pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.Highlight) 
-        WindowBg= pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.Window)
-        WindowFg= pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.WindowText)
-        HighlightFg=pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.HighlightedText)
-        self.WinFg=WindowFg.name()
-        self.WinBg=WindowBg.name()
-        self.HlBg=HighlightBg.name()
-        self.HlFg=HighlightFg.name()
+
         #-----------------------------------------
         #complete GUI
         self.disabled_edit_bgcolor='Lavender'
@@ -100,7 +91,7 @@ class RecipeWidget(QWidget):
 
         title=QLabel()
         title.setText('RECETTE EN ÉDITION ')
-        title.setStyleSheet('font-size: 24px; font-weight:bold; color:'+self.WinFg)
+        title.setStyleSheet('font-size: 24px; font-weight:bold; color:black;')
         toolbarLayout.addWidget(title)
         spacerItem = QtWidgets.QSpacerItem(40, 10, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Fixed)
         spacerItemSmall = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
@@ -317,51 +308,53 @@ class RecipeWidget(QWidget):
         validated=True
         name=self.ui.nameEdit.text()
         if(name ==''):
-            self.ui.nameEdit.setStyleSheet("background-color: "+self.HlBg+";color: "+self.HlFg+";")
+            self.ui.nameEdit.setStyleSheet("background-color:red;color: white;")
             print('name error')
             validated=False
         author=self.ui.authorEdit.text()
         if(author ==''):
-            self.ui.authorEdit.setStyleSheet("background-color: "+self.HlBg+";color: "+self.HlFg+";")
+            self.ui.authorEdit.setStyleSheet("background-color:red;color: white;")
             print('author error')
             validated=False
         rtype=self.ui.typeCombo.currentText()
         if(rtype ==''):
-            self.ui.typeCombo.setStyleSheet("background-color: "+self.HlBg+";color: "+self.HlFg+";")
+            self.ui.typeCombo.setStyleSheet("background-color:red;color: white;")
             print('type error')
             validated=False
         style=self.ui.styleCombo.currentText()
         if(style ==''):
-            self.ui.styleCombo.setStyleSheet("background-color: "+self.HlBg+";color: "+self.HlFg+";")
+            self.ui.styleCombo.setStyleSheet("background-color:red;color: white;")
             print('style error')
             validated=False
         bitterness=self.ui.bitternessEdit.text()
         r=self.first_validator.validate(bitterness,0)
         if(r[0] != QtGui.QValidator.State.Acceptable):
-            self.ui.bitternessEdit.setStyleSheet("background-color: "+self.HlBg+";color: "+self.HlFg+";")
+            self.ui.bitternessEdit.setStyleSheet("background-color: red;color: white;")
             print('bitterness error')
             validated=False
         og=self.ui.targetOGEdit.text()
         r=self.first_validator.validate(og,0)
         if(r[0] != QtGui.QValidator.State.Acceptable):
-            self.ui.targetOGEdit.setStyleSheet("background-color: "+self.HlBg+";color: "+self.HlFg+";")
+            self.ui.targetOGEdit.setStyleSheet("background-color: red;color: white;")
             print('og error')
             validated=False
         abv=(self.ui.abvEdit.text())
         r=self.abv_validator.validate(abv,0)
         if(r[0] != QtGui.QValidator.State.Acceptable):
-            #self.ui.abvEdit.setStyleSheet("background-color: "+self.HlBg+";color: "+self.HlFg+";")
+            self.ui.abvEdit.setStyleSheet("border: 2px solid red")
+            print("Bad ABV")
             validated=False
         color=self.ui.colorEdit.text()
         r=self.first_validator.validate(color,0)
         if(r[0] != QtGui.QValidator.State.Acceptable):
-            #self.ui.colorEdit.setStyleSheet("background-color: "+self.HlBg+";color: "+self.HlFg+";")
             print('color error')
             validated=False
+        else:
+            print("og correct")
         boil_time=self.ui.boilTimeEdit.text()
         r=self.first_validator.validate(boil_time,0)
         if(r[0] != QtGui.QValidator.State.Acceptable):
-            self.ui.boilTimeEdit.setStyleSheet("background-color: "+self.HlBg+";color: "+self.HlFg+";")
+            self.ui.boilTimeEdit.setStyleSheet("background-color:red ;color: white;")
             print('boil time error')
             validated=False
    
@@ -388,7 +381,10 @@ class RecipeWidget(QWidget):
             print('rest error')
             validated=False
         if(validated==True):
+            print("VValidated true")
             read_item=Recipe(self.id,name,author,rtype,style,bitterness,og,abv,color,boil_time,fermentables,hops,yeasts, miscs,rests)
+            print("Returning read_item")
+            print(read_item)
             return read_item
         else:
             self.calculate_ABV
@@ -609,7 +605,7 @@ class RecipeWidget(QWidget):
                     if recip:
                         self.id=recip.id
                         self.brewButton.setVisible(True)
-                else:
+                else:   
                     self.set_message('failure', result),
         
         #self.parent.ui.listView.recipes.append(r)
@@ -621,8 +617,10 @@ class RecipeWidget(QWidget):
         print(text)
         if style =="success":
             messagePopup=QMessageBox(QMessageBox.Icon.Information,style,text,QMessageBox.StandardButton.Ok,self,Qt.WindowType.FramelessWindowHint)
+            messagePopup.setStyleSheet("background-color:green;color: white;font-weight:bold")
         else:
              messagePopup=QMessageBox(QMessageBox.Icon.Critical,style,text,QMessageBox.StandardButton.Ok,self,Qt.WindowType.FramelessWindowHint)
+             messagePopup.setStyleSheet("background-color:red;color: white;font-weight:bold")
         messagePopup.exec()
         
     #--------------------------------------------------------------------------------------------------
@@ -632,21 +630,18 @@ class RecipeWidget(QWidget):
        
         match what:
             case 'name':
-                self.ui.nameEdit.setStyleSheet('background-color:'+self.WinBg+'; color: '+self.WinFg+';')    
+                self.ui.nameEdit.setStyleSheet('background-color:white; color: black;')    
             case 'author':
-                self.ui.authorEdit.setStyleSheet('background-color:'+self.WinBg+'; color: '+self.WinFg+';') 
+                self.ui.authorEdit.setStyleSheet('background-color:white; color: black;') 
             case 'type':
-                self.ui.typeCombo.setStyleSheet('background-color:'+self.WinBg+'; color: '+self.WinFg+';')     
-            case 'style':
-                self.ui.styleCombo.setStyleSheet('background-color:'+self.WinBg+'; color: '+self.WinFg+';')   
+                self.ui.typeCombo.setStyleSheet('background-color:white; color: black;')  
+            case 'style':   
+                self.ui.styleCombo.setStyleSheet('background-color:white; color: black;')   
             case 'bitterness':
-                self.ui.bitternessEdit.setStyleSheet('background-color:'+self.WinBg+'; color: '+self.WinFg+';')  
+                self.ui.bitternessEdit.setStyleSheet('background-color:white; color: black;')  
             case 'og':
-                self.ui.targetOGEdit.setStyleSheet('background-color:'+self.WinBg+'; color: '+self.WinFg+';') 
+                self.ui.targetOGEdit.setStyleSheet('background-color:white; color: black;') 
+                self.ui.abvEdit.setStyleSheet("border: 1px solid gray")
             case 'boil_time':
-                self.ui.boilTimeEdit.setStyleSheet('background-color:'+self.WinBg+'; color: '+self.WinFg+';')  
-            #case 'color':
-            #    self.ui.colorEdit.setStyleSheet('background-color:'+self.WinBg+'; color: '+self.WinFg+';')
-            #case 'abv':
-            #    self.ui.abvEdit.setStyleSheet('background-color:'+self.WinBg+'; color: '+self.WinFg+';') 
+                self.ui.boilTimeEdit.setStyleSheet('background-color:white; color: black;')  
         
