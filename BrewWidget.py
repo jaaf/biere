@@ -670,12 +670,20 @@ class BrewWidget(MyWidget):
         swidth, sheight = screen_resolution.width(), screen_resolution.height()
         print(str(swidth)+'x'+str(sheight))
         print("width :"+str(event.size().width())+ " / height: "+str(event.size().height()))
-        if event.size().width()<1568:
+        if event.size().height()<720:
             self.indicatorFrame.setVisible(False)
             self.fermentable_selector.ui.titleGroupBox.setVisible(False)
+            self.hop_selector.ui.titleGroupBox.setVisible(False)
+            self.yeast_selector.ui.titleGroupBox.setVisible(False)
+            self.misc_selector.ui.titleGroupBox.setVisible(False)
+            self.rest_selector.ui.titleGroupBox.setVisible(False)
         else:
             self.indicatorFrame.setVisible(True)
             self.fermentable_selector.ui.titleGroupBox.setVisible(True)
+            self.hop_selector.ui.titleGroupBox.setVisible(True)
+            self.yeast_selector.ui.titleGroupBox.setVisible(True)
+            self.misc_selector.ui.titleGroupBox.setVisible(True)
+            self.rest_selector.ui.titleGroupBox.setVisible(True)
     #-------------------------------------------------------------------------
     def rest_data_changed(self):
         self.c.calculate.emit("rest_data",None)        
