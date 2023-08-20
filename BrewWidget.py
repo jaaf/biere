@@ -690,7 +690,6 @@ class BrewWidget(MyWidget):
 
     #--------------------------------------------------------------------------
     def handle_shortcuts(self,obj):
-        print('x')
         match obj.value:
             case "toggle_header":
                 self.toggle_header_view()
@@ -703,21 +702,18 @@ class BrewWidget(MyWidget):
     def toggle_header_view(self):
         if self.ui.headerGroupBox.isVisible():
             self.ui.headerGroupBox.setVisible(False)
-            self.parent.parent.toggleHeaderViewAction.setText("Montrer l'entête (Ctrl+E")
         else:
             self.ui.headerGroupBox.setVisible(True)      
-            self.parent.parent.toggleHeaderViewAction.setText("Cacher l'entête (Ctrl+E")  
             
     #---------------------------------------------------------------------
     def toggle_calculation_view(self):
         if self.ui.general5GroupBox.isVisible():
             self.ui.general5GroupBox.setVisible(False) 
             self.ui.general6GroupBox.setVisible(False)
-            self.parent.parent.toggleCalculationsViewAction.setText("Montrer les valeurs calculées (Ctrl+C")
         else:
             self.ui.general5GroupBox.setVisible(True) 
             self.ui.general6GroupBox.setVisible(True) 
-            self.parent.parent.toggleHeaderViewAction.setText("Cacher les valeurs calculées (Ctrl+C")
+        
 
     #------------------------------------------------------------------
     def tab_changed(self):

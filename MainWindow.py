@@ -159,7 +159,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         toggleToolbarAction.setText('Barre d\'outils')
         self.toggleHeaderViewAction=QAction("Cacher/Afficher l'entête (Alt+E")
         self.menuView.addAction(self.toggleHeaderViewAction)
-        self.toggleCalculationsViewAction=QAction("Cacher/Afficher les valeurs calculées (Alt+C")
+        self.toggleCalculationsViewAction=QAction("Cacher/Afficher les valeurs calculées (Alt+C)")
         self.menuView.addAction(self.toggleCalculationsViewAction)
         self.actionInventoryFermentables.triggered.connect(self.showInventoryFermentableEditor)
         self.actionToolInventoryFermentables.triggered.connect(self.showInventoryFermentableEditor)

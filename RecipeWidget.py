@@ -226,10 +226,9 @@ class RecipeWidget(QWidget):
     def toggle_header_view(self):
         if self.ui.headerGroupBox.isVisible():
             self.ui.headerGroupBox.setVisible(False)
-            self.parent.parent.toggleHeaderViewAction.setText("Montrer l'entête (Ctrl+E")
         else:
             self.ui.headerGroupBox.setVisible(True)      
-            self.parent.parent.toggleHeaderViewAction.setText("Cacher l'entête (Ctrl+E")  
+
 
     #--------------------------------------------------
     def handle_calculate_signal(self, obj):
