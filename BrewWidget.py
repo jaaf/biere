@@ -22,7 +22,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets,QtPrintSupport
 from PyQt6.QtCore import (QFile, QObject, QRegularExpression, QSize, Qt,
                           QTextStream, QTimer, pyqtSignal)
 from PyQt6.QtGui import (QColor, QDoubleValidator, QIcon, QIntValidator,
-                         QPalette, QRegularExpressionValidator,)
+                         QPalette, QRegularExpressionValidator,QScreen)
 from PyQt6.QtWidgets import (QDateEdit, QDialog, QFrame, QGroupBox,QInputDialog,
                              QHBoxLayout, QLabel, QLayout, QLineEdit,
                              QListView, QPushButton, QTextEdit, QVBoxLayout,QMessageBox,
@@ -665,6 +665,10 @@ class BrewWidget(MyWidget):
     #--------------------------------------------------------------------------
     def resizeEvent(self,event):
         #when using small resolution screens need to remove indicators
+        app = QtWidgets.QApplication.instance()
+        screen_resolution=app.primaryScreen().size()
+        swidth, sheight = screen_resolution.width(), screen_resolution.height()
+        print(str(swidth)+'x'+str(sheight))
         print("width :"+str(event.size().width())+ " / height: "+str(event.size().height()))
         if event.size().width()<1568:
             self.indicatorFrame.setVisible(False)

@@ -1,4 +1,4 @@
-'''
+'''def set_messagedef set_message
 Copyright José FOURNIER 2023
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -10,7 +10,7 @@ You should have received a copy of the GNU General Public License along with thi
 
 from RecipeWidgetBase import Ui_RecipeWidget as recipeWgt
 from BrewWidget import BrewWidget
-from PyQt6.QtWidgets import QDialog,QLabel,QHBoxLayout,QVBoxLayout,QWidget,QFrame,QPushButton,QGroupBox
+from PyQt6.QtWidgets import QDialog,QLabel,QHBoxLayout,QVBoxLayout,QWidget,QFrame,QPushButton,QGroupBox,QMessageBox
 from PyQt6 import QtCore,QtWidgets
 from PyQt6.QtCore import Qt, QSize
 #from database.profiles.equipment import all_equipment, update_equipment,Equipment, add_equipment,delete_equipment, find_equipment_by_id
@@ -57,7 +57,7 @@ class RecipeWidget(QWidget):
         self.icon_path='base-data/icons/'
         self.icon_size=QSize(32,32)
 
-        self.ui.messageGroupBox.setMaximumWidth(self.geometry().width()-50)
+        
         today=datetime.date.today()
         current_year=today.year
         pal=QPalette()
@@ -119,7 +119,6 @@ class RecipeWidget(QWidget):
         self.ui.typeCombo.addItem('Tout grain')
         self.ui.typeCombo.addItem('Empâtage partiel')
         self.ui.typeCombo.addItem('Extraits')
-        self.ui.messageGroupBox.setVisible(False)
          
         #help text     
         filename ="help/RecipeHelp.html"
@@ -206,7 +205,6 @@ class RecipeWidget(QWidget):
         self.saveButton.clicked.connect(self.add)
         self.closeButton.clicked.connect(self.close)
         self.deleteButton.clicked.connect(self.delete)
-        self.ui.closeMessageButton.clicked.connect(self.hide_message)
         self.ui.nameEdit.textChanged.connect(lambda :self.clean_edit('name'))
         self.ui.authorEdit.textChanged.connect(lambda :self.clean_edit('author'))
         self.ui.typeCombo.currentIndexChanged.connect(lambda :self.clean_edit('type'))
@@ -589,10 +587,8 @@ class RecipeWidget(QWidget):
                     #to reset changes to no change
                     self.initial_recipe=copy.deepcopy(r)
                     self.set_message('success','La recette a été correctement sauvegardée')
-                    self.ui.messageLabel.setVisible(True)
                 else:
                     self.set_message('failure', result),
-                    self.ui.messageLabel.setVisible(True)  
             else:
                 result=add_recipe(r)
                 if(result == 'OK'):   
@@ -609,29 +605,21 @@ class RecipeWidget(QWidget):
                         self.brewButton.setVisible(True)
                 else:
                     self.set_message('failure', result),
-                    self.ui.messageLabel.setVisible(True)  
         
         #self.parent.ui.listView.recipes.append(r)
         #self.parent.model.layoutChanged.emit()
 
     #--------------------------------------------------------------------------------------------------
-    def set_message(self, style, text):
-        self.ui.messageLabel.setText(text)
-        if(style =='success'):
-            self.ui.messageLabel.setStyleSheet('background-color:green; color: white;padding:10px')
-            self.ui.closeMessageButton.setVisible(False)
-            self.ui.messageGroupBox.setVisible(True)
-            self.timer=QTimer()
-            self.timer.timeout.connect(self.hide_message)
-            self.timer.start(5000) 
-        if(style == 'failure'):
-                self.ui.messageLabel.setStyleSheet('background-color:red; color: white;padding:10px')
-                self.ui.messageGroupBox.setVisible(True)
-                self.ui.closeMessageButton.setVisible(True)
 
+    def set_message(self,style,text,time=500):
+        print(text)
+        if style =="success":
+            messagePopup=QMessageBox(QMessageBox.Icon.Information,style,text,QMessageBox.StandardButton.Ok,self,Qt.WindowType.FramelessWindowHint)
+        else:
+             messagePopup=QMessageBox(QMessageBox.Icon.Critical,style,text,QMessageBox.StandardButton.Ok,self,Qt.WindowType.FramelessWindowHint)
+        messagePopup.exec()
+        
     #--------------------------------------------------------------------------------------------------
-    def hide_message(self):
-        self.ui.messageGroupBox.setVisible(False)
 
     #--------------------------------------------------------------------------------------------------
     def clean_edit(self,what):
