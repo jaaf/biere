@@ -9,26 +9,28 @@ You should have received a copy of the GNU General Public License along with thi
 '''
 
 from SelectorWidgetBase import Ui_Selector as selself
-from PyQt6.QtWidgets import QWidget,QCheckBox,QGroupBox,QPushButton,QHBoxLayout,QVBoxLayout,QLineEdit,QLabel,QListView
+from PyQt6.QtWidgets import QWidget,QCheckBox,QGroupBox,QPushButton,QHBoxLayout,QVBoxLayout,QLineEdit,QLabel
 from PyQt6 import QtCore
-from PyQt6.QtCore import Qt,QRegularExpression,QTimer,QModelIndex
+from PyQt6.QtCore import Qt,QRegularExpression
 from database.fermentables.fermentable_brand import all_fbrand, find_fbrand_by_name
-from database.yeasts.yeast import all_ybrand, find_ybrand_by_name
-from database.yeasts.yeast import all_yeast, update_yeast,Yeast, add_yeast,delete_yeast, find_yeast_by_id
-from parameters import yeast_sedimentation,yeast_floculation,yeast_target,yeast_form,yeast_pack_unit
+from database.fermentables.fermentable import all_fermentable
+from database.yeasts.yeast import all_ybrand
+from database.yeasts.yeast import all_yeast
+from database.hops.hop import all_hop
+from database.miscs.misc import all_misc
+
+from parameters import yeast_target,yeast_form
 
 from BrewUtils import BrewUtils
 from PyQt6 import QtGui
-from database.hops.hop_suppliers import all_hsupplier, find_hsupplier_by_name
-import copy,os,re
-import jsonpickle
+from database.hops.hop_suppliers import all_hsupplier
+import re
 from database.profiles.rest import Rest
-from PyQt6.QtGui import QDoubleValidator,QRegularExpressionValidator,QIntValidator,QPalette,QColor
+from PyQt6.QtGui import QRegularExpressionValidator,QPalette
 from SignalObject import SignalObject
-from calculator import Calculator
 from MyQListView import MyQListView
-from parameters import fermentable_forms, raw_ingredients, fermentable_categories,get_fermentable_form_name,get_fermentable_category_name,get_raw_ingredient_name
-from parameters import  raw_ingredients,  hop_forms,hop_purposes,get_hop_form_name,get_hop_purpose_name
+from parameters import  raw_ingredients, fermentable_categories
+from parameters import  raw_ingredients,  hop_forms,hop_purposes
 
 from RecipeFermentable import RecipeFermentable
 from RecipeHop import RecipeHop
@@ -180,15 +182,7 @@ class SelectorWidget(QWidget):
         
         self.sourceList=MyQListView(name='source')
         self.sourceLayout=QVBoxLayout()
-        '''
-        self.sourceFiltersLayout=QHBoxLayout()
-        self.searchEdit=QLineEdit()
-        self.searchEdit.setPlaceholderText('Taper votre recherche ici')
-        self.searchLabel=QLabel('Recherche')
-        self.sourceFiltersLayout.addWidget(self.searchLabel)
-        #self.sourceFiltersLayout.addWidget(self.ui.searchEdit)
-        self.sourceFiltersLayout.addWidget(self.searchEdit)
-        '''
+   
         self.add_filters( self.what)
         self.sourceLayout.addWidget(self.sourceList)
         self.sourceLayout.addWidget(self.filterGroupbox)
@@ -681,6 +675,26 @@ class SelectorWidget(QWidget):
         self.filter_list()
           
     #-----------------------------------------------------------------------------------------------
+    def refresh_source(self):
+        match self.what:
+            case "fermentable":
+                self.source_list=all_fermentable()
+                self.source_list.sort(key=lambda x: (x.brand,x.name,x.version))
+            case "hop":
+                self.source_list=all_hop()
+                self.source_list.sort(key=lambda x: (x.supplier,x.name,x.crop_year))
+
+            case "yeast":
+                self.source_list=all_yeast()
+                self.source_list.sort(key=lambda x: (x.target,x.brand,x.name))
+            case "misc":
+                self.source_list=all_misc()
+
+        self.source_model.items=self.source_list
+        self.source_model.layoutChanged.emit()  
+
+
+    #----------------------------------------------------------------------------------------------
     def filter_list(self):
         items=self.source_list
         filtered=None

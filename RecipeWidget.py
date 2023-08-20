@@ -139,7 +139,14 @@ class RecipeWidget(QWidget):
         self.set_validators()
         self.set_connections()
 
-
+    #---------------------------------------------------------
+    def showEvent(self,e):
+        print('show event in recipe')
+        self.fermentable_selector.refresh_source()
+        self.hop_selector.refresh_source()
+        self.yeast_selector.refresh_source()
+        self.misc_selector.refresh_source()
+        
     #------------------------------------------------------
     def set_selectors(self):
         fermentable_list=all_fermentable()

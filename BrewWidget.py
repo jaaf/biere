@@ -1233,6 +1233,8 @@ class BrewWidget(MyWidget):
         self.change_equipment()
         self.ui.equipmentRefreshButton.setVisible(False)
         self.ui.equipmentCombo.setStyleSheet(self.font_style_prefix+'')
+    #--------------------------------------------------------------------
+    
     #---------------------------------------------------------------------
     def change_equipment(self):
         equip=find_equipment_by_name(self.ui.equipmentCombo.currentText())
@@ -1771,6 +1773,7 @@ class BrewWidget(MyWidget):
         #check if equipment has not changed in database after the BrewWidget page has been hidden and shown again
         if self.equipment is not None:
             self.check_equipment()
+            
         event.accept()
 
     def compare_equipments(self,eq1,eq2):
