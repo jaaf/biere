@@ -109,7 +109,7 @@ if choice =='sqlite':
         except Exception as e:
          
             print(str(e))
-        db_url="sqlite:///"+home_directory+r"\AppData\Local\biere\db1"
+        db_url="sqlite:///"+home_directory+r"\AppData\Local\biere\db3"
         #db_url="sqlite:///"+home_directory+"\\testpython\\biere\db1"
         
 

@@ -250,7 +250,10 @@ class MiscInventoryWidget(QWidget):
     #------------------------------------------------------------------------------------------------
     def showEvent(self,event): 
         self.inventory_model.inventory_miscs=all_inventory_misc()
-        self.inventory_model.layoutChanged.emit()     
+        self.inventory_model.layoutChanged.emit()  
+        self.model.miscs=all_misc()  
+        self.model.layoutChanged.emit()
+
     #------------------------------------------------------------------------------------------------    
     def prepare_form_for_replace(self):
         self.ui.importButton.setText('Remplacer')
