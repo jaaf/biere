@@ -4,37 +4,35 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from database.orm_base import Base
 from cryptography.fernet import Fernet
 import os
-#from os import path
-from pathlib import Path
+from os import path
 import sys
 from getpass import getpass
 from shutil import which
 import sqlite3
-home_path=Path().home()
-#home_path = os.path.expanduser( '~' )
-#home_path = os.environ['USERPROFILE']
-print("Home dir is "+str(home_path.resolve()))
+home_directory = os.path.expanduser( '~' )
+#home_directory = os.environ['USERPROFILE']
+print("Home dir is "+home_directory)
 db_name='video2'
 if sys.platform.startswith('linux'):
-    path_to_cred=Path('./cred/linux')
-    #path_to_cred=path.abspath(path.join(path.dirname(__file__),'../cred/linux'))
+    path_to_cred=path.abspath(path.join(path.dirname(__file__),'../cred/linux'))
 else:
-    path_to_cred=Path('./cred/windows')
-    #path_to_cred =path.abspath(path.join(path.dirname(__file__),r'..\cred\windows'))
+    path_to_cred =path.abspath(path.join(path.dirname(__file__),r'..\cred\windows'))
 choice=''
 try: #check is a db choice has already been done
-    with open(path_to_cred/'db-choice.txt','r') as fileObj:
+    with open(path_to_cred+r'\db-choice.txt','r') as fileObj:
         for line in fileObj:
             choice=line
         fileObj.close()
         print("Le choix de la base de données a déjà été fait. il s'agit de  "+choice)
 except Exception as e:
+    #print(str(e))
+    #the choice has not been done yet
     choice=input("""
     Bienvenue dans Bière.\n
     Vous avez le choix entre une base de données mysql ou sqlite. Donnez votre choix en tapant mysql ou sqlite\n""") 
     while choice != "mysql" and choice != 'sqlite':
         choice=input("Vous avez saisi "+str(choice)+" .Ce doit être mysq ou sqlite. Veuillez saisir votre choix à nouveau.\n")
-    with open(path_to_cred/'db-choice.txt','w') as fileObj:
+    with open(path_to_cred+r'\db-choice.txt','w') as fileObj:
             fileObj.write(choice)
             fileObj.close()
 
@@ -48,20 +46,20 @@ if choice =='mysql':
           """)
     try:
     
-        with open(path_to_cred/'key.bin','rb') as fileObj : 
+        with open(path_to_cred+r'\key.bin','rb') as fileObj : 
             for line in fileObj:
                 key=line
             fileObj.close() 
     except Exception:
         #we could not get a key , create a new one and save it          
         key=Fernet.generate_key()
-        with open(path_to_cred/'key.bin','wb') as fileObj: 
+        with open(path_to_cred+r'\key.bin','wb') as fileObj: 
             fileObj.write(key)
             fileObj.close()
 
     try:
         #try to retrieve database name
-        with open(path_to_cred/'dbname.bin','rb') as fileObj:
+        with open(path_to_cred+r'\dbname.bin','rb') as fileObj:
             for line in fileObj:
                 encrypted_dbname=line
             fileObj.close()
@@ -71,14 +69,14 @@ if choice =='mysql':
         #we could not retrieve the dbname
         dbname=getpass("Merci de saisir le nom de la base de données\n")
         encrypted_dbname=Fernet(key).encrypt(dbname.encode('utf-8'))
-        with open(path_to_cred/'dbname.bin','wb') as fileObj:
+        with open(path_to_cred+r'\dbname.bin','wb') as fileObj:
             fileObj.write(encrypted_dbname)
         fileObj.close()  
 
 
     try:
         #try to retrieve a previously saved password
-        with open(path_to_cred/'password.bin','rb') as fileObj:
+        with open(path_to_cred+r'\password.bin','rb') as fileObj:
             for line in fileObj:
                 encrypted_password=line
             fileObj.close()
@@ -89,7 +87,7 @@ if choice =='mysql':
         #we could not retrieve a password create one and save it
         password=getpass("Merci de saisir le mot de passe de l’utilisateur biere@localhost \n")
         encrypted_password=Fernet(key).encrypt(password.encode('utf-8'))
-        with open(path_to_cred/'password.bin','wb') as fileObj:
+        with open(path_to_cred+r'\password.bin','wb') as fileObj:
             fileObj.write(encrypted_password)
         fileObj.close()
     #check mysql server is installed
@@ -112,12 +110,12 @@ if choice =='mysql':
             #print("Le nom de la base de donnée "+dbname+" ou le mot de passe est erroné. ")
             dbname=getpass('Merci de saisir à nouveau le nom de la base de donnée\n')
             encrypted_dbname=Fernet(key).encrypt(dbname.encode('utf-8'))
-            with open(path_to_cred/'dbname.bin','wb') as fileObj:
+            with open(path_to_cred+'/dbname.bin','wb') as fileObj:
                 fileObj.write(encrypted_dbname)
             fileObj.close()
             password=getpass("Merci de saisir le mot de passe de l’utilisateur biere@localhost de la base de données\n")
             encrypted_password=Fernet(key).encrypt(password.encode('utf-8'))
-            with open(path_to_cred/'password.bin','wb') as fileObj:
+            with open(path_to_cred+'/password.bin','wb') as fileObj:
                 fileObj.write(encrypted_password)
             fileObj.close() 
             
@@ -133,18 +131,20 @@ if choice =='mysql':
 if choice =='sqlite':
     if sys.platform.startswith("linux"):
         try:
-            os.mkdir(home_path/".biere")
+            os.mkdir(home_directory+"/.biere")
         except:
             pass    
-        db_url="sqlite:///"+str(home_path/".biere/db1")
+        db_url="sqlite:///"+home_directory+"/.biere/db1"
     else:
         try:
-            os.makedirs(home_path/"AppData/Local/biere",mode=0o777)
+            #os.makedirs(home_directory+"\\testpython\\biere",mode=0o777)
+            os.makedirs(home_directory+r"\AppData\Local\biere",mode=0o777)
             
         except Exception as e:
          
             print(str(e))
-        db_url="sqlite:///"+home_path/"AppDataLocalbiere\db5"
+        db_url="sqlite:///"+home_directory+r"\AppData\Local\biere\db5"
+        #db_url="sqlite:///"+home_directory+"\\testpython\\biere\db1"
         
 
 
