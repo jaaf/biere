@@ -71,6 +71,7 @@
     <addaction name="separator"/>
     <addaction name="separator"/>
     <addaction name="actionImport"/>
+    <addaction name="actionRecopier"/>
    </widget>
    <widget class="QMenu" name="menuDivers">
     <property name="title">
@@ -281,6 +282,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>À propos de ce logiciel</string>
+   </property>
+  </action>
+  <action name="actionRecopier">
+   <property name="text">
+    <string>Recopier les fichiers d’initialisation</string>
    </property>
   </action>
  </widget>

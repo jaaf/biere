@@ -36,6 +36,7 @@ from HelpWidget import HelpWidget
 from hop.HopInventoryWidget import HopInventoryWidget
 from hop.SupplierDialog import SupplierDialog
 from ImportDialog import ImportDialog
+from MoveInitFilesDialog import MoveInitFilesDialog
 from MainWindowBase import Ui_MainWindowBase
 from misc.MiscInventoryWidget import MiscInventoryWidget
 from RecipeListWidget import RecipeListWidget
@@ -173,6 +174,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
 
 
         self.actionImport.triggered.connect(self.showImportDialog)
+        self.actionRecopier.triggered.connect(self.showRecopyDialog)
     
         
         self.actionBrand.triggered.connect(self.showBrandDialog)
@@ -258,7 +260,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
     def showImportDialog(self):
         self.showImportDlg=ImportDialog()
         self.showImportDlg.exec()
-        
+    
+    def showRecopyDialog(self):
+        self.recopyDialog=MoveInitFilesDialog()
+        self.recopyDialog.exec()
     #------------------------------------------------------------------
     def show_contextual_help(self,what):
         helpPopup=HelpMessage()
