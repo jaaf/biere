@@ -15,6 +15,7 @@ from database.miscs.misc import (InventoryMisc, add_inventory_misc,
 from database.miscs.misc import (Misc, add_misc, all_misc, delete_misc,
                                  find_misc_by_id, update_misc)
 from dateUtils import DateUtils
+from datetime import date
 from ConfirmationDialog import ConfirmationDialog
 from ListModels import InventoryMiscModel, MiscModel
 from misc.MiscInventoryWidgetBase import Ui_Form as miscInventoryWgt
@@ -597,7 +598,7 @@ class MiscInventoryWidget(QWidget):
                 self.ui.costEdit.setStyleSheet(self.font_style_prefix+ 'background-color: red; color:white;')
                 validated = False
             purchase_date=self.ui.importDateEdit.date()
-            pd=purchase_date.toString('yyyy-MM-dd')
+            pd=date.fromisoformat(purchase_date.toString("yyyy-MM-dd"))
 
             if(validated == True):
                 inventory_ferm=InventoryMisc(None,selected_item.id,quantity,cost,pd,False) 
@@ -628,7 +629,7 @@ class MiscInventoryWidget(QWidget):
                 self.ui.invCostEdit.setStyleSheet(self.font_style_prefix+ 'background-color: red; color:white;')
                 validated = False
             if(validated == True):
-                inventory_ferm=InventoryMisc(None,selected_item.id,quantity,cost,selected_item.frozen) 
+                inventory_ferm=InventoryMisc(None,selected_item.id,quantity,cost,selected_item.purchase_date,selected_item.frozen) 
                 return inventory_ferm
             else:
                 return False

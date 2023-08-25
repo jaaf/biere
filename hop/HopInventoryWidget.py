@@ -17,6 +17,7 @@ from database.hops.inventory_hop import (InventoryHop, add_inventory_hop,
                                          delete_inventory_hop,
                                          update_inventory_hop)
 from dateUtils import DateUtils
+from datetime import date
 #from ListModels import HopModel,InventoryHopModel
 from HelpMessage import HelpMessage
 from hop.HopInventoryWidgetBase import Ui_Form as hopInventoryWgt
@@ -816,7 +817,7 @@ class HopInventoryWidget(QWidget):
                 self.ui.costEdit.setStyleSheet( 'background-color: red; color:white;')
                 validated = False
             purchase_date=self.ui.importDateEdit.date()
-            pd=purchase_date.toString('yyyy-MM-dd')
+            pd=date.fromisoformat(purchase_date.toString("yyyy-MM-dd"))#iso format
 
             if(validated == True):
                 inventory_ferm=InventoryHop(None,selected_item.id,quantity,cost,pd,False) 
@@ -847,7 +848,7 @@ class HopInventoryWidget(QWidget):
                 self.ui.invCostEdit.setStyleSheet( 'background-color: red; color:white;')
                 validated = False
             if(validated == True):
-                inventory_ferm=InventoryHop(None,selected_item.id,quantity,cost,selected_item.frozen) 
+                inventory_ferm=InventoryHop(None,selected_item.id,quantity,cost,selected_item.purchase_date,selected_item.frozen) 
                 return inventory_ferm
             else:
                 return False

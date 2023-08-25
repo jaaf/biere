@@ -19,6 +19,7 @@ from database.fermentables.inventory_fermentable import (
     InventoryFermentable, add_inventory_fermentable, all_inventory_fermentable,
     delete_inventory_fermentable, update_inventory_fermentable)
 from dateUtils import DateUtils
+from datetime import date
 from fermentable.FermentableInventoryWidgetBase import \
     Ui_Form as fermentableInventoryWgt
 from HelpMessage import HelpMessage
@@ -522,7 +523,7 @@ class FermentableInventoryWidget(QWidget):
                 self.set_message_inventory('failure','Vous devez sélectionner un fermentable')   
         self.clear_selection('both')       
              
-    #-------------------------------------------------------------------------------            
+    #-------------------------------------------------------------------------------           
     def delete(self):
         msgBox=ConfirmationDialog()
         msgBox.setTitle('Confirmer suppression')
@@ -773,7 +774,7 @@ class FermentableInventoryWidget(QWidget):
                 validated = False
                 #print('bat cost')
             purchase_date=self.ui.importDateEdit.date()
-            pd=purchase_date.toString('yyyy-MM-dd')
+            pd=date.fromisoformat(purchase_date.toString("yyyy-MM-dd"))
             #print(pd)   
             if(validated == True):
                 #print('validated is True')
@@ -788,7 +789,7 @@ class FermentableInventoryWidget(QWidget):
     #---------------------------------------------------------------------------------------------       
     def readUpdateInventoryForm(self):
     #read the import fermentable form and check inputs validated
-    #returns Fals if not validated, returns a new inventory_fermentable otherwise
+    #returns False if not validated, returns a new inventory_fermentable otherwise
         validated=True
         indexes = self.ui.inventoryList.selectedIndexes()
         if indexes:
@@ -805,7 +806,7 @@ class FermentableInventoryWidget(QWidget):
                 self.ui.invCostEdit.setStyleSheet(self.font_style_prefix+ 'background-color: red; color:white;')
                 validated = False
             if(validated == True):
-                inventory_ferm=InventoryFermentable(selected_item.id,selected_item.fermentable_id,quantity,cost,selected_item.frozen) 
+                inventory_ferm=InventoryFermentable(selected_item.id,selected_item.fermentable_id,quantity,cost,selected_item.purchase_date,selected_item.frozen) 
                 return inventory_ferm
             else:
                 return False

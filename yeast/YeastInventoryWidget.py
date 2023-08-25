@@ -18,6 +18,7 @@ from database.yeasts.yeast import (InventoryYeast, Yeast, add_inventory_yeast,
                                    find_yeast_by_id, update_inventory_yeast,
                                    update_yeast)
 from dateUtils import DateUtils
+from datetime import date
 from HelpMessage import HelpMessage
 from ListModels import InventoryYeastModel, YeastModel
 from parameters import (yeast_floculation, yeast_form, yeast_pack_unit,
@@ -891,7 +892,7 @@ class YeastInventoryWidget(QWidget):
                 self.ui.costEdit.setStyleSheet(self.font_style_prefix+ 'background-color: red; color:white;')
                 validated = False
             purchase_date=self.ui.importDateEdit.date()
-            pd=purchase_date.toString('yyyy-MM-dd')
+            pd=date.fromisoformat(purchase_date.toString("yyyy-MM-dd"))
 
             if(validated == True):
                 inventory_ferm=InventoryYeast(None,selected_item.id,quantity,cost,pd,False) 
@@ -922,7 +923,7 @@ class YeastInventoryWidget(QWidget):
                 self.ui.invCostEdit.setStyleSheet(self.font_style_prefix+ 'background-color: red; color:white;')
                 validated = False
             if(validated == True):
-                inventory_ferm=InventoryYeast(None,selected_item.id,quantity,cost,selected_item.frozen) 
+                inventory_ferm=InventoryYeast(None,selected_item.id,quantity,cost,selected_item.purchase_date,selected_item.frozen) 
                 return inventory_ferm
             else:
                 return False
