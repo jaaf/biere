@@ -36,7 +36,20 @@ except Exception as e:
         choice=input("Vous avez saisi "+str(choice)+" .Ce doit être mysq ou sqlite. Veuillez saisir votre choix à nouveau.\n")
     with open(path_to_cred/'db-choice.txt','w') as fileObj:
             fileObj.write(choice)
-            fileObj.close()
+            fileObj.close()    
+            
+try:
+    
+    with open(path_to_cred/'key.bin','rb') as fileObj : 
+        for line in fileObj:
+            key=line
+        fileObj.close() 
+except Exception:
+    #we could not get a key , create a new one and save it          
+    key=Fernet.generate_key()
+    with open(path_to_cred/'key.bin','wb') as fileObj: 
+        fileObj.write(key)
+        fileObj.close()
 
 if choice =='mysql':
     print("""
@@ -46,18 +59,7 @@ if choice =='mysql':
     - avoir créé une base de données
     – avoir créé l’utilisateur biere@localhost et lui avoir donné tous les privilèges sur cette base
           """)
-    try:
-    
-        with open(path_to_cred/'key.bin','rb') as fileObj : 
-            for line in fileObj:
-                key=line
-            fileObj.close() 
-    except Exception:
-        #we could not get a key , create a new one and save it          
-        key=Fernet.generate_key()
-        with open(path_to_cred/'key.bin','wb') as fileObj: 
-            fileObj.write(key)
-            fileObj.close()
+
 
     try:
         #try to retrieve database name
@@ -94,11 +96,14 @@ if choice =='mysql':
         fileObj.close()
     #check mysql server is installed
 
-    if not which('mysql') :
+    cmd = "mysql"
+    if not which(cmd) :
         
         print("Vous n’avez pas installé de serveur mysql. L’application ne peut fonctionner sans ce serveur. Merci de l’installer avant de continuer")
-    while not which('mysql'):
+    while not which(cmd):
         pass
+    
+
     db_url="mysql+pymysql://biere:"+password+"@localhost:3306/"+dbname
     #db_url="sqlite:////home/jaaf/db1"
     try:
@@ -110,7 +115,10 @@ if choice =='mysql':
         
         while end==False:
             #print("Le nom de la base de donnée "+dbname+" ou le mot de passe est erroné. ")
-            dbname=getpass('Merci de saisir à nouveau le nom de la base de donnée\n')
+            dbname=getpass("""
+Bière n’a pu se connecter à la basse de données\n. 
+Il peut y avoir plusieurs raisons à cela : base de données non créée, utilisateur biere@localhost non créé, mot de passe erroné.\n
+Corrigez cela et réessayez sion vous allez boucler sur ces demandes. Merci de saisir à nouveau le nom de la base de donnée\n""")
             encrypted_dbname=Fernet(key).encrypt(dbname.encode('utf-8'))
             with open(path_to_cred/'dbname.bin','wb') as fileObj:
                 fileObj.write(encrypted_dbname)
@@ -131,20 +139,39 @@ if choice =='mysql':
                 print('Connexion au serveur de base de données refusée. Vérifiez le mot de passe et le nom de la base!')  
 
 if choice =='sqlite':
+
+    try:
+    #try to retrieve database name
+        with open(path_to_cred/'dbname.bin','rb') as fileObj:
+            for line in fileObj:
+                encrypted_dbname=line
+            fileObj.close()
+        dbname=Fernet(key).decrypt(encrypted_dbname).decode('utf-8')  
+
+    except Exception as e:
+        #we could not retrieve the dbname
+        dbname=input("Merci de saisir le nom de la base de données\n")
+        encrypted_dbname=Fernet(key).encrypt(dbname.encode('utf-8'))
+        with open(path_to_cred/'dbname.bin','wb') as fileObj:
+            fileObj.write(encrypted_dbname)
+        fileObj.close()  
+
     if sys.platform.startswith("linux"):
         try:
             os.mkdir(home_path/".biere")
         except:
             pass    
-        db_url="sqlite:///"+str(home_path/".biere/db1")
+        db_url="sqlite:///"+str(home_path/".biere"/dbname)
     else:
         try:
-            os.makedirs(home_path/"AppData/Local/biere",mode=0o777)
-            
+            #os.makedirs(home_path/"AppData/Local/biere",mode=0o777)
+            p=home_path/"AppData/Local/biere"
+            p.mkdir(mode=0o777, parents=True, exist_ok=True) 
         except Exception as e:
          
-            print(str(e))
-        db_url="sqlite:///"+home_path/"AppDataLocalbiere\db5"
+            print("could not create the db as it exists")
+        db_url="sqlite:///"+str(home_path/"AppData/Local/biere"/dbname)
+        print(db_url)
         
 
 

@@ -25,6 +25,7 @@ class Calculator:
             dlg.ui.calculatedOGEdit.setText(str(round(dlg.og,3)))
             dlg.og_indicator.setValue(round(dlg.og,3))
             cls.beer_forecast_abv(dlg)
+            
         else:
             dlg.og=1.0    
 
@@ -303,9 +304,11 @@ class Calculator:
 
             color=2.939 * MCU**0.6859
             dlg.ui.colorEdit.setText(str(round(color,0)))   
+            dlg.color_indicator.setValue(color)
     #--------------------------------------------------------------------------------------
     @classmethod
     def beer_forecast_abv(cls, dlg):
+        print("In Calculator beer_forecast_abv")
         #att is attenuation of the yeast expressed like 0.80
         #csm is the quantity of sugar added per liter for bottle carbonation
         #cwm the quantity of water to dilute the carbonation sugar per liter
@@ -332,7 +335,10 @@ class Calculator:
             FG=((NOG-1)*(1-att))+1
             ABV =((NOG-FG)*1.047 /FG /0.789)*100
             dlg.abv=ABV
+            dlg.abv_indicator.setValue(dlg.abv)
+            print("Setting avb indicator "+str(dlg.abv))
             dlg.ui.abvEdit.setText(str(round(ABV,1)))
+            cls.beer_color(dlg)
         #---------------------------------------------------------------------------------------
     @classmethod
     def mash_fermentables_absorbed_water(cls,dlg):
@@ -935,6 +941,7 @@ class Calculator:
     #----------------------------------------------------------------------------------------------------------------------
     @classmethod
     def bitterness(cls,dlg):
+        print("In Calculator bitterness")
         
         if  dlg.utilisation_gravity_factor and dlg.batch_volume and dlg.equipment:
            
@@ -972,7 +979,13 @@ class Calculator:
                 dlg.ui.calculatedIBUEdit.setText(str(round(ibu,0))) 
                 dlg.ibu_indicator.setValue(ibu)
                 dlg.bitterness=ibu
-            else:      
+                 
+                print ("ibu not is "+str(ibu)) 
+                dlg.ibu_indicator.setValue(ibu)
+
+            else:  
+                print ("ibu as target is "+str(ibu))    
+                dlg.ibu_indicator.setValue(ibu)
                 return ibu
           
 

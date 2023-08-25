@@ -283,12 +283,12 @@ class BrewWidget(MyWidget):
         self.ibu_indicator.setText('IBU') 
         self.abv_indicator=LevelIndicator(30,250,20,1)
         self.abv_indicator.setText('ABV %') 
-        self.srm_indicator=LevelIndicator(30,250,20,0)
-        self.srm_indicator.setText('COLOR SRM')
+        self.color_indicator=LevelIndicator(30,250,20,0)
+        self.color_indicator.setText('COLOR SRM')
 
         self.indicatorLayout=QHBoxLayout()
         self.indicatorLayoutRight=QVBoxLayout()
-        self.indicatorLayoutRight.addWidget(self.srm_indicator)
+        self.indicatorLayoutRight.addWidget(self.color_indicator)
         self.indicatorLayoutRight.insertWidget(0,self.ibu_indicator)
         self.indicatorLayoutLeft=QVBoxLayout()
         self.indicatorLayoutLeft.addWidget(self.abv_indicator)  
@@ -350,6 +350,7 @@ class BrewWidget(MyWidget):
                     Calculator.end_sugar(self)
                     Calculator.end_water_mass(self)
                     Calculator.end_boil_Volume_hot(self)
+                    Calculator.beer_forecast_abv(self)
                 case 'og':
                     Calculator.end_sugar(self)   
                     Calculator.beer_forecast_abv(self) 
@@ -365,6 +366,7 @@ class BrewWidget(MyWidget):
                         Calculator.mash_water_mass(self)
                         Calculator.boil_evaporation(self)
                         Calculator.compute_rests(self)
+                        Calculator.beer_forecast_abv(self)
               
                     
                 case 'fermentable':
@@ -1065,7 +1067,7 @@ class BrewWidget(MyWidget):
         for m in self.misc_selector.destination_model.items:
             check=self.check_misc_availability(m.misc.id,m.quantity)
             if check[0]!= 'success':
-                message += "\nIl manque "+str(check[1]+" "+str(m.misc.unit)+ " de l'ingrédient divers "+m.misc.name+" dont l'ID public est "+str(m.misc.id)+". Veuillez approvisionner.")
+                message += "\nIl manque "+str(check[1])+" "+str(m.misc.unit)+ " de l'ingrédient divers "+m.misc.name+" dont l'ID public est "+str(m.misc.id)+". Veuillez approvisionner."
                 available = False
         if available:
             return "OK"
@@ -1280,6 +1282,7 @@ class BrewWidget(MyWidget):
             self.abv=float(self.ui.abvEdit.text()) 
             #this signal is used to chain the calculation (see handle_calculate_signal)
             self.c.calculate.emit(SignalObject('abv',self.abv))
+            self.abv.indicator.setValue(self.abv)
         except:
             self.abv=None
         self.ui.abvEdit.setStyleSheet(self.font_style_prefix+'color:'+self.disabled_edit_color+'; background-color:'+self.disabled_edit_bgcolor+'; border: 1px solid '+self.disabled_edit_color+';')   
@@ -1369,13 +1372,20 @@ class BrewWidget(MyWidget):
             self.abv_indicator.setValues(self.style.abv_min,self.style.abv_max,2)
             self.ibu_indicator.setValues(self.style.ibu_min,self.style.ibu_max,0)
             self.og_indicator.setValues(self.style.og_min,self.style.og_max,1.0)
-            self.srm_indicator.setValues(self.style.srm_min,self.style.srm_max,0)
+            self.color_indicator.setValues(self.style.srm_min,self.style.srm_max,0)
+            try:
+                self.abv_indicator.setValue(self.abv)
+                self.ibu_indicator.setValue(self.bitterness)
+                self.og_indicator.setValue(self.og)
+                self.color_indicator.setValue(self.color)
+            except:
+                pass
         else:
             #print('resetting indicators')
             self.abv_indicator.reset()
             self.ibu_indicator.reset()   
             self.og_indicator.reset() 
-            self.srm_indicator.reset()
+            self.cololr_indicator.reset()
             
 
   
