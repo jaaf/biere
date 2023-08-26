@@ -78,6 +78,7 @@
      <string>Divers</string>
     </property>
     <addaction name="actionFont"/>
+    <addaction name="actionEffacer_les_choix_initiaux"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -287,6 +288,11 @@
   <action name="actionRecopier">
    <property name="text">
     <string>Recopier les fichiers d’initialisation</string>
+   </property>
+  </action>
+  <action name="actionEffacer_les_choix_initiaux">
+   <property name="text">
+    <string>Effacer les choix initiaux</string>
    </property>
   </action>
  </widget>

@@ -130,7 +130,6 @@ Corrigez cela et réessayez sion vous allez boucler sur ces demandes. Merci de s
             fileObj.close() 
             
             db_url="mysql+pymysql://biere:"+password+"@localhost:3306/"+dbname
-            print('db_url in loop is '+db_url)
             try:
                 if not database_exists(db_url):
                     create_database(db_url)  
@@ -171,12 +170,12 @@ if choice =='sqlite':
          
             print("could not create the db as it exists")
         db_url="sqlite:///"+str(home_path/"AppData/Local/biere"/dbname)
-        print(db_url)
         
+        
+        print ("Vous travaillez avec une base de données sqlite dont le nom est "+dbname)
 
 
 
-print ("The db_url is "+db_url)
 engine = create_engine(db_url)#,pool_size=5,pool_recycle=3600)
 Session =sessionmaker(bind=engine,expire_on_commit=False)
 session =Session()

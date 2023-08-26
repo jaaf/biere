@@ -67,6 +67,8 @@ from SelectorWidget import SelectorWidget
 from SignalObject import SignalObject
 from WaterAdjustmentWidget import WaterAdjustmentWidget
 from PDFWritter import PDFWriter
+from ExportBrewSheet import ExportBrewSheet
+
 
 #from help.TargetOGHelp import TargetOGHelp
 
@@ -2110,6 +2112,7 @@ class BrewWidget(MyWidget):
         return "<"+balise+">"+text+"</"+balise+">"
     
     def create_brew_sheet(self):
+        
         msgBox=ConfirmationDialog()
         msgBox.setTitle('Création de la fiche de session')
         
@@ -2122,9 +2125,11 @@ class BrewWidget(MyWidget):
             print("sauvegarde demandée")
             self.add()
         try:
-            writer=PDFWriter()
+            export_dlg=ExportBrewSheet(self)
+            export_dlg.exec()
+            #writer=PDFWriter()
         
-            writer.print_brew(self)
+            #writer.print_brew(self)
         except Exception as e:
             self.set_message("failure","Une exception s’est produite lors de l’impression de la feuille de session \n"+str(e))
         

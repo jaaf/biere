@@ -45,7 +45,9 @@ from yeast.YeastInventoryWidget import YeastInventoryWidget
 from FontDialogWidget import FontDialogWidget
 from SignalObject import SignalObject
 from HelpMessage import HelpMessage
-
+import sys
+from pathlib import Path
+from ConfirmationDialog import ConfirmationDialog
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
@@ -171,6 +173,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         self.actionInventoryMiscs.triggered.connect(self.showInventoryMiscEditor)
         self.actionToolInventoryMisc.triggered.connect(self.showInventoryMiscEditor)
         self.actionAbout.triggered.connect(lambda: self.show_contextual_help("about"))
+        self.actionEffacer_les_choix_initiaux.triggered.connect(self.erase_initial_choices)
 
 
         self.actionImport.triggered.connect(self.showImportDialog)
@@ -215,7 +218,37 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         print('key is '+todo)
         self.keyboard_signal.emit(SignalObject('clavier',todo))
         
-    
+    def erase_initial_choices(self):
+        msgBox=ConfirmationDialog()
+        msgBox.setTitle("Confirmer l’effacement des choix initiaux")
+        
+        msgBox.setIcon(self.icon_path+'alert-48px-svgrepo-com.svg')
+        message="""
+Vous êtes sur le point d’effacer vos choix initiaux, c.-à-d. le choix du système de base de données, le nom de la base de données et éventuellement le mot de passe d’accès au serveur de 
+base de données.
+
+Si vous confirmez, ces choix seront effacés et l’application sera immédiatement fermée. Donc si nécessaire enregistrez vos modifications avant de le faire.
+
+Sachez cependant, que l’effacement des choix initiaux n’entraîne pas l’effacement de la base de données sur laquelle vous travaillez actuellement. Vous pourrez toujours y revenir par la suite à condition
+d’en avoir mémorisé le nom.
+
+Confirmez-vous l’effacement ?"""
+        msgBox.setMessage(message) 
+        msgBox.setCancelButtonText('Non. Ne pas effacer')
+        msgBox.setConfirmButtonText('Oui. Effacer et terminer l’application')
+        confirm=msgBox.exec()   
+        if(confirm == 1):
+            if sys.platform.startswith('linux'):
+                path_to_cred=Path('./cred/linux')
+            else:
+                path_to_cred=Path('./cred/windows')
+            path=path_to_cred/"db-choice.txt"
+            path.unlink(missing_ok=True)    
+            path=path_to_cred/"password.bin"
+            path.unlink(missing_ok=True)
+            path=path_to_cred/"dbname.bin"
+            path.unlink(missing_ok=True)
+            exit(0)
       
  
 

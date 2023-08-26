@@ -9,6 +9,7 @@ from database.profiles.equipment import (Equipment, add_equipment,
 from dateUtils import DateUtils
 from PyQt6.QtWidgets import QFileDialog
 import jsonpickle,os
+from pathlib import Path
 
 
 class  PDFWriter (FPDF):
@@ -160,7 +161,7 @@ class  PDFWriter (FPDF):
         current_y=pos_y+self.lh #one line for title
         for item in list:
             self.cell(40,lh,item.misc.name.lower().capitalize(),border=0,new_x="RIGHT",new_y="TOP",align="L")
-            self.cell(30,lh,item.misc.category.unit,border=0,new_x="RIGHT",new_y="TOP",align="L")
+            self.cell(30,lh,item.misc.category,border=0,new_x="RIGHT",new_y="TOP",align="L")
             self.cell(40,lh,str(round(item.quantity,0))+" "+item.misc.unit,border=0,new_x="RIGHT",new_y="TOP",align="L")
             #after last column
             current_y+=lh
@@ -404,7 +405,8 @@ class  PDFWriter (FPDF):
                 self.output(filename[0]+".pdf")
                
     #--------------------------------------------------------------------------------------------------------------
-    def print_brew(self,brewWidget):
+    def print_brew(self,brewWidget,destination_path):
+        print("destination path in PDFWriter is "+destination_path)
         
         brew=find_brew_by_id(brewWidget.id)
         self.prepare_tables(brew,brewWidget)
@@ -517,8 +519,8 @@ class  PDFWriter (FPDF):
         self.set_xy(170,271)
         self.set_font(self.font_name,"",6)
         self.cell(20,5,self.font_name)
-
-        self.output("PDFExample.pdf")
+    
+        self.output(destination_path)
     
 
       
