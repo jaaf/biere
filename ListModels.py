@@ -22,7 +22,7 @@ from database.yeasts.yeast import all_yeast, update_yeast,Yeast, add_yeast,delet
 from database.yeasts.yeast import all_ybrand, find_ybrand_by_name
 from database.miscs.misc import all_misc, update_misc,Misc, add_misc,delete_misc, find_misc_by_id
 from database.miscs.misc import all_inventory_misc, InventoryMisc, add_inventory_misc, delete_inventory_misc, update_inventory_misc
-
+from PyQt6.QtGui  import QFont
 
 class RecipeListModel(QtCore.QAbstractListModel):
     def __init__(    self, *args, recipes=None, **kwargs):
@@ -53,12 +53,14 @@ class BrewListModel(QtCore.QAbstractListModel):
     def __init__(    self, *args, brews=None, **kwargs):
         super(BrewListModel,self).__init__(*args, **kwargs)
         self.brews = brews or []  
+        
+        
  
         
     def data(self,index,role):
         b =self.brews[index.row()] 
         if (role ==Qt.ItemDataRole.DisplayRole):
-            return (str(b.id)+ ' '+self.str_normalize(DateUtils.FrenchDate(b.brew_date),20)+ ' — '+b.name).upper()
+            return (str(b.id)+ ' '+self.str_normalize(DateUtils.FrenchDate(b.brew_date),20)+ ' — '+self.str_normalize(b.name.upper(),50)+ ' '+self.str_normalize(b.style,50))
      
                 
                       
