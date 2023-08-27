@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>505</width>
-    <height>249</height>
+    <width>549</width>
+    <height>312</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Aide générale de l’application</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
@@ -22,7 +22,11 @@
     </widget>
    </item>
    <item>
-    <widget class="QTextEdit" name="textEdit"/>
+    <widget class="QTextEdit" name="textEdit">
+     <property name="styleSheet">
+      <string notr="true">padding-left:20px;background-color:transparent</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

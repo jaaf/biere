@@ -10,7 +10,7 @@ import datetime
 class Brew(Base):
     __tablename__="brews"
     
-    id = Column("id",Integer, primary_key=True)
+    id = Column("id",Integer, primary_key=True,autoincrement=True)
     name= Column('name',String(50))
     equipment=Column('equipment',Text)
     batch_volume=Column('batch_volume',Float)
@@ -47,6 +47,10 @@ class Brew(Base):
   
 
     __table_args__=(UniqueConstraint('name', 'brew_date',name='_name_date_uc'),)
+
+    def __repr__(self):
+        return f"[{self.id}, {self.name} ,{self.launched},{self.feedback}"
+
     
     def __init__(self,id,name,equipment,batch_volume,brew_date,rtype,style,bitterness,og,abv,color,boil_time,fermentables,hops,yeasts,miscs,rests,\
                  grain_temperature, additions_temperature, temperature_method,base_water,dilution_water,dilution,\
@@ -89,6 +93,7 @@ class Brew(Base):
 metadata.create_all(bind=engine)
 
 def add_brew(brew):
+    print("IN add_brew ")
     try:
         with session as sess:
             sess.add(brew)
@@ -101,6 +106,7 @@ def add_brew(brew):
 
 #-------------------------------------------------------------------------
 def update_brew(brew): 
+    print("IN updat_brew")
     try:
         with session as sess:
             result =(sess.query(Brew).filter(Brew.id == brew.id).first())  
@@ -172,4 +178,9 @@ def find_brew_by_id(id):
 def find_brew_by_name(name):
     with session as sess:
         result = (sess.query(Brew).filter(Brew.name == name).first())
+        return result
+
+def find_brew_by_name_and_date(name, date):
+    with session as sess:
+        result = (sess.query(Brew).filter(Brew.name == name,Brew.brew_date==date).first())
         return result

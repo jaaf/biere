@@ -136,7 +136,8 @@ Corrigez cela et réessayez sion vous allez boucler sur ces demandes. Merci de s
                 end=True 
             except:
                 print('Connexion au serveur de base de données refusée. Vérifiez le mot de passe et le nom de la base!')  
-
+    print ("Vous travaillez avec une base de données sqlite dont le nom est "+dbname)
+    
 if choice =='sqlite':
 
     try:

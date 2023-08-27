@@ -9,7 +9,7 @@ You should have received a copy of the GNU General Public License along with thi
 '''
 
 from HelpWidgetBase import Ui_helpWidget as hw
-from PyQt6.QtWidgets import QWidget,QVBoxLayout,QPushButton
+from PyQt6.QtWidgets import QWidget,QVBoxLayout,QPushButton,QSpacerItem,QSizePolicy,QTextEdit
 from PyQt6 import QtCore
 from PyQt6.QtCore import Qt,QRegularExpression,QTimer,QSize
 from database.fermentables.fermentable_brand import all_fbrand, find_fbrand_by_name
@@ -24,28 +24,47 @@ class HelpWidget(QWidget):
         super().__init__(parent)
         self.ui =hw()
         self.ui.setupUi(self)
-
+        self.ui.groupBox.setTitle("Sommaire")
+        
         self.resize(QSize(1600,800))
         self.vl=QVBoxLayout()
-        self.chapter1Button=QPushButton('Introduction')
-        self.chapter2Button=QPushButton("Présentation de l'interface")
-        self.chapter3Button=QPushButton("Principe des saisies d'ingrédients dans une recette")
-        self.vl.addWidget(self.chapter1Button)
-        self.vl.addWidget(self.chapter2Button)
-        self.vl.addWidget(self.chapter3Button)
+        self.Introduction=QPushButton('Introduction')
+        self.Installation=QPushButton('Variantes d’installation')
+        self.sqlite2mysql=QPushButton("Basculer de sqlite\nvers mysql")
+        self.mysql2sqlite=QPushButton("Bascule de mysql \nvers sqlite")
+        self.Interface=QPushButton("Présentation de l'interface")
+        self.Selector=QPushButton("Principe des saisies d'ingrédients\n dans une recette")
+        self.Recipe=QPushButton("Notion de recette dans Bière")
+        self.Brew=QPushButton("Notion de session de brassage")
+        self.vl.addWidget(self.Introduction)
+        self.vl.addWidget(self.Installation)
+        self.vl.addWidget(self.sqlite2mysql)
+        self.vl.addWidget(self.mysql2sqlite)
+        self.vl.addWidget(self.Interface)
+        self.vl.addWidget(self.Selector)
+        self.vl.addWidget(self.Recipe)
+        self.vl.addWidget(self.Brew)
+        self.vl.addStretch()
         self.ui.groupBox.setMaximumWidth(200)
         self.ui.groupBox.setLayout(self.vl)
         self.set_connections()
+        
+        
 
     def set_connections(self):
-        self.chapter1Button.clicked.connect(lambda: self.show_chapter('1')) 
-        self.chapter2Button.clicked.connect(lambda: self.show_chapter('2')) 
-        self.chapter3Button.clicked.connect(lambda: self.show_chapter('3'))
+        self.Introduction.clicked.connect(lambda: self.show_chapter('Introduction')) 
+        self.Installation.clicked.connect(lambda: self.show_chapter("Installation"))
+        self.sqlite2mysql.clicked.connect(lambda: self.show_chapter("Basculer de sqlite vers mysql"))
+        self.mysql2sqlite.clicked.connect(lambda: self.show_chapter("Basculer de mysql vers sqlite"))
+        self.Interface.clicked.connect(lambda: self.show_chapter('Interface')) 
+        self.Selector.clicked.connect(lambda: self.show_chapter('Selector'))
+        self.Recipe.clicked.connect(lambda: self.show_chapter('Recipe'))
+        self.Brew.clicked.connect(lambda: self.show_chapter('Brew'))
 
-    def show_chapter(self,nb):
+    def show_chapter(self,what):
         filename="help/Head.html"
         prepend=open(filename,'r',encoding="utf-8").read()
-        filename="help/GeneralHelp/chapter"+str(nb)+".html"
+        filename="help/GeneralHelp/"+what+".html"
           
         text=open(filename,'r',encoding="utf-8").read()
         self.ui.textEdit.setHtml(prepend+text) 

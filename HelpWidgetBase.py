@@ -12,13 +12,14 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_helpWidget(object):
     def setupUi(self, helpWidget):
         helpWidget.setObjectName("helpWidget")
-        helpWidget.resize(505, 249)
+        helpWidget.resize(549, 312)
         self.horizontalLayout = QtWidgets.QHBoxLayout(helpWidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.groupBox = QtWidgets.QGroupBox(parent=helpWidget)
         self.groupBox.setObjectName("groupBox")
         self.horizontalLayout.addWidget(self.groupBox)
         self.textEdit = QtWidgets.QTextEdit(parent=helpWidget)
+        self.textEdit.setStyleSheet("padding-left:20px;background-color:transparent")
         self.textEdit.setObjectName("textEdit")
         self.horizontalLayout.addWidget(self.textEdit)
 
@@ -27,5 +28,5 @@ class Ui_helpWidget(object):
 
     def retranslateUi(self, helpWidget):
         _translate = QtCore.QCoreApplication.translate
-        helpWidget.setWindowTitle(_translate("helpWidget", "Form"))
+        helpWidget.setWindowTitle(_translate("helpWidget", "Aide générale de l’application"))
         self.groupBox.setTitle(_translate("helpWidget", "GroupBox"))

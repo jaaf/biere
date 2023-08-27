@@ -59,6 +59,7 @@ from database.yeasts.yeast import (all_inventory_yeast, all_yeast,
                                    delete_inventory_yeast,
                                    update_inventory_yeast)
 from dateUtils import DateUtils
+from datetime import date
 from HelpMessage import HelpMessage
 from LevelIndicator import LevelIndicator
 from parameters import cooler_type, equipment_type
@@ -68,6 +69,7 @@ from SignalObject import SignalObject
 from WaterAdjustmentWidget import WaterAdjustmentWidget
 from PDFWritter import PDFWriter
 from ExportBrewSheet import ExportBrewSheet
+from NameDialog import NameDialog
 
 
 #from help.TargetOGHelp import TargetOGHelp
@@ -234,7 +236,12 @@ class BrewWidget(MyWidget):
         self.ui.targetOGUnitCombo.setVisible(False)#not used at the moment
         #create a toolbar
         toolbarLayout=QHBoxLayout()
+        self.duplicateButton=QPushButton()
+        self.duplicateButton.setIcon(QIcon(self.icon_path+'duplicate-svgrepo-com.svg'))
+        self.duplicateButton.setIconSize(self.icon_size)
+        self.duplicateButton.setToolTip("Cloner la session de brassage")
         self.closeButton=QPushButton()
+        
         self.closeButton.setIcon(QIcon(self.icon_path+'close-square-svgrepo-com.svg'))
         self.closeButton.setIconSize(self.icon_size)
         self.closeButton.setToolTip("Fermer la session de brassage")
@@ -311,6 +318,7 @@ class BrewWidget(MyWidget):
         self.toolbarLayout=QHBoxLayout()
         self.toolbarLayout.addItem(spacerItem)
         self.toolbarLayout.addWidget(self.lockButton)
+        self.toolbarLayout.addWidget(self.duplicateButton)
         self.toolbarLayout.addWidget(self.saveButton)
         self.toolbarLayout.addWidget(self.deleteButton) 
         self.toolbarLayout.addWidget(self.printButton)
@@ -630,6 +638,7 @@ class BrewWidget(MyWidget):
     #--------------------------------------------------------------------------
     def set_connections(self):
         #set connections
+        self.duplicateButton.clicked.connect(self.duplicate_brew)
         self.printButton.clicked.connect(self.create_brew_sheet)
         self.parent.parent.keyboard_signal.connect(self.handle_shortcuts)
         self.ui.tabWidget.currentChanged.connect(self.tab_changed)
@@ -752,6 +761,40 @@ class BrewWidget(MyWidget):
         helpPopup.exec()
 
     #-------------------------------------------------------------------
+    def duplicate_brew(self):
+        if self.id is not None:
+            read_brew=self.read_form()
+            if read_brew:
+                read_brew.id=None
+                read_brew.brew_date=date.today()
+                read_brew.feedback=""
+                read_brew.launched=0
+                self.name_dlg=NameDialog(self)
+                intro="Merci de choisir un nom pour votre nouvelle session de brassage"
+                self.name_dlg.set_intro(intro)
+                self.name_dlg.set_name(read_brew.name)
+                if self.name_dlg.exec():
+                    read_brew.name=self.name_dlg.name
+                    result=add_brew(read_brew)
+                    if isinstance(result,int):
+                        self.set_message("success","Duplication réussie. Une nouvelle session de brassage dont le nom est «" +read_brew.name +\
+                                         " » a été ajoutée à la base de données.Vous pouvez y accéder en fermant cette session.")
+                        self.parent.brews=all_brew()
+                        self.parent.model.brews=all_brew()
+                        self.parent.model.layoutChanged.emit()  
+                    else:
+                        self.set_message("failure","La duplication a échoué. \n"+result)    
+            
+
+            
+
+            
+        else:
+            self.set_message("failure","Vous ne pouvez dupliquer une session de brassage qui n’a jamais été enregistrée. Complétez-la d’abord et enregistréz-la.")
+            print("cannot duplicate a non saved brew")
+
+        
+
     def delete(self):
         #before deletion
         current_brew=find_brew_by_id(self.id)
@@ -2061,6 +2104,7 @@ class BrewWidget(MyWidget):
                     self.set_message('failure', result)     
             else:
                 print('adding a brew in add')
+                print(str(read_brew.id))
                 result=add_brew(read_brew)
                 if isinstance(result,int):
                     self.lockButton.setVisible(True)
