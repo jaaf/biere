@@ -130,6 +130,9 @@ class RecipeWidget(QWidget):
         self.set_validators()
         self.set_connections()
 
+    def initial_hide_for_extract_type(self):
+      
+        self.ui.tabWidget.setTabVisible(4,False)
     #---------------------------------------------------------
     def showEvent(self,e):
         print('show event in recipe')
@@ -205,7 +208,7 @@ class RecipeWidget(QWidget):
         self.deleteButton.clicked.connect(self.delete)
         self.ui.nameEdit.textChanged.connect(lambda :self.clean_edit('name'))
         self.ui.authorEdit.textChanged.connect(lambda :self.clean_edit('author'))
-        self.ui.typeCombo.currentIndexChanged.connect(lambda :self.clean_edit('type'))
+        self.ui.typeCombo.currentIndexChanged.connect(self.recipe_type_changed)
         self.ui.styleCombo.currentIndexChanged.connect(lambda :self.clean_edit('style'))
         self.ui.bitternessEdit.textChanged.connect(lambda :self.clean_edit('bitterness'))
         self.ui.targetOGEdit.textChanged.connect(self.calculate_attenuation_and_ABV)#(lambda :self.clean_edit('og'))
@@ -238,7 +241,16 @@ class RecipeWidget(QWidget):
                 #not set before the first saving 
                 self.recipe_yeasts=self.yeast_selector.destination_model.items
                 self.calculate_attenuation_and_ABV()
-    #---------------------------------------------------------------------    
+    #---------------------------------------------------------------------   
+    def recipe_type_changed(self):
+        self.clean_edit("type")
+        if self.ui.typeCombo.currentText()=="Extraits":
+            self.ui.tabWidget.setTabVisible(4,False) 
+            self.fermentable_selector.remove_all_fermentables()
+            
+        else:
+            self.ui.tabWidget.setTabVisible(4,True)
+
     def setCurrentStackIndex(self,val):
         self.currentStackIndex=val   
     #----------------------------------------------------------------------
@@ -519,7 +531,10 @@ class RecipeWidget(QWidget):
             self.recipe_rests=None
             self.recipe_miscs=None
             self.recipe_yeasts=None
-
+        if self.ui.typeCombo.currentText()=="Extraits":
+            self.ui.tabWidget.setTabVisible(4,False)
+        else:
+            self.ui.tabWidget.setTabVisible(4,True)
     #---------------------------------------------------------------------------------
     def close(self):
         if(self.id):

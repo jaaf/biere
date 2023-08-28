@@ -213,13 +213,6 @@ class SelectorWidget(QWidget):
         self.destinationList.setSpacing(6)
         self.sourceList.setVisible(False)
         self.toggle_tab_view()
-        #uncomment the following lines to change the color of selected item background
-        #pal=QPalette()
-        #pal=self.destinationList.palette()
-        #pal.setColor(QPalette.ColorGroup.Active, QPalette.ColorRole.Highlight, QColor(255,0,0))
-        #pal.setColor(QPalette.ColorGroup.Inactive, QPalette.ColorRole.Highlight, QColor(255,0,0))
-        #self.destinationList.setPalette(pal)
-        #set the validators-----------------------------------------------------------------------------------------
         self.ui.restTemperatureEdit.setValidator(QRegularExpressionValidator(QRegularExpression("[0-9]{0,2}[\\.][0-9]{1,2}")))
         self.ui.fermentableQuantityEdit.setValidator(QRegularExpressionValidator(QRegularExpression("[0-9]{0,3}([\\.][0-9]{3}){0,1}")))
         self.ui.hopQuantityEdit.setValidator(QRegularExpressionValidator(QRegularExpression("[0-9]{0,3}\\.][0-9]{1,2}")))
@@ -246,6 +239,11 @@ class SelectorWidget(QWidget):
         'yeast_quantity','yeast_reference_volume','misc_quantity','misc_reference_volume','rest_temperature','rest_duration']:
             self.clean_edit(what)
     #-----------------------------------------------------------------------------------------------------------
+    def remove_all_fermentables(self):
+        print("remove all called")
+        self.destination_model.items=[]
+        self.destination_model.layoutChanged.emit()
+
     def receive_signal(self,obj):
         print('signal received '+obj.name)
     def set_connections(self):
@@ -1268,6 +1266,7 @@ class SelectorWidget(QWidget):
         destination=self.destination_selection
         combo=self.ui.fermentableUsageCombo
         if source :
+            #we are adding a new fermentable or exchanging it
             if (source.form =='Extrait liquide' or source.form=='Extrait sec' or source.form=='Sucre') and combo.currentText() != "ébullition":  
                 self.parent.set_message('failure', "L'usage pour un extrait ou un sucre doit être 'ébullition' ") 
                 return False  
@@ -1277,8 +1276,12 @@ class SelectorWidget(QWidget):
             if ((source.category.startswith("Base") or source.category.startswith("Munich") or source.category.startswith("Vienne")) and  (combo.currentText() =="trempage"  or combo.currentText()=="ébullition")):
                 self.parent.set_message('failure',"Un malt de cette catégorie ne doit être ni trempé ni bouilli mais empâté.")
                 return False
+            if (combo.currentText()=="empâtage" and self.parent.ui.typeCombo.currentText()=="Extraits"):
+                self.parent.set_message("failure","Vous ne pouvez empâter des malts dans une recette de type Extraits.")
+                return False
             
         if (destination and not source)   :
+            #we are modifying an already selected fermentable
             if (destination.fermentable.form =='Extrait liquide' or destination.fermentable.form=='Extrait sec' or destination.fermentable.form =='Sucre') and combo.currentText() != "ébullition":  
                 self.parent.set_message('failure', "L'usage pour un extrait ou un sucre doit être 'ébullition' ") 
                 return False  

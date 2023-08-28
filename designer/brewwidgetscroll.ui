@@ -52,8 +52,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1462</width>
-        <height>876</height>
+        <width>1388</width>
+        <height>886</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -529,7 +529,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_13">
+               <widget class="QLabel" name="coldMashWaterUnitLabel">
                 <property name="minimumSize">
                  <size>
                   <width>12</width>
@@ -602,7 +602,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_14">
+               <widget class="QLabel" name="coldSpargeWaterVolumeUnitLabel">
                 <property name="minimumSize">
                  <size>
                   <width>12</width>
@@ -1013,7 +1013,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_45">
          <item>
-          <widget class="QGroupBox" name="general5GroupBox">
+          <widget class="QGroupBox" name="calculationGroupBox">
            <property name="styleSheet">
             <string notr="true"/>
            </property>

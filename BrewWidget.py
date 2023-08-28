@@ -214,7 +214,7 @@ class BrewWidget(MyWidget):
         mylist+=self.ui.general2GroupBox.findChildren(QWidget)
         mylist+=self.ui.general3GroupBox.findChildren(QWidget)
         mylist+=self.ui.general4GroupBox.findChildren(QWidget)
-        mylist+=self.ui.general5GroupBox.findChildren(QWidget)
+        mylist+=self.ui.calculationGroupBox.findChildren(QWidget)
         mylist+=self.ui.general6GroupBox.findChildren(QWidget)
         self.style_disabled_edit(mylist)
         
@@ -698,6 +698,16 @@ class BrewWidget(MyWidget):
             self.yeast_selector.ui.titleGroupBox.setVisible(True)
             self.misc_selector.ui.titleGroupBox.setVisible(True)
             self.rest_selector.ui.titleGroupBox.setVisible(True)
+
+    def initial_hide_for_extract_type(self):
+        self.ui.coldSpargeWaterVolumeEdit.setVisible(False)
+        self.ui.coldSpargeWaterVolumeLabel.setVisible(False) 
+        self.ui.coldSpargeWaterVolumeUnitLabel.setVisible(False) 
+        self.ui.coldMashWaterLabel.setVisible(False)
+        self.ui.coldMashWaterVolumeEdit.setVisible(False)
+        self.ui.coldMashWaterUnitLabel.setVisible(False)
+        self.ui.calculationGroupBox.setVisible(False)
+        self.ui.tabWidget.setTabVisible(4,False)
     #-------------------------------------------------------------------------
     def rest_data_changed(self):
         self.c.calculate.emit("rest_data",None)        
@@ -721,11 +731,11 @@ class BrewWidget(MyWidget):
             
     #---------------------------------------------------------------------
     def toggle_calculation_view(self):
-        if self.ui.general5GroupBox.isVisible():
-            self.ui.general5GroupBox.setVisible(False) 
+        if self.ui.calculationGroupBox.isVisible():
+            self.ui.calculationGroupBox.setVisible(False) 
             self.ui.general6GroupBox.setVisible(False)
         else:
-            self.ui.general5GroupBox.setVisible(True) 
+            self.ui.calculationGroupBox.setVisible(True) 
             self.ui.general6GroupBox.setVisible(True) 
         
 
@@ -1609,14 +1619,15 @@ class BrewWidget(MyWidget):
         
 
 
-            
+        if self.ui.typeCombo.currentText()!="Extraits":   
                 
-        try:
-            grain_temperature=float(self.rest_selector.ui.grainTemperatureEdit.text())
-        except:
-            message += "\nVous n'avez pas indiqué la température du grain dans l'onglet « Programme d'empâtage »"
-            validated=False   
-    
+            try:
+                grain_temperature=float(self.rest_selector.ui.grainTemperatureEdit.text())
+            except:
+                message += "\nVous n'avez pas indiqué la température du grain dans l'onglet « Programme d'empâtage »"
+                validated=False   
+        else:
+            grain_temperature=None
         
        
         #brew_date=self.dateEdit.date().toString('yyyy-MM-dd')
@@ -2081,6 +2092,8 @@ class BrewWidget(MyWidget):
                 self.pH_target=None
                 self.acid_agent=None
                 self.launched=None
+        if self.ui.typeCombo.currentText()=="Extraits":
+            self.initial_hide_for_extract_type()        
     #---------------------------------------------------------------------------------------------------   
  
     # ----------------------------------------------------------------------------------------------         
