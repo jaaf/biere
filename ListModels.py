@@ -33,8 +33,7 @@ class RecipeListModel(QtCore.QAbstractListModel):
     def data(self,index,role):
         r =self.recipes[index.row()] 
         if (role ==Qt.ItemDataRole.DisplayRole):
-            return str (r.id)+ ' ' +self.str_normalize(r.name.upper(),50)  +"  d'après " +r.author+ '\n'\
-            +self.str_normalize(r.style,20)+ "("+r.rtype+')' 
+            return self.str_normalize(r.name.upper(),50)  +" "+self.str_normalize(r.style,50)+ " "+r.rtype
      
      #---------------------------------------------------------------------------------  
     def str_normalize(self, s,l):
@@ -60,7 +59,7 @@ class BrewListModel(QtCore.QAbstractListModel):
     def data(self,index,role):
         b =self.brews[index.row()] 
         if (role ==Qt.ItemDataRole.DisplayRole):
-            return (str(b.id)+ ' '+self.str_normalize(DateUtils.FrenchDate(b.brew_date),20)+ ' — '+self.str_normalize(b.name.upper(),50)+ ' '+self.str_normalize(b.style,50))
+            return (self.str_normalize(DateUtils.FrenchDate(b.brew_date),20)+ ' '+self.str_normalize(b.name.upper(),50)+ ' '+self.str_normalize(b.style,50))
      
                 
                       

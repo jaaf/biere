@@ -51,7 +51,7 @@ class BrewListWidget(QWidget):
 
         #create a toolbar
         toolbarLayout=QHBoxLayout()
-
+        #FILTERS
         self.filterLayout=QHBoxLayout()
         self.dateFilterLayout=QVBoxLayout()
         self.dateSubFilterLayout=QHBoxLayout()
@@ -106,13 +106,14 @@ class BrewListWidget(QWidget):
         self.hide_sub_filter("date")
 
         self.sortCombo=QComboBox()
+        self.sortCombo.addItem("")
         self.sortCombo.addItem('Date-Nom-Style')
         self.sortCombo.addItem("Nom-Date-Style")
         self.sortCombo.addItem("Style-Date-Nom")
         self.sortButton.setIcon(QIcon(self.icon_path+'sort-list-alt-svgrepo-com.svg'))
         self.sortButton.setIconSize(self.icon_size)
         self.sortButton.setMaximumSize(40,40)
-        self.sortButton.setToolTip('Trier les recettes')
+        self.sortButton.setToolTip('Trier les sessions')
         spacerItem = QtWidgets.QSpacerItem(40, 10, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Fixed)
         spacerItemSmall = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Fixed)
         toolbarLayout.addItem(spacerItem)
@@ -141,7 +142,8 @@ class BrewListWidget(QWidget):
         self.brews=all_brew()
         self.brews.sort(key=lambda x: x.brew_date)
         self.model=BrewListModel(brews=self.brews)
-        font=QFont("DejaVuSans Mono",12)
+        font=QFont("Liberation Mono")
+        #font=self.font().setStyle(QFont.styleItalic)
         self.listView.setFont(font)
         self.listView.setModel(self.model)
         self.listView.setSpacing(8)
@@ -238,6 +240,8 @@ class BrewListWidget(QWidget):
     def sort_list(self, mode):
         #self.source_list.sort(key=lambda x: (x.brand,x.name,x.version))
         match mode:
+            case "":
+                self.model.brews.sort(key=lambda x: (x.id))
             case 'Date-Nom-Style':
                 self.model.brews.sort(key=lambda x: (x.brew_date,x.name,x.style))
             case "Nom-Date-Style":
