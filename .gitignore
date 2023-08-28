@@ -10,5 +10,5 @@ build/
 *.deb
 *.rpm
 *.pdf
-cred/*/*.bin
-cred/*/*.txt
+base-data/cred/*/*.bin
+base-data/cred/*/*.txt
