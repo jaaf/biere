@@ -135,7 +135,6 @@ class RecipeWidget(QWidget):
         self.ui.tabWidget.setTabVisible(4,False)
     #---------------------------------------------------------
     def showEvent(self,e):
-        print('show event in recipe')
         self.fermentable_selector.refresh_source()
         self.hop_selector.refresh_source()
         self.yeast_selector.refresh_source()
@@ -395,8 +394,6 @@ class RecipeWidget(QWidget):
         if(validated==True):
             print("VValidated true")
             read_item=Recipe(self.id,name,author,rtype,style,bitterness,og,abv,color,boil_time,fermentables,hops,yeasts, miscs,rests)
-            print("Returning read_item")
-            print(read_item)
             return read_item
         else:
             self.calculate_ABV

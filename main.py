@@ -20,8 +20,8 @@ import os
 
 app = QtWidgets.QApplication(sys.argv)
 app.setStyle('Fusion')
-print(app.style().objectName())
-print(sys.platform)
+print("Le style des fenêtres est "+app.style().objectName())
+print("La plateforme est "+sys.platform)
 screen_resolution = QtGui.QGuiApplication.primaryScreen().availableGeometry()
 
 #window.resize(w,h)

@@ -21,7 +21,6 @@ class Calculator:
         if(not dlg.og_as_target and dlg.end_sugar>0 and dlg.end_water_mass>0 ):
             #dlg.og=BrewUtils.og_from_sugar_and_volume(dlg.end_sugar, dlg.batch_volume+dlg.equipment.kettle_retention)
             dlg.og=BrewUtils.og_from_sugar_and_water_mass(dlg.end_sugar,dlg.end_water_mass)
-            print('in calc og is '+str(dlg.og))
             dlg.ui.calculatedOGEdit.setText(str(round(dlg.og,3)))
             dlg.og_indicator.setValue(round(dlg.og,3))
             cls.beer_forecast_abv(dlg)
@@ -138,7 +137,6 @@ class Calculator:
             for item in dlg.fermentable_selector.destination_model.items:
                 total_MCU+=(4.23*item.fermentable.color*item.quantity)/dlg.batch_volume
             color=2.99*(total_MCU**0.6859)
-            print("beer average color is "+str(color))
             dlg.color=color
         except:
             pass
@@ -308,7 +306,6 @@ class Calculator:
     #--------------------------------------------------------------------------------------
     @classmethod
     def beer_forecast_abv(cls, dlg):
-        print("In Calculator beer_forecast_abv")
         #att is attenuation of the yeast expressed like 0.80
         #csm is the quantity of sugar added per liter for bottle carbonation
         #cwm the quantity of water to dilute the carbonation sugar per liter
@@ -336,7 +333,6 @@ class Calculator:
             ABV =((NOG-FG)*1.047 /FG /0.789)*100
             dlg.abv=ABV
             dlg.abv_indicator.setValue(dlg.abv)
-            print("Setting avb indicator "+str(dlg.abv))
             dlg.ui.abvEdit.setText(str(round(ABV,1)))
             cls.beer_color(dlg)
         #---------------------------------------------------------------------------------------
@@ -941,12 +937,8 @@ class Calculator:
     #----------------------------------------------------------------------------------------------------------------------
     @classmethod
     def bitterness(cls,dlg):
-        print("In Calculator bitterness")
-        
-        if  dlg.utilisation_gravity_factor and dlg.batch_volume and dlg.equipment:
-           
+        if  dlg.utilisation_gravity_factor and dlg.batch_volume and dlg.equipment:  
             items = dlg.hop_selector.destination_model.items
-          
             ibu=0
             for item in items:
                 match item.usage:
@@ -978,13 +970,10 @@ class Calculator:
             if(not dlg.bitterness_as_target):
                 dlg.ui.calculatedIBUEdit.setText(str(round(ibu,0))) 
                 dlg.ibu_indicator.setValue(ibu)
-                dlg.bitterness=ibu
-                 
-                print ("ibu not is "+str(ibu)) 
+                dlg.bitterness=ibu 
                 dlg.ibu_indicator.setValue(ibu)
 
-            else:  
-                print ("ibu as target is "+str(ibu))    
+            else:    
                 dlg.ibu_indicator.setValue(ibu)
                 return ibu
           

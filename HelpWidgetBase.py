@@ -12,10 +12,11 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_helpWidget(object):
     def setupUi(self, helpWidget):
         helpWidget.setObjectName("helpWidget")
-        helpWidget.resize(549, 312)
+        helpWidget.resize(1068, 582)
         self.horizontalLayout = QtWidgets.QHBoxLayout(helpWidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.groupBox = QtWidgets.QGroupBox(parent=helpWidget)
+        self.groupBox.setMinimumSize(QtCore.QSize(250, 0))
         self.groupBox.setObjectName("groupBox")
         self.horizontalLayout.addWidget(self.groupBox)
         self.textEdit = QtWidgets.QTextEdit(parent=helpWidget)

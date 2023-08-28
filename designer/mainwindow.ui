@@ -77,7 +77,6 @@
     <property name="title">
      <string>Divers</string>
     </property>
-    <addaction name="actionFont"/>
     <addaction name="actionEffacer_les_choix_initiaux"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
@@ -90,6 +89,7 @@
     <property name="title">
      <string>Affichage</string>
     </property>
+    <addaction name="actionFont"/>
    </widget>
    <addaction name="menuInventaires"/>
    <addaction name="menuProfils"/>

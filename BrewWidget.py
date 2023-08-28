@@ -153,7 +153,7 @@ class BrewWidget(MyWidget):
         self.ui.equipmentRefreshButton.setVisible(False)
         self.ui.equipmentRefreshButton.setStyleSheet('background-color:red; color:white; font-weight:bold;')
         self.start_from_scratch=False
-        #load the brew if id passed  
+        #load brew checks if id passed  
         self.load_brew()
         self.add_tab_content()
         self.ui.calculatedIBUEdit.setStyleSheet(self.font_style_prefix+'background-color:'+self.disabled_edit_bgcolor+';color:'+self.disabled_edit_color)
@@ -169,17 +169,16 @@ class BrewWidget(MyWidget):
         self.update_all()
         self.c.calculate.emit(SignalObject('equipment',self.equipment))
         self.waterAdjustmentDialog.after_init()
-        
+
         if self.launched:
+            #to disable a lot of fields
             self.set_launched()
   
     #--------------------------------------------------------------------------------------
     def style_disabled_edit(self,list,v=None):
         for item in list:
-            
             try:
                 if item.__class__.__name__=="QLineEdit":
-                    
                     if item.isEnabled()==True:
                         item.setStyleSheet(self.font_style_prefix+'color:'+self.enabled_edit_color+'; background-color:'+self.enabled_edit_bgcolor+'; border: 1px solid '+self.disabled_edit_color+';')
                         item.setFont(self.font())
@@ -195,20 +194,6 @@ class BrewWidget(MyWidget):
         
     #--------------------------------------------------------------------------------------
     def finish_gui(self):
-
-        pal=QPalette()
-        pal=self.palette()
-        HighlightBg= pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.Highlight) 
-        WindowBg= pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.Window)
-        WindowFg= pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.WindowText)
-        HighlightFg=pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.HighlightedText)
-        self.WinFg=WindowFg.name()
-        self.WinBg=WindowBg.name()
-        self.HlBg=HighlightBg.name()
-        self.HlFg=HighlightFg.name()
-
-        
-
         #set style of disabled inputs
         mylist=self.ui.general1GroupBox.findChildren(QWidget)
         mylist+=self.ui.general2GroupBox.findChildren(QWidget)
@@ -227,21 +212,20 @@ class BrewWidget(MyWidget):
         self.ui.preboilGravityHelpButton.setText('?')
         self.ui.preboilGravityHelpButton.setStyleSheet(self.font_style_prefix+'color:white; background-color:green;')
 
-        #-----------------------------------------
         #complete GUI
         self.ui.calculatedOGEdit.setVisible(False)
         self.ui.calculatedOGLabel.setVisible(False)
         self.ui.calculatedOGUnitLabel.setVisible(False)
         self.style=None
         self.ui.targetOGUnitCombo.setVisible(False)#not used at the moment
-        #create a toolbar
+
+        #create a toolbar 
         toolbarLayout=QHBoxLayout()
         self.duplicateButton=QPushButton()
         self.duplicateButton.setIcon(QIcon(self.icon_path+'duplicate-svgrepo-com.svg'))
         self.duplicateButton.setIconSize(self.icon_size)
         self.duplicateButton.setToolTip("Cloner la session de brassage")
         self.closeButton=QPushButton()
-        
         self.closeButton.setIcon(QIcon(self.icon_path+'close-square-svgrepo-com.svg'))
         self.closeButton.setIconSize(self.icon_size)
         self.closeButton.setToolTip("Fermer la session de brassage")
@@ -294,7 +278,6 @@ class BrewWidget(MyWidget):
         self.abv_indicator.setText('ABV %') 
         self.color_indicator=LevelIndicator(30,250,20,0)
         self.color_indicator.setText('COLOR SRM')
-
         self.indicatorLayout=QHBoxLayout()
         self.indicatorLayoutRight=QVBoxLayout()
         self.indicatorLayoutRight.addWidget(self.color_indicator)
@@ -311,7 +294,6 @@ class BrewWidget(MyWidget):
         self.indicatorFrame.setLayout(self.indicatorLayout)
         self.headerLayout.addWidget(self.indicatorFrame)
         self.headerLayout.addSpacerItem(spacerItem)
-     
         self.ui.calculatedIBUUnitLabel.setStyleSheet(self.font_style_prefix+"color:red")
 
         #toolbar on the right
@@ -323,7 +305,6 @@ class BrewWidget(MyWidget):
         self.toolbarLayout.addWidget(self.deleteButton) 
         self.toolbarLayout.addWidget(self.printButton)
         self.toolbarLayout.addWidget(self.closeButton)
-       
         self.toolbarLayout.setSpacing(20)
         self.headerLayout.addLayout(self.toolbarLayout)
         self.ui.headerGroupBox.setLayout(self.headerLayout)
@@ -682,7 +663,7 @@ class BrewWidget(MyWidget):
         app = QtWidgets.QApplication.instance()
         screen_resolution=app.primaryScreen().size()
         swidth, sheight = screen_resolution.width(), screen_resolution.height()
-        print(str(swidth)+'x'+str(sheight))
+        print("screen resolution is :"+str(swidth)+'x'+str(sheight))
         print("width :"+str(event.size().width())+ " / height: "+str(event.size().height()))
         if event.size().height()<720:
             self.indicatorFrame.setVisible(False)
@@ -699,6 +680,7 @@ class BrewWidget(MyWidget):
             self.misc_selector.ui.titleGroupBox.setVisible(True)
             self.rest_selector.ui.titleGroupBox.setVisible(True)
 
+    #-------------------------------------------------------------------------
     def initial_hide_for_extract_type(self):
         self.ui.coldSpargeWaterVolumeEdit.setVisible(False)
         self.ui.coldSpargeWaterVolumeLabel.setVisible(False) 
@@ -738,7 +720,6 @@ class BrewWidget(MyWidget):
             self.ui.calculationGroupBox.setVisible(True) 
             self.ui.general6GroupBox.setVisible(True) 
         
-
     #------------------------------------------------------------------
     def tab_changed(self):
         if self.ui.tabWidget.currentIndex() == 6:
@@ -794,31 +775,23 @@ class BrewWidget(MyWidget):
                         self.parent.model.layoutChanged.emit()  
                     else:
                         self.set_message("failure","La duplication a échoué. \n"+result)    
-            
-
-            
-
-            
         else:
             self.set_message("failure","Vous ne pouvez dupliquer une session de brassage qui n’a jamais été enregistrée. Complétez-la d’abord et enregistréz-la.")
-            print("cannot duplicate a non saved brew")
+           
 
-        
-
+    #-------------------------------------------------------------------
     def delete(self):
         #before deletion
         current_brew=find_brew_by_id(self.id)
         if current_brew:
             msgBox=ConfirmationDialog()
             msgBox.setTitle('Confirmer suppression')
-            
             msgBox.setIcon(self.icon_path+'alert-48px-svgrepo-com.svg')
             msgBox.setMessage('Vous êtes sur le point de supprimer une session de brassage. Cette suppression sera définitive. \n Confirmez-vous la suppression ?') 
             msgBox.setCancelButtonText('Non. Ne pas supprimer')
             msgBox.setConfirmButtonText('Oui. Supprimer.')
             confirm=msgBox.exec()   
             if(confirm == 1):
-
                 result = delete_brew(self.id)#imported function
                 if result == 'OK':
                     self.parent.brews=all_brew()
@@ -834,7 +807,6 @@ class BrewWidget(MyWidget):
     def changes_saved(self):
         r=self.read_form() 
         reason=None
-        
         #fermentables have already been encoded ,come back to list
         fs=jsonpickle.decode(r.fermentables)
         fis=jsonpickle.decode(self.initial_brew.fermentables)
@@ -915,28 +887,23 @@ class BrewWidget(MyWidget):
             confirm=msgBox.exec()   
             if(confirm == 1):
                 self.manage_closure()           
-    
-
-              
+               
     #-------------------------------------------------------------------
     def before_lock(self):
         read_brew=self.read_form()
-
         if(read_brew):
             if(self.id):
                 read_brew.id=self.id
-                print('updating brew with id '+str(self.id))
                 result=update_brew(read_brew)
-
                 if result =="OK":
                     #to reset changes to no change
                     self.initial_brew=copy.deepcopy(read_brew)
                     self.set_message('success','La session de brassage a été correctement sauvegardée')
                     self.lock()
-
                 else:
                     self.set_message('failure', result),     
 
+    #----------------------------------------------------------------
     def lock(self):
         message=''
         #--FERMENTABLES--
@@ -1032,6 +999,7 @@ class BrewWidget(MyWidget):
         
     #-----------------------------------------------------------
     def check_hop_availability(self,id,quantity):
+        #check one hop only
         inv_hops=all_inventory_hop()
         available_quantity=0
         for inv_h in inv_hops:
@@ -1057,11 +1025,9 @@ class BrewWidget(MyWidget):
         else:
             return message
 
-
     #--------------------------------------------------------------
     def evaluate_yeast_units(self,value,threshold):
         #when threshold<decimal part, we use one more pack
-        print('value is '+str(value))
         decimal_part=value % 1
         int_part=int(value)
         if int_part ==0:
@@ -1071,7 +1037,8 @@ class BrewWidget(MyWidget):
                 return int_part+1
             else:
                 return int_part
-            
+
+    #----------------------------------------------------------------        
     def check_yeast_availability(self,id,quantity,cells_per_pack):
         inv_yeasts=all_inventory_yeast()
         available_quantity=0
@@ -1229,10 +1196,7 @@ class BrewWidget(MyWidget):
                         update_inventory_misc(inv_m)
                         residual_quantity=0
 
-
-
-
-
+    #------------------------------------------------------------
     def manage_closure(self):
         i=self.parent.parent.stackedWidget.currentIndex()
         self.parent.parent.brewTabWidget.removeTab(self.parent.parent.stackedWidget.currentIndex()-1)
@@ -1291,7 +1255,6 @@ class BrewWidget(MyWidget):
         self.change_equipment()
         self.ui.equipmentRefreshButton.setVisible(False)
         self.ui.equipmentCombo.setStyleSheet(self.font_style_prefix+'')
-    #--------------------------------------------------------------------
     
     #---------------------------------------------------------------------
     def change_equipment(self):
@@ -1308,6 +1271,7 @@ class BrewWidget(MyWidget):
             self.c.calculate.emit(SignalObject('equipment',self.equipment))
         else:
             self.equipment=None   
+
     #-----------------------------------------------------------------
     def og_update(self):
         #input is filtered at source so that values are empty or good
@@ -1319,6 +1283,7 @@ class BrewWidget(MyWidget):
         except :
             self.og=None
         self.ui.targetOGEdit.setStyleSheet(self.font_style_prefix+'color:'+self.enabled_edit_color+'; background-color:'+self.enabled_edit_bgcolor+'; border: 1px solid '+self.enabled_edit_color+';')    
+
     #-----------------------------------------------------------------
     def bitterness_update(self):
         #input is filtered at source so that values are empty or good
@@ -1330,6 +1295,7 @@ class BrewWidget(MyWidget):
         except :
             self.bitterness=None
         self.ui.targetIBUEdit.setStyleSheet(self.font_style_prefix+'color:'+self.enabled_edit_color+'; background-color:'+self.enabled_edit_bgcolor+'; border: 1px solid '+self.enabled_edit_color+';')   
+
     #-------------------------------------------------------------------        
     def abv_update(self):
         print('in abv_update')
@@ -1341,21 +1307,6 @@ class BrewWidget(MyWidget):
         except:
             self.abv=None
         self.ui.abvEdit.setStyleSheet(self.font_style_prefix+'color:'+self.disabled_edit_color+'; background-color:'+self.disabled_edit_bgcolor+'; border: 1px solid '+self.disabled_edit_color+';')   
-        
-    #-------------------------------------------------------------------   
-    '''def color_update(self):
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!in color update")
-        try:
-            read_color=float(self.ui.colorEdit.text())
-            if(read_color >0 and read_color<1800):
-                self.color=read_color  
-                #this signal is used to chain the calculation (see handle_calculate_signal)
-                self.c.calculate.emit(SignalObject('color',self.color))
-            else:
-                self.color=None    
-        except:
-            self.color=None
-        self.ui.colorEdit.setStyleSheet(self.font_style_prefix+'color:'+self.disabled_edit_color+'; background-color:'+self.disabled_edit_bgcolor+'; border: 1px solid '+self.disabled_edit_color+';')  ''' 
         
     #---------------------------------------------------------------------
     def boil_time_update(self):
@@ -1417,8 +1368,7 @@ class BrewWidget(MyWidget):
             self.ui.targetIBUEdit.setVisible(False)
             self.ui.targetIBULabel.setVisible(False)
             self.ui.calculatedIBUEdit.setText(str(round(self.bitterness,0)))
-
-     #----------------------------------------------------------------------------------   
+ 
     #--------------------------------------------------------------------------
     def set_style(self):
         self.style=find_style_by_name(self.ui.styleCombo.currentText())
@@ -1442,8 +1392,6 @@ class BrewWidget(MyWidget):
             self.og_indicator.reset() 
             self.cololr_indicator.reset()
             
-
-  
     #------------------------------------------------------------------------------------
     def attenuation(self):
         attenuation=None
@@ -1479,11 +1427,11 @@ class BrewWidget(MyWidget):
        FG=((NOG-1)*(1-att))+1
        ABV =(NOG-FG)*1.047 /FG /0.789
        return ABV
+    
     #-------------------------------------------------------------------------------------
     def add_tab_content(self):
         #------------------------------------------
         try:
-            
             #the public list
             fermentable_list=all_fermentable()
             #this is after load_brew
@@ -1546,6 +1494,7 @@ class BrewWidget(MyWidget):
        
         except Exception as ex:
             print('exception dans add_tab content '+str(ex))
+
     #--------------------------------------------------------------------------------------
     def selectors_show_actual_values(self):
             #to display actual values and units in list views
@@ -1569,6 +1518,7 @@ class BrewWidget(MyWidget):
         self.ui.abvEdit.setValidator(QRegularExpressionValidator(QRegularExpression("[0-1]{0,1}[0-9]{1}[\\.][0-9]{1}")))
         self.ui.boilTimeEdit.setValidator(QRegularExpressionValidator(QRegularExpression("[0-2]{0,1}[0-9]{1,2}")))
         self.ui.colorEdit.setValidator(accepted_chars)
+
     #---------------------------------------------------------------------------------
     def read_form(self):
         #read the form into a Brew object
@@ -1615,8 +1565,6 @@ class BrewWidget(MyWidget):
             if temperature_method is not None and temperature_method == 'Infusion':
                 message += "\nVous n'avez pas indiqué la température des ajouts d'eau dans l'onglet « Programme d'empâtage »" 
                 validated=False
-
-        
 
 
         if self.ui.typeCombo.currentText()!="Extraits":   
@@ -1727,7 +1675,6 @@ class BrewWidget(MyWidget):
                 self.set_message('failure',message)
             return False
 
-
     #-------------------------------------------------------------------------------
     def are_equal_equipments(self,eq1,eq2):
         if eq1.name != eq2.name :
@@ -1808,6 +1755,7 @@ class BrewWidget(MyWidget):
             #print("le débit du refroidisseur a changé")
             return False  
         return True     
+    
     #---------------------------------------------------------------------------------
     def check_equipment(self): 
         #check if equipment has not changed in database after the BrewWidget page has been hidden and shown again
@@ -1833,8 +1781,6 @@ class BrewWidget(MyWidget):
                 self.ui.equipmentCombo.addItem(equipment.name)
             self.ui.equipmentCombo.setStyleSheet(self.font_style_prefix+'background-color: red')
         
-
-        
     #---------------------------------------------------------------------------------
     def showEvent(self,event):
         #check if equipment has not changed in database after the BrewWidget page has been hidden and shown again
@@ -1843,22 +1789,17 @@ class BrewWidget(MyWidget):
             
         event.accept()
 
+    #---------------------------------------------------------------------------
     def compare_equipments(self,eq1,eq2):
         print('Comparing equipments')
         for attr1, value1 in eq1.__dict__.items():
-            
             for attr2,value2 in eq2.__dict__.items():
                 if attr1=="_sa_instance_state":
                     continue
                 if attr1 ==attr2 and value1 != value2:
-                    print(False)
-                    print(attr1)
-                    print(value1)
-                    print(attr2)
-                    print(value2)
                     return False
-        print  (True)
         return True   
+    
     #---------------------------------------------------------------------------------
     def load_brew(self):
         recipe=None
@@ -2093,9 +2034,8 @@ class BrewWidget(MyWidget):
                 self.acid_agent=None
                 self.launched=None
         if self.ui.typeCombo.currentText()=="Extraits":
-            self.initial_hide_for_extract_type()        
-    #---------------------------------------------------------------------------------------------------   
- 
+            self.initial_hide_for_extract_type()   
+
     # ----------------------------------------------------------------------------------------------         
     def add(self):
         #add or update a Brew
@@ -2133,7 +2073,7 @@ class BrewWidget(MyWidget):
                     else:    
                         self.set_message('failure', result)    
 
-                
+    #-----------------------------------------------------------------------------------          
     def set_message(self,style,text,time=500):
         print(text)
         if style =="success":
@@ -2144,8 +2084,6 @@ class BrewWidget(MyWidget):
              messagePopup.setStyleSheet("background-color:red;color: white;font-weight:bold")
         messagePopup.exec()
         
- 
-
     #--------------------------------------------------------------------------------------
     def clean_edit(self,what):
         #restore initial style for previously unaccepted edit
@@ -2165,11 +2103,12 @@ class BrewWidget(MyWidget):
             case 'color':
                 self.ui.colorEdit.setStyleSheet("border: 1px solid gray;")
 
+    #---------------------------------------------------------------------------
     def balise(self,balise,text):
         return "<"+balise+">"+text+"</"+balise+">"
     
+    #---------------------------------------------------------------------------
     def create_brew_sheet(self):
-        
         msgBox=ConfirmationDialog()
         msgBox.setTitle('Création de la fiche de session')
         
@@ -2184,9 +2123,6 @@ class BrewWidget(MyWidget):
         try:
             export_dlg=ExportBrewSheet(self)
             export_dlg.exec()
-            #writer=PDFWriter()
-        
-            #writer.print_brew(self)
         except Exception as e:
             self.set_message("failure","Une exception s’est produite lors de l’impression de la feuille de session \n"+str(e))
         

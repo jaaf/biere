@@ -39,7 +39,6 @@ except Exception as e:
             fileObj.close()    
             
 try:
-    
     with open(path_to_cred/'key.bin','rb') as fileObj : 
         for line in fileObj:
             key=line
@@ -52,14 +51,6 @@ except Exception:
         fileObj.close()
 
 if choice =='mysql':
-    print("""
-    Vous avez choisi d’utiliser une base de données mysql.\n
-    Vous devez donc:\n
-    – avoir installé un serveur mysql
-    - avoir créé une base de données
-    – avoir créé l’utilisateur biere@localhost et lui avoir donné tous les privilèges sur cette base
-          """)
-
 
     try:
         #try to retrieve database name
@@ -136,7 +127,7 @@ Corrigez cela et réessayez sion vous allez boucler sur ces demandes. Merci de s
                 end=True 
             except:
                 print('Connexion au serveur de base de données refusée. Vérifiez le mot de passe et le nom de la base!')  
-    print ("Vous travaillez avec une base de données sqlite dont le nom est "+dbname)
+    print ("Vous travaillez avec une base de données mysql dont le nom est "+dbname)
     
 if choice =='sqlite':
 
