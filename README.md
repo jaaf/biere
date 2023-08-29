@@ -21,7 +21,8 @@ L’installation de Bière peut se faire de deux manières:
 La deuxième façon est recommandée, surtout si l’utilisateur n’est pas à l’aise avec l’installation de programme.
 
 ### Installation avec sqlite
-1- téléchargez l’exécutable correspondant (installateur)
+1- téléchargez l’exécutable correspondant (installateur) dans la liste des fichiers du dossier racine. Pour windows Bière-1.0-installer.exe, pour Linux Bière-1.0-installer.rpm ou Bière-1.0-installer.deb.
+
 2- exécutez l’installateur. Une icône du programme sera placée sur le bureau.
 3- lancez le programme en cliquant sur l’icône. Le programme démarre dans un terminal. Lorsqu’on vous pose une première question sur le type de base de données a utiliser, répondez **sqlite**.
 Le programme démarre dans sa fenêtre. 
@@ -73,7 +74,7 @@ Vous pouvez quitter le client du serveur avec
 
     exit
 
-2- téléchargez l’exécutable correspondant (installateur)
+2- téléchargez l’exécutable correspondant (installateur) dans la liste des fichiers de dossier racine. Pour windows Bière-1.0-installer.exe, pour Linux Bière-1.0-installer.rpm ou Bière-1.0-installer.deb.
 
 3- exécutez l’installateur. Une icône du programme sera placée sur le bureau.
 
