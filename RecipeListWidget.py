@@ -10,10 +10,10 @@ You should have received a copy of the GNU General Public License along with thi
 
 from database.recipes.recipe import all_recipe
 from ListModels import RecipeListModel
-from PyQt6.QtWidgets import QListView,QVBoxLayout,QHBoxLayout,QPushButton,QSpacerItem,QWidget,QLabel,QComboBox,QCheckBox,QLineEdit,QFrame
+from PyQt6.QtWidgets import QListView,QVBoxLayout,QHBoxLayout,QPushButton,QWidget,QLabel,QComboBox,QCheckBox,QLineEdit,QFrame
 from PyQt6 import QtCore,QtWidgets
-from PyQt6.QtCore import QSize,Qt
-from PyQt6.QtGui import QIcon,QPalette,QFont
+from PyQt6.QtCore import QSize
+from PyQt6.QtGui import QIcon,QFont
 from RecipeWidget import RecipeWidget
 
 
@@ -32,17 +32,7 @@ class RecipeListWidget(QWidget):
         
 
     def setup_gui(self): 
-        #define colors  
-        pal=QPalette()
-        pal=self.parent.palette()
-        HighlightBg= pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.Highlight) 
-        WindowBg= pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.Window)
-        WindowFg= pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.WindowText)
-        HighlightFg=pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.HighlightedText)
-        self.WinFg=WindowFg.name()
-        self.WinBg=WindowBg.name()
-        self.HlBg=HighlightBg.name()
-        self.HlFg=HighlightFg.name() 
+
         #create a toolbar
         self.sortCombo=QComboBox()
         self.sortCombo.addItem("")
@@ -122,7 +112,10 @@ class RecipeListWidget(QWidget):
         titlebarLayout=QHBoxLayout()
         self.titleLabel=QLabel()
         self.titleLabel.setText('LISTE DES RECETTES')
-        self.titleLabel.setStyleSheet('padding:5px;font-size: 20px; font-weight:bold; color:'+self.WinFg)
+        title_font=QFont()
+        title_font.setPointSize(int(self.font().pointSize()*1.3))
+        title_font.setWeight(700)
+        self.titleLabel.setFont(title_font)
         spacerItem = QtWidgets.QSpacerItem(40, 10, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Fixed)
         titlebarLayout.addWidget(self.titleLabel) 
         titlebarLayout.addItem(spacerItem)

@@ -10,12 +10,11 @@ You should have received a copy of the GNU General Public License along with thi
 '''
 from database.brews.brew import all_brew
 from ListModels import BrewListModel
-from PyQt6.QtWidgets import QListView,QVBoxLayout,QHBoxLayout,QPushButton,QSpacerItem,QWidget,QLabel,QDateEdit,QCheckBox,QLineEdit,QLabel,QFrame
-from PyQt6 import QtCore,QtWidgets
-from PyQt6.QtCore import QSize,Qt
+from PyQt6.QtWidgets import QListView,QVBoxLayout,QHBoxLayout,QPushButton,QWidget,QLabel,QDateEdit,QCheckBox,QLineEdit,QLabel,QFrame,QComboBox
+from PyQt6 import QtWidgets
+from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon,QPalette,QFont
 from BrewWidget import BrewWidget
-from PyQt6.QtWidgets import QComboBox
 from datetime import date
 from HelpMessage import HelpMessage
 
@@ -37,17 +36,7 @@ class BrewListWidget(QWidget):
         self.listView.clicked.connect(self.select_brew)
 
     def setup_gui(self):  
-        #define colors
-        pal=QPalette()
-        pal=self.parent.palette()
-        HighlightBg= pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.Highlight) 
-        WindowBg= pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.Window)
-        WindowFg= pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.WindowText)
-        HighlightFg=pal.color(QPalette.ColorGroup.Active, QPalette.ColorRole.HighlightedText)
-        self.WinFg=WindowFg.name()
-        self.WinBg=WindowBg.name()
-        self.HlBg=HighlightBg.name()
-        self.HlFg=HighlightFg.name() 
+
 
         #create a toolbar
         toolbarLayout=QHBoxLayout()
@@ -131,7 +120,10 @@ class BrewListWidget(QWidget):
         titlebarLayout=QHBoxLayout()
         self.titleLabel=QLabel()
         self.titleLabel.setText('LISTE DES SESSIONS DE BRASSAGE')
-        self.titleLabel.setStyleSheet('padding:5px;font-size: 20px; font-weight:bold; color:'+self.WinFg)
+        title_font=QFont()
+        title_font.setPointSize(int(self.font().pointSize()*1.3))
+        title_font.setWeight(700)
+        self.titleLabel.setFont(title_font)
         spacerItem = QtWidgets.QSpacerItem(40, 10, QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Fixed)
         titlebarLayout.addWidget(self.titleLabel) 
         titlebarLayout.addItem(spacerItem)
@@ -176,8 +168,6 @@ class BrewListWidget(QWidget):
 
     def apply_filters(self):
         items=self.brews
-        print(items[0].brew_date)
-        print(self.startDateEdit.date())
         filtered=list(filter(lambda x: \
                              (x.brew_date>self.startDateEdit.date() and x.brew_date<=self.endDateEdit.date() or not self.dateFilter.isChecked()) and \
                                 (self.nameFilterEdit.text().upper() in x.name.upper() or not self.nameFilter.isChecked()) and \
@@ -192,12 +182,9 @@ class BrewListWidget(QWidget):
             self.hide_sub_filter("date")
             
     def style_filter_changed(self):
-        print("in style_filter_changed")
         if self.styleFilter.isChecked():
-            print("show")
             self.show_sub_filter("style")
         else:
-            print("hide")
             self.hide_sub_filter("style")  
 
     def name_filter_changed(self):
@@ -224,7 +211,6 @@ class BrewListWidget(QWidget):
                 self.styleFilterEdit.setText("")    
 
     def show_sub_filter(self,mode):
-        print('show again')
         match mode:
             case "date":
                 self.startDateEdit.setVisible(True)
@@ -234,7 +220,6 @@ class BrewListWidget(QWidget):
             case "name":
                 self.nameFilterEdit.setVisible(True)
             case "style":
-                print("style")
                 self.styleFilterEdit.setVisible(True)    
 
     def sort_list(self, mode):
@@ -256,7 +241,6 @@ class BrewListWidget(QWidget):
             index=indexes[0]
             self.selection=self.model.brews[index.row()]
             self.brewWidget=BrewWidget(self.selection.id,None,self)
-            #print(self.brewWidget)
             self.parent.brewTabWidget.addTab(self.brewWidget,self.brewWidget.nameEdit.text())
             stackIndex=self.parent.swapWidget('brew',self.parent.brewTabWidget)# ('brew',self.brewWidget)
             self.parent.stackedWidget.setCurrentIndex(stackIndex)
@@ -270,7 +254,6 @@ class BrewListWidget(QWidget):
         pass    
 
     def new_brew(self):#not used at the moment
-        #print('creating new brew')
         self.brewWidget=BrewWidget(None,self.parent)#we pass the parent i.e. MainWindow as parent
         self.brewWidget.show() 
         self.model.brews=all_brew()  
