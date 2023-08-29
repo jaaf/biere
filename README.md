@@ -10,10 +10,10 @@ Il est placé sous licence GPL et, en plus d’être libre, est entièrement gra
 
 Pour le moment, il est compatible avec les plateformes Windows et Linux.
 
-**Une chaîne youtube met à votre disposition tous les .**
-[Tutoriels d’installation et de prise en main de Bière](https://www.youtube.com/playlist?list=PLbmSAALAruzfYM-BoCCixDvdexDnaPuL0)
+**Une chaîne youtube met à votre disposition tous les **
+[tutoriels d’installation et de prise en main de Bière](https://www.youtube.com/playlist?list=PLbmSAALAruzfYM-BoCCixDvdexDnaPuL0)
 
-##Installation
+## Installation
 L’installation de Bière peut se faire de deux manières:
 - pour être utilisé avec une base de données mysql
 - pour être utilisé avec une base de données sqlite3
