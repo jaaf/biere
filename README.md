@@ -10,8 +10,8 @@ Il est placé sous licence GPL et, en plus d’être libre, est entièrement gra
 
 Pour le moment, il est compatible avec les plateformes Windows et Linux.
 
-**Une chaîne youtube met à votre disposition les tutoriels d’installation et de prise en main.**
-[lien](https://www.youtube.com/channel/UChFFMG1XequnuPoV36UBkZg)
+**Une chaîne youtube met à votre disposition tous les .**
+[Tutoriels d’installation et de prise en main de Bière](https://www.youtube.com/channel/UChFFMG1XequnuPoV36UBkZg)
 
 ##Installation
 L’installation de Bière peut se faire de deux manières:
