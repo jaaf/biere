@@ -21,11 +21,23 @@ L’installation de Bière peut se faire de deux manières:
 La deuxième façon est recommandée, surtout si l’utilisateur n’est pas à l’aise avec l’installation de programme.
 
 ### Installation avec sqlite
+#### Sur Windows
 1- téléchargez l’exécutable correspondant (installateur) dans la liste des fichiers du dossier racine. Pour windows Bière-1.0-installer.exe, pour Linux Bière-1.0-installer.rpm ou Bière-1.0-installer.deb.
 
 2- exécutez l’installateur. Une icône du programme sera placée sur le bureau.
 3- lancez le programme en cliquant sur l’icône. Le programme démarre dans un terminal. Lorsqu’on vous pose une première question sur le type de base de données a utiliser, répondez **sqlite**.
 Le programme démarre dans sa fenêtre. 
+#### Sur Linux
+1- téléchargez le fichier biere-1.0.rpm
+2- retirez toute installation précédente avec la commande
+
+    sudo dnf remove biere
+
+3- Installez avec la commande
+
+    sudo dnf localinstall biere-1.0.rpm
+    
+
 
 ### Installation avec mysql
 1- Installez le serveur de base de données mariadb en version 11.0.3. D’autres versions pourrait fonctionner mais le programme a été testé avec cette version seulement.
@@ -73,12 +85,23 @@ biere1 doit bien sûr être remplacé par le nom de base que vous avez choisi pr
 Vous pouvez quitter le client du serveur avec 
 
     exit
-
+#### Sur Windows
 2- téléchargez l’exécutable correspondant (installateur) dans la liste des fichiers de dossier racine. Pour windows Bière-1.0-installer.exe, pour Linux Bière-1.0-installer.rpm ou Bière-1.0-installer.deb.
 
 3- exécutez l’installateur. Une icône du programme sera placée sur le bureau.
 
 4- lancez le programme en cliquant sur l’icône. Le programme démarre dans un terminal. Lorsqu’on vous pose une première question sur le type de base de données a utiliser, répondez **mysql**. Lorsqu’on vous demande le nom de la base répondez **biere1** ou le nom que vous auriez éventuellement choisi. Lorsqu’on vous demande le mot de passe donnez celui que vous avez saisi à  la commande 1-d.
 
+#### Sur Linux
+#### Sur Linux
+1- téléchargez le fichier biere-1.0.rpm
+2- retirez toute installation précédente avec la commande
+
+    sudo dnf remove biere
+
+3- Installez avec la commande
+
+    sudo dnf localinstall biere-1.0.rpm
+    
 Le programme démarre dans sa fenêtre. 
 
