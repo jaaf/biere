@@ -22,7 +22,7 @@ class RecipeListWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent=parent
-        self.icon_path='base-data/icons/'
+        self.icon_path=self.parent.icon_path
         self.icon_size=QSize(32,32)
         self.newButton=QPushButton()
         self.sortButton=QPushButton()

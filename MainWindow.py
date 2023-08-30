@@ -56,7 +56,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
         self.WinBg=None
-
+        path1=Path(__file__).parent.resolve()
+        self.icon_path=str(path1)+"/base-data/icons/" #a string
         self.recipeListWidget=RecipeListWidget(self)
         self.recipeListWidget.setup_gui()
         self.brewListWidget=BrewListWidget(self)
@@ -89,66 +90,66 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         
         
         #left tool bar
-        icon_path='./base-data/icons/'
+
         actionGroup=QActionGroup(self)
         actionGroup.setExclusive(True)
 
-        self.actionToolRecipes=QAction(QIcon(icon_path+'recipe-svgrepo-com.svg'),"Mes recettes", self)
+        self.actionToolRecipes=QAction(QIcon(self.icon_path+'recipe-svgrepo-com.svg'),"Mes recettes", self)
         self.toolBar.addAction(self.actionToolRecipes)
         self.actionToolRecipes.setCheckable(1)
         actionGroup.addAction(self.actionToolRecipes)
 
-        self.actionToolBrews=QAction(QIcon(icon_path+'beer-svgrepo-com.svg'),'Mes sessions',self)
+        self.actionToolBrews=QAction(QIcon(self.icon_path+'beer-svgrepo-com.svg'),'Mes sessions',self)
         self.toolBar.addAction(self.actionToolBrews)
         self.actionToolBrews.setCheckable(1)
         actionGroup.addAction(self.actionToolBrews)
        
     
         #self.toolBar.addSeparator()
-        self.actionToolInventoryFermentables=QAction(QIcon(icon_path+'cereal-wheat-svgrepo-com.svg'),'Mes fermentables',self)
+        self.actionToolInventoryFermentables=QAction(QIcon(self.icon_path+'cereal-wheat-svgrepo-com.svg'),'Mes fermentables',self)
         self.toolBar.addAction(self.actionToolInventoryFermentables)
         self.actionToolInventoryFermentables.setCheckable(1)
         actionGroup.addAction(self.actionToolInventoryFermentables)
 
-        self.actionToolInventoryHops=QAction(QIcon(icon_path+'hops-svgrepo-com.svg'),'Mes houblons',self)
+        self.actionToolInventoryHops=QAction(QIcon(self.icon_path+'hops-svgrepo-com.svg'),'Mes houblons',self)
         self.toolBar.addAction(self.actionToolInventoryHops)
         self.actionToolInventoryHops.setCheckable(1)
         actionGroup.addAction(self.actionToolInventoryHops)
 
-        self.actionToolInventoryYeasts=QAction(QIcon(icon_path+'petri-dish-svgrepo-com.svg'),'Mes levures',self)
+        self.actionToolInventoryYeasts=QAction(QIcon(self.icon_path+'petri-dish-svgrepo-com.svg'),'Mes levures',self)
         self.toolBar.addAction(self.actionToolInventoryYeasts)
         self.actionToolInventoryYeasts.setCheckable(1)
         actionGroup.addAction(self.actionToolInventoryYeasts)
         
-        self.actionToolInventoryMisc=QAction(QIcon(icon_path+'ingredients-svgrepo-com.svg'),'Mes ingrédients divers',self)
+        self.actionToolInventoryMisc=QAction(QIcon(self.icon_path+'ingredients-svgrepo-com.svg'),'Mes ingrédients divers',self)
         self.toolBar.addAction(self.actionToolInventoryMisc)
         self.actionToolInventoryMisc.setCheckable(1)
         actionGroup.addAction(self.actionToolInventoryMisc)
 
         
         #self.toolBar.addSeparator()
-        self.actionToolEquipment=QAction(QIcon(icon_path+'brew-svgrepo-com.svg'),'Mes équipments',self)
+        self.actionToolEquipment=QAction(QIcon(self.icon_path+'brew-svgrepo-com.svg'),'Mes équipments',self)
         self.toolBar.addAction(self.actionToolEquipment)
         self.actionToolEquipment.setCheckable(1)
         actionGroup.addAction(self.actionToolEquipment)
 
-        self.actionToolSourceWaters=QAction(QIcon(icon_path+'tap-faucet-svgrepo-com.svg'),'Mes eaux sources',self)
+        self.actionToolSourceWaters=QAction(QIcon(self.icon_path+'tap-faucet-svgrepo-com.svg'),'Mes eaux sources',self)
         self.toolBar.addAction(self.actionToolSourceWaters)
         self.actionToolSourceWaters.setCheckable(1)
         actionGroup.addAction(self.actionToolSourceWaters)
 
-        self.actionToolTargetWaters=QAction(QIcon(icon_path+'target-svgrepo-com.svg'),'Mes eaux cibles',self)
+        self.actionToolTargetWaters=QAction(QIcon(self.icon_path+'target-svgrepo-com.svg'),'Mes eaux cibles',self)
         self.toolBar.addAction(self.actionToolTargetWaters)
         self.actionToolTargetWaters.setCheckable(1)
         actionGroup.addAction(self.actionToolTargetWaters)
 
         
         #self.toolBar.addSeparator() 
-       
 
-        self.icon_path='base-data/icons/'
+
+      
         self.icon_size=QSize(32,32)
-        self.actionToolHelp=QAction(QIcon(icon_path+'help-question-question-mark-svgrepo-com.svg'),'Aide',self)
+        self.actionToolHelp=QAction(QIcon(self.icon_path+'help-question-question-mark-svgrepo-com.svg'),'Aide',self)
         self.toolBar.addAction(self.actionToolHelp)
         self.actionToolHelp.setCheckable(1)
         actionGroup.addAction(self.actionToolHelp)
@@ -224,31 +225,42 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         
         msgBox.setIcon(self.icon_path+'alert-48px-svgrepo-com.svg')
         message="""
-Vous êtes sur le point d’effacer vos choix initiaux, c.-à-d. le choix du système de base de données, le nom de la base de données et éventuellement le mot de passe d’accès au serveur de 
-base de données.
+ <p>Vous êtes sur le point d’effacer vos choix initiaux, c.-à-d. le choix du système de base de données, le nom de la base de données et éventuellement le mot de passe d’accès au serveur de 
+base de données.</p>
 
-Si vous confirmez, ces choix seront effacés et l’application sera immédiatement fermée. Donc si nécessaire enregistrez vos modifications avant de le faire.
+<p>Si vous confirmez, ces choix seront effacés et l’application sera immédiatement fermée. Donc si nécessaire enregistrez vos modifications avant de le faire.</p>
 
-Sachez cependant, que l’effacement des choix initiaux n’entraîne pas l’effacement de la base de données sur laquelle vous travaillez actuellement. Vous pourrez toujours y revenir par la suite à condition
-d’en avoir mémorisé le nom.
+<p>Sachez cependant, que l’effacement des choix initiaux n’entraîne pas l’effacement de la base de données sur laquelle vous travaillez actuellement.</p>
+ <p>Vous pourrez toujours y revenir par la suite à condition
+d’en avoir mémorisé le nom.</p>
 
-Confirmez-vous l’effacement ?"""
+<p style="font-weight:bold; color:red;">Attention : si vous êtes sur une plateforme Linux, vous devrez faire le prochain lancement de l'application dans un terminal, avec la commande suivante</p>
+<p style="font-weight:bold; color:red;background-color: yellow;"> /opt/biere/biere </p>
+<p>Confirmez-vous l’effacement ?</p>"""
         msgBox.setMessage(message) 
         msgBox.setCancelButtonText('Non. Ne pas effacer')
         msgBox.setConfirmButtonText('Oui. Effacer et terminer l’application')
         confirm=msgBox.exec()   
         if(confirm == 1):
             if sys.platform.startswith('linux'):
-                path_to_cred=Path('./cred/linux')
+                path1=Path.home()
+                path_to_cred=(path1/".biere"/"cred").resolve() #a string
+                print("printing path_to_cred in MainWindow")
+                print(path_to_cred)
+ 
+                #path_to_cred=Path('./cred/linux')
+                #path1=Path(__file__).parent
+                #path_to_cred=(path1/"."/"cred"/"linux").resolve() #a string
+                
             else:
                 path_to_cred=Path('./cred/windows')
-            path=path_to_cred/"db-choice.txt"
-            path.unlink(missing_ok=True)    
-            path=path_to_cred/"password.bin"
-            path.unlink(missing_ok=True)
-            path=path_to_cred/"dbname.bin"
-            path.unlink(missing_ok=True)
-            exit(0)
+        path=path_to_cred/"db-choice.txt"
+        path.unlink(missing_ok=True)    
+        path=path_to_cred/"password.bin"
+        path.unlink(missing_ok=True)
+        path=path_to_cred/"dbname.bin"
+        path.unlink(missing_ok=True)
+        #exit(0)
       
  
 

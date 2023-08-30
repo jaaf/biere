@@ -30,7 +30,9 @@ class ConfirmationDialog(QDialog):
         self.ui.titleLabel.setText(title)
 
     def setMessage(self,message):
-        self.ui.messageLabel.setText(message)  
+        self.ui.textEdit.setHtml(message)  
+        self.ui.textEdit.setMinimumWidth(900)
+        self.ui.textEdit.setMinimumHeight(400)
 
     def setConfirmButtonText(self,text):
         self.ui.confirmButton.setText(text) 

@@ -39,11 +39,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QLabel" name="messageLabel">
-     <property name="text">
-      <string>Le texte</string>
-     </property>
-    </widget>
+    <widget class="QTextEdit" name="textEdit"/>
    </item>
    <item>
     <widget class="QGroupBox" name="buttonGroupBox">

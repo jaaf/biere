@@ -14,10 +14,16 @@ home_path=Path().home()
 #home_path = os.path.expanduser( '~' )
 #home_path = os.environ['USERPROFILE']
 print("Home dir is "+str(home_path.resolve()))
-db_name='video2'
+
 if sys.platform.startswith('linux'):
-    path_to_cred=Path('./cred/linux')
+    #path_to_cred=Path('./cred/linux')
+    path1=Path.home()
+    path_to_cred=(path1/".biere"/"cred").resolve() #a string
+    print("printing path_to_cred")
+    print(path_to_cred)
+
     #path_to_cred=path.abspath(path.join(path.dirname(__file__),'../cred/linux'))
+
 else:
     path_to_cred=Path('./cred/windows')
     #path_to_cred =path.abspath(path.join(path.dirname(__file__),r'..\cred\windows'))

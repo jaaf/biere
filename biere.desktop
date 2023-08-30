@@ -18,4 +18,4 @@
 
         # The icon for the entry, using the name from `hicolor/scalable` without the extension.
         # You can also use a full path to a file in /opt.
-        Icon=biere32.png
+        Icon=biere-64x64.png
