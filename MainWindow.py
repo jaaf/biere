@@ -244,23 +244,17 @@ d’en avoir mémorisé le nom.</p>
         if(confirm == 1):
             if sys.platform.startswith('linux'):
                 path1=Path.home()
-                path_to_cred=(path1/".biere"/"cred").resolve() #a string
-                print("printing path_to_cred in MainWindow")
-                print(path_to_cred)
- 
-                #path_to_cred=Path('./cred/linux')
-                #path1=Path(__file__).parent
-                #path_to_cred=(path1/"."/"cred"/"linux").resolve() #a string
-                
+                path_to_cred=(path1/".biere"/"cred").resolve() #a string                 
             else:
                 path_to_cred=Path('./cred/windows')
+
         path=path_to_cred/"db-choice.txt"
         path.unlink(missing_ok=True)    
         path=path_to_cred/"password.bin"
         path.unlink(missing_ok=True)
         path=path_to_cred/"dbname.bin"
         path.unlink(missing_ok=True)
-        #exit(0)
+        exit()
       
  
 

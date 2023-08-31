@@ -15,7 +15,10 @@ home_path=Path().home()
 print("Home dir is "+str(home_path.resolve()))
 p=home_path/".biere"/"cred"
 p.mkdir(mode=0o777,parents=True,exist_ok=True)
-path_to_cred=(home_path/".biere"/"cred").resolve() #a string
+if sys.platform.startswith('linux'):
+    path_to_cred=(home_path/".biere"/"cred").resolve() #a string
+else:
+    path_to_cred=Path('./cred/windows')
 
 try:
     with open(path_to_cred/'key.bin','rb') as fileObj : 
