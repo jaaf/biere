@@ -35,7 +35,7 @@ for item in settings:
     else:    
         new_font.setPointSize(11)
 
-app.setFont( new_font ) 
+app.setFont( new_font )
 window = MainWindow()
 window.resize(1280,720)
 window.show()

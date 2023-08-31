@@ -3,47 +3,20 @@ from sqlalchemy_utils import create_database, database_exists
 from sqlalchemy.orm import sessionmaker, scoped_session
 from database.orm_base import Base
 from cryptography.fernet import Fernet
-import os
+from PyQt6.QtWidgets import QMessageBox
 #from os import path
 from pathlib import Path
+
 import sys
 from getpass import getpass
 from shutil import which
 import sqlite3
 home_path=Path().home()
-#home_path = os.path.expanduser( '~' )
-#home_path = os.environ['USERPROFILE']
 print("Home dir is "+str(home_path.resolve()))
+p=home_path/".biere"/"cred"
+p.mkdir(mode=0o777,parents=True,exist_ok=True)
+path_to_cred=(home_path/".biere"/"cred").resolve() #a string
 
-if sys.platform.startswith('linux'):
-    #path_to_cred=Path('./cred/linux')
-    path1=Path.home()
-    path_to_cred=(path1/".biere"/"cred").resolve() #a string
-    print("printing path_to_cred")
-    print(path_to_cred)
-
-    #path_to_cred=path.abspath(path.join(path.dirname(__file__),'../cred/linux'))
-
-else:
-    path_to_cred=Path('./cred/windows')
-    #path_to_cred =path.abspath(path.join(path.dirname(__file__),r'..\cred\windows'))
-choice=''
-try: #check is a db choice has already been done
-    with open(path_to_cred/'db-choice.txt','r') as fileObj:
-        for line in fileObj:
-            choice=line
-        fileObj.close()
-        print("Le choix de la base de données a déjà été fait. il s'agit de  "+choice)
-except Exception as e:
-    choice=input("""
-    Bienvenue dans Bière.\n
-    Vous avez le choix entre une base de données mysql ou sqlite. Donnez votre choix en tapant mysql ou sqlite\n""") 
-    while choice != "mysql" and choice != 'sqlite':
-        choice=input("Vous avez saisi "+str(choice)+" .Ce doit être mysq ou sqlite. Veuillez saisir votre choix à nouveau.\n")
-    with open(path_to_cred/'db-choice.txt','w') as fileObj:
-            fileObj.write(choice)
-            fileObj.close()    
-            
 try:
     with open(path_to_cred/'key.bin','rb') as fileObj : 
         for line in fileObj:
@@ -55,6 +28,26 @@ except Exception:
     with open(path_to_cred/'key.bin','wb') as fileObj: 
         fileObj.write(key)
         fileObj.close()
+
+choice=''
+try: #check is a db choice has already been done
+
+    with open(path_to_cred/'db-choice.txt','r') as fileObj:
+        for line in fileObj:
+            choice=line
+        fileObj.close()
+        print("Le choix de la base de données a déjà été fait. il s'agit de  "+choice)
+except Exception as e:
+    choice=input("""
+    Bienvenue dans Bière.\n
+    Vous avez le choix entre une base de données mysql ou sqlite. Donnez votre choix en tapant mysql ou sqlite\n """) 
+    while choice != "mysql" and choice != 'sqlite':
+        choice=input("Vous avez saisi "+str(choice)+" .Ce doit être mysq ou sqlite. Veuillez saisir votre choix à nouveau.\n")
+    with open(path_to_cred/'db-choice.txt','w') as fileObj:
+            fileObj.write(choice)
+            fileObj.close()    
+            
+
 
 if choice =='mysql':
 
@@ -153,24 +146,13 @@ if choice =='sqlite':
             fileObj.write(encrypted_dbname)
         fileObj.close()  
 
-    if sys.platform.startswith("linux"):
-        try:
-            os.mkdir(home_path/".biere")
-        except:
-            pass    
+    if sys.platform.startswith("linux"):   
         db_url="sqlite:///"+str(home_path/".biere"/dbname)
     else:
-        try:
-            #os.makedirs(home_path/"AppData/Local/biere",mode=0o777)
-            p=home_path/"AppData/Local/biere"
-            p.mkdir(mode=0o777, parents=True, exist_ok=True) 
-        except Exception as e:
-         
-            print("could not create the db as it exists")
         db_url="sqlite:///"+str(home_path/"AppData/Local/biere"/dbname)
         
         
-        print ("Vous travaillez avec une base de données sqlite dont le nom est "+dbname)
+    print ("Vous travaillez avec une base de données sqlite dont le nom est "+dbname)
 
 
 
