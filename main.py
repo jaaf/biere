@@ -16,8 +16,6 @@ from PyQt6.QtGui import QPalette,QColor,QFont
 from MainWindow import MainWindow
 from database.commons.settings import Setting,all_setting, update_setting, add_setting, find_setting_by_id
 
-
-
 app = QtWidgets.QApplication(sys.argv)
 app.setStyle('Fusion')
 print("Le style des fenêtres est "+app.style().objectName())

@@ -11,6 +11,7 @@ import sys
 from getpass import getpass
 from shutil import which
 import sqlite3
+
 home_path=Path().home()
 print("Home dir is "+str(home_path.resolve()))
 p=home_path/".biere"/"cred"
