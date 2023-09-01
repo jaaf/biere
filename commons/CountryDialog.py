@@ -23,7 +23,7 @@ class CountryDialog(QDialog):
         additionalColors=Themes.get_additional_colors('brown')
 #        self.ui.introTextEdit.setStyleSheet('color:'+additionalColors['intro']+';background-color: '+self.parent.WinBg+';')
 
-        self.ui.idEdit.setVisible(False)
+      
         self.ui.addButton.clicked.connect(self.add_country)
         
         #setting the model for list view
