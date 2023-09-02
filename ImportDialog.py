@@ -185,7 +185,6 @@ class ImportDialog(QDialog):
 
     #---------------------------------------------------------------------------------------------------
     def check_import(self,x_array):
-        print('in check_import'+self.what)
         result=""
         match self.what:
             case "fermentables":
