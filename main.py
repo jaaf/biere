@@ -15,13 +15,35 @@ from PyQt6 import QtGui
 from PyQt6.QtGui import QPalette,QColor,QFont
 from MainWindow import MainWindow
 from database.commons.settings import Setting,all_setting, update_setting, add_setting, find_setting_by_id
+import logging
+import datetime
+from pathlib import Path
+from database.db_connection_local import logger
 
 
 
+
+#Creating a handler
+def handle_unhandled_exception(exc_type, exc_value, exc_traceback):
+    if issubclass(exc_type, KeyboardInterrupt):
+                #Will call default excepthook
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+        #Create a critical level log message with info from the except hook.
+    logger.critical("Unhandled exception", exc_info=(exc_type, exc_value, exc_traceback))
+#Assign the excepthook to the handler
+sys.excepthook = handle_unhandled_exception
+
+
+now=datetime.datetime.now()
+logging.info('Application démarrée' )
+print('logger initialized')
 app = QtWidgets.QApplication(sys.argv)
 app.setStyle('Fusion')
 print("Le style des fenêtres est "+app.style().objectName())
 print("La plateforme est "+sys.platform)
+logger.info("Le style des fenêtres est "+app.style().objectName())
+logger.info("La plateforme est "+sys.platform)
 screen_resolution = QtGui.QGuiApplication.primaryScreen().availableGeometry()
 
 #window.resize(w,h)
@@ -40,3 +62,6 @@ window = MainWindow()
 window.resize(1280,720)
 window.show()
 app.exec()
+logging.info('Application terminée \n\n')
+
+

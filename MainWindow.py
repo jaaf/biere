@@ -48,6 +48,7 @@ from HelpMessage import HelpMessage
 import sys
 from pathlib import Path
 from ConfirmationDialog import ConfirmationDialog
+import logging
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
@@ -56,6 +57,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
         self.WinBg=None
+        log=logging.getLogger(__name__)
         path1=Path(__file__).parent.resolve()
         self.this_file_path=Path(__file__).parent
         self.icon_path=str(path1)+"/base-data/icons/" #a string
@@ -204,8 +206,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
 
         self.actionStyles.triggered.connect(self.showStyleDialog)
         self.actionRests.triggered.connect(self.showRestDialog)
-        
- 
+     
 
         self.actionToolHelp.triggered.connect(self.showHelp)
         self.actionFont.triggered.connect(self.showFontDialog)
@@ -214,7 +215,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         self.toggleHeaderViewAction.triggered.connect(lambda: self.shortcut_triggered('toggle_header'))
         QtGui.QShortcut(QtGui.QKeySequence("Alt+C"), self, activated=  lambda todo="toggle_calculations": self.shortcut_triggered(todo))
         self.toggleCalculationsViewAction.triggered.connect(lambda: self.shortcut_triggered('toggle_calculations'))
-
+        log.info("mainwindow initialized")
     #---------------------------------------------------------------------------    
     def shortcut_triggered(self,todo)    :
         print('key is '+todo)

@@ -9,6 +9,7 @@ build/
 .vscode
 *.deb
 *.rpm
+*.log
 *.pdf
 cred/*/*.bin
 cred/*/*.txt

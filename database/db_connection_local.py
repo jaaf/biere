@@ -10,8 +10,23 @@ from pathlib import Path
 import sys
 from getpass import getpass
 from shutil import which
+import logging
+import logging.handlers as handlers
 import sqlite3
-home_path=Path().home()
+from pathlib import Path
+
+#THIS IS PARSED BEFORE main.py
+#Creating a logger
+home_path=Path.home()
+logger = logging.getLogger("ROOT")
+filename=(home_path/".biere/bière.log").resolve()
+
+logging.basicConfig(filename=filename, filemode='a', level=logging.DEBUG,
+    format="%(name)s: %(asctime)s | %(levelname)s | %(filename)s:%(lineno)s | %(process)d >>> %(message)s",
+    datefmt="%Y-%m-%d à %H:%M:%SZ",
+)
+logHandler = handlers.RotatingFileHandler(filename, maxBytes=5000, backupCount=2)
+logger.addHandler(logHandler)
 print("Home dir is "+str(home_path.resolve()))
 p=home_path/".biere"/"cred"
 p.mkdir(mode=0o777,parents=True,exist_ok=True)
@@ -53,7 +68,7 @@ except Exception as e:
 
 
 if choice =='mysql':
-
+    logger.info("L'application utilise une base de données "+choice)
     try:
         #try to retrieve database name
         with open(path_to_cred/'dbname.bin','rb') as fileObj:
@@ -132,7 +147,8 @@ Corrigez cela et réessayez sion vous allez boucler sur ces demandes. Merci de s
     print ("Vous travaillez avec une base de données mysql dont le nom est "+dbname)
     
 if choice =='sqlite':
-
+    logging.info("L'application utilise une base de données "+choice)
+    print('le choix est '+choice)
     try:
     #try to retrieve database name
         with open(path_to_cred/'dbname.bin','rb') as fileObj:
