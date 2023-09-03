@@ -23,6 +23,7 @@ from HelpMessage import HelpMessage
 from hop.HopInventoryWidgetBase import Ui_Form as hopInventoryWgt
 from parameters import (get_hop_form_name, get_hop_purpose_name, hop_forms,
                         hop_purposes)
+from pathlib import Path
 
 
 class HopInventoryWidget(QWidget):
@@ -33,6 +34,7 @@ class HopInventoryWidget(QWidget):
         self.ui.setupUi(self)
         self.id=id
         self.parent=parent
+        self.this_file_path=Path(__file__).parent
 
         #propage app font
         app = QtWidgets.QApplication.instance()
@@ -110,12 +112,12 @@ class HopInventoryWidget(QWidget):
             #------------------------------------------------------------------
     def show_contextual_help(self,what):
         helpPopup=HelpMessage()
-        filename="help/Head.html"
+        filename=(self.this_file_path/"../help/Head.html").resolve()
         prepend=open(filename,'r',encoding="utf-8").read()
         match what:
             case 'filter':
                 helpPopup.set_title('À propos du filtrage et de la recherche')
-                filename="help/HopSearchHelp.html"
+                filename=(self.this_file_path/"../help/HopSearchHelp.html").resolve()
                 text=open(filename,'r',encoding="utf-8").read()
                 helpPopup.set_message(prepend+text)
            

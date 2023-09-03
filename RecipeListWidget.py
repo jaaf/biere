@@ -15,7 +15,8 @@ from PyQt6 import QtCore,QtWidgets
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon,QFont
 from RecipeWidget import RecipeWidget
-
+from HelpMessage import HelpMessage
+from pathlib import Path
 
 
 class RecipeListWidget(QWidget):
@@ -29,6 +30,7 @@ class RecipeListWidget(QWidget):
         self.listView=QListView()
         self.selection=None
         self.recipeWidget=None
+        self.this_file_path=Path(__file__).parent
         
 
     def setup_gui(self): 
@@ -151,10 +153,10 @@ class RecipeListWidget(QWidget):
 
     def show_contextual_help(self):
         helpPopup=HelpMessage() 
-        filename="help/Head.html"
+        filename=(self.this_file_path/"help/Head.html").resolve()
         prepend=open(filename,'r',encoding="utf-8").read()
         helpPopup.set_title('À propos du filtrage ')
-        filename="help/BrewListFilterHelp.html"
+        filename=(self.this_file_path/"help/BrewListFilterHelp.html").resolve()
         text=open(filename,'r',encoding="utf-8").read()
         helpPopup.set_message(prepend+text)
         helpPopup.exec()

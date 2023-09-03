@@ -24,7 +24,7 @@ from ListModels import InventoryYeastModel, YeastModel
 from parameters import (yeast_floculation, yeast_form, yeast_pack_unit,
                         yeast_sedimentation, yeast_target)
 from yeast.YeastInventoryWidgetBase import Ui_Form as yeastInventoryWgt
-
+from pathlib import Path
 
 class YeastInventoryWidget(QWidget):
     resized = QtCore.pyqtSignal()
@@ -33,7 +33,8 @@ class YeastInventoryWidget(QWidget):
         self.ui =yeastInventoryWgt()
         self.ui.setupUi(self)
         self.id=id
-        self.parent=parent       
+        self.parent=parent    
+        self.this_file_path=Path(__file__).parent   
 
         #propage app font
         app = QtWidgets.QApplication.instance()
@@ -308,12 +309,12 @@ class YeastInventoryWidget(QWidget):
     #------------------------------------------------------------------
     def show_contextual_help(self,what):
         helpPopup=HelpMessage()
-        filename="help/Head.html"
+        filename=(self.this_file_path/"../help/Head.html").resolve()
         prepend=open(filename,'r',encoding="utf-8").read()
         match what:
             case 'filter':
                 helpPopup.set_title('À propos du filtrage et de la recherche')
-                filename="help/YeastSearchHelp.html"
+                filename=(self.this_file_path/"../help/YeastSearchHelp.html").resolve()
                 text=open(filename,'r',encoding="utf-8").read()
                 helpPopup.set_message(prepend+text)
            

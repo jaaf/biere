@@ -34,7 +34,7 @@ from database.commons.country import all_country,find_country_by_code
 from datetime import date
 import chardet,os
 #from help.RecipeHelp import recipe_help
-from SignalObject import SignalObject
+from pathlib import Path
 
 class ImportDialog(QDialog):
     resized = QtCore.pyqtSignal()
@@ -64,12 +64,15 @@ class ImportDialog(QDialog):
         self.ui.comboBox.insertSeparator(16)
         self.ui.comboBox.addItem('styles')
         self.ui.comboBox.addItem("paliers d'empâtage")
+        self.this_file_path=Path(__file__).parent
 
 
         #help text 
-        filename="help/Head.html"
-        prepend=open(filename,'r',encoding="utf-8").read()    
-        filename ="help/ImportHelp.html"
+        
+        filename=(self.this_file_path/"help/Head.html").resolve()
+        prepend=open(filename,'r',encoding="utf-8").read()  
+
+        filename =(self.this_file_path/"help/ImportHelp.html").resolve()
         text=open(filename,'r',encoding="utf-8").read()
         self.ui.helpEdit.setHtml(prepend+text)
         self.ui.helpEdit.setReadOnly(True)

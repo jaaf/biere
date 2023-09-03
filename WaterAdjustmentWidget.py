@@ -17,6 +17,7 @@ from PyQt6.QtCore import QObject
 import copy
 import jsonpickle,math
 from HelpMessage import HelpMessage
+from pathlib import Path
 
 class SaltAdditions(QObject):
     def __init__(self, CaSO4,MgSO4,CaCl2,MgCl2,CaOH2,NaHCO3):
@@ -50,6 +51,7 @@ class WaterAdjustmentWidget(QWidget):
         super().__init__(parent)
         self.parent=parent
         self.ui =WAWdgt()
+        self.this_file_path=Path(__file__).parent
     
         self.base_water=base_water
         self.dilution_water=dilution_water
@@ -195,11 +197,11 @@ class WaterAdjustmentWidget(QWidget):
     #--------------------------------------------------------------------------------- 
     def show_contextual_help(self,what):
         helpPopup=HelpMessage()
-        filename="help/Head.html"
+        filename=(self.this_file_path/"help/Head.html").resolve()
         prepend=open(filename,'r',encoding="utf-8").read()
          
         helpPopup.set_title('Ajustement de l\'eau')
-        filename="help/WaterAdjustment.html"
+        filename=(self.this_file_path/"help/WaterAdjustment.html").resolve()
         text=open(filename,'r',encoding="utf-8").read()
         helpPopup.set_message(prepend+text)
 

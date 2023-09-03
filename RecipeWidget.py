@@ -22,8 +22,7 @@ from database.profiles.style import all_style,find_style_by_name
 from database.profiles.rest import all_rest
 from database.recipes.recipe import Recipe,all_recipe,update_recipe,add_recipe,delete_recipe,find_recipe_by_id,find_recipe_by_name
 from dateUtils import DateUtils
-from PyQt6.QtCore import Qt,QRegularExpression,QTimer,QFile,QTextStream,pyqtSignal,QObject
-from parameters import equipment_type,cooler_type
+from PyQt6.QtCore import Qt,QRegularExpression,pyqtSignal,QObject
 from database.commons.country import all_country,find_country_by_code
 from PyQt6.QtGui import QDoubleValidator,QRegularExpressionValidator,QIntValidator,QPalette,QColor
 from PyQt6 import QtGui
@@ -31,7 +30,7 @@ from PyQt6.QtGui import QIcon
 from LevelIndicator import LevelIndicator
 from SelectorWidget import SelectorWidget
 from RecipeFermentable import RecipeFermentable
-import sys, datetime
+import  datetime
 import jsonpickle
 from ConfirmationDialog import ConfirmationDialog
 import copy,json
@@ -39,6 +38,7 @@ from BrewUtils import BrewUtils
 from HelpMessage import HelpMessage
 from SignalObject import SignalObject
 import os
+from pathlib import Path
 class RecipeCommunication(QObject):
     calculate=pyqtSignal(SignalObject)
 
@@ -56,6 +56,7 @@ class RecipeWidget(QWidget):
         self.helpPath=os.path.join(dirname,'help/')
         self.icon_path='base-data/icons/'
         self.icon_size=QSize(32,32)
+        self.this_file_path=Path(__file__).parent
 
         
         today=datetime.date.today()
@@ -111,9 +112,7 @@ class RecipeWidget(QWidget):
         self.ui.typeCombo.addItem('Empâtage partiel')
         self.ui.typeCombo.addItem('Extraits')
          
-        #help text     
-        filename ="help/RecipeHelp.html"
-        text=open(filename,'r',encoding="utf-8").read()
+      
 
         #----------------------------------------
         #SET VARIOUS COMBO
@@ -255,18 +254,18 @@ class RecipeWidget(QWidget):
     #----------------------------------------------------------------------
         #------------------------------------------------------------------
     def show_contextual_help(self,what):
-        filename="help/Head.html"
+        filename=(self.this_file_path/"help/Head.html").resolve()
         prepend=open(filename,'r',encoding="utf-8").read()
         helpPopup=HelpMessage()
         match what:
             case 'abv':
                 helpPopup.set_title("À propos du taux d'alcool en volume visé")
-                filename="help/ABVHelp.html"
+                filename=(self.this_file_path/"help/ABVHelp.html").resolve()
                 text=open(filename,'r',encoding="utf-8").read()
                 helpPopup.set_message(prepend+text)
             case 'color':
                 helpPopup.set_title("À propos de la couleur visée")
-                filename="help/ColorHelp.html"
+                filename=(self.this_file_path/"help/ColorHelp.html").resolve()
                 text=open(filename,'r',encoding="utf-8").read()
                 helpPopup.set_message(prepend+text)
         helpPopup.exec()

@@ -10,7 +10,7 @@ You should have received a copy of the GNU General Public License along with thi
 
 from PyQt6 import QtGui,QtWidgets
 from PyQt6.QtWidgets import QPushButton,QDialog,QHBoxLayout,QVBoxLayout,QTextEdit,QLabel,QTextBrowser
-
+from pathlib import Path
 class HelpMessage(QDialog):
     def __init__(self,parent=None):
         super().__init__(parent)
@@ -30,13 +30,14 @@ class HelpMessage(QDialog):
         self.setLayout(mainLayout)
         self.resize(800,400)
         self.closeButton.clicked.connect(self.close)
+        self.this_file_path=Path(__file__).parent
 
     def set_title(self, title):
         self.title.setText(title)
         self.title.setStyleSheet('font-size:18px; font-weight:600;')
         
     def set_message(self,message):
-        filename="help/Head.html"
+        filename=(self.this_file_path/"help/Head.html").resolve()
         prepend=open(filename,'r',encoding="utf-8").read()
         self.body.setHtml(prepend+message) 
           

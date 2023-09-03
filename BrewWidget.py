@@ -70,6 +70,7 @@ from WaterAdjustmentWidget import WaterAdjustmentWidget
 from PDFWritter import PDFWriter
 from ExportBrewSheet import ExportBrewSheet
 from NameDialog import NameDialog
+from pathlib import Path
 
 
 #from help.TargetOGHelp import TargetOGHelp
@@ -92,6 +93,7 @@ class BrewWidget(MyWidget):
         self.id=id
         self.recipe_id=recipe_id
         self.parent=parent
+        self.this_file_path=Path(__file__).parent
         
         #os.system('clear')
         keyPressed = QtCore.pyqtSignal(int)
@@ -728,24 +730,24 @@ class BrewWidget(MyWidget):
     #------------------------------------------------------------------
     def show_contextual_help(self,what):
         helpPopup=HelpMessage()
-        filename="help/Head.html"
+        filename=(self.this_file_path/"help/Head.html").resolve()
         prepend=open(filename,'r',encoding="utf-8").read()
        
         match what:
             case "preboil_gravity":
                 helpPopup.set_title("À propos de la densité de pré-ébullition")
-                filename="help/PreboilGravityHelp.html"
+                filename=(self.this_file_path/"help/PreboilGravityHelp.html").resolve()
             case 'volumes':
                 helpPopup.set_title('À propos des volumes intermédiaires')
-                filename='help/IntermediaryVolumes.html'
+                filename=(self.this_file_path/'help/IntermediaryVolumes.html').resolve()
                 
             case 'targetOG':
                 helpPopup.set_title('À propos de la densité initiale')
-                filename="help/TargetOGHelp.html"
+                filename=(self.this_file_path/"help/TargetOGHelp.html").resolve()
 
             case 'targetIBU':
                 helpPopup.set_title('À propos de l\'amertume')
-                filename="help/TargetIBUHelp.html"
+                filename=(self.this_file_path/"help/TargetIBUHelp.html").resolve()
 
         text=open(filename,'r',encoding="utf-8").read()
         helpPopup.set_message(prepend+text)

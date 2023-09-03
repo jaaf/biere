@@ -12,7 +12,7 @@ import sys, datetime
 from HelpMessage import HelpMessage
 from SignalObject import SignalObject
 from BrewWidget import Communication
-
+from pathlib import Path
 
 
 
@@ -25,6 +25,7 @@ class EquipmentDialogWidget(QWidget):
         self.id=id
        
         self.parent=parent
+        self.this_file_path=Path(__file__).parent
         today=datetime.date.today()
 
         app = QtWidgets.QApplication.instance()
@@ -302,28 +303,28 @@ class EquipmentDialogWidget(QWidget):
     def show_contextual_help(self,what):
         #print('what is '+str(what))
         helpPopup=HelpMessage()
-        filename="help/Head.html"
+        filename=(self.this_file_path/"../help/Head.html").resolve()
         prepend=open(filename,'r',encoding="utf-8").read()
-        filename='help/CoolFlowRateHelp.html'
+        filename=(self.this_file_path/'../help/CoolFlowRateHelp.html').resolve()
         match what:
             case "mash_tun_capa_calo":
                 helpPopup.set_title("Capacité calorifique de la cuve en équivalent grain")
-                filename="help/MashTunCapaCaloHelp.html"
+                filename=(self.this_file_path/"../help/MashTunCapaCaloHelp.html").resolve()
             case 'loose_hop':
                 helpPopup.set_title("Coefficient réducteur de l'absorption d'eau par les houblons ?")    
-                filename="help/LooseCoeffHelp.html"
+                filename=(self.this_file_path/"../help/LooseCoeffHelp.html").resolve()
             case 'grain_absorption':
                 helpPopup.set_title("Absorption d'eau par le grain")
-                filename="help/GrainAbsorption.html"    
+                filename=(self.this_file_path/"../help/GrainAbsorption.html").resolve()    
             case 'cooler_slope':
                 helpPopup.set_title("Pente du refroidisseur")
-                filename="help/CoolSlopeHelp.html"
+                filename=(self.this_file_path/"../help/CoolSlopeHelp.html").resolve()
             case 'cooler_flow_rate':
                 helpPopup.set_title("Débit au refroidissement")
-                filename="help/CoolFlowRateHelp.html" 
+                filename=(self.this_file_path/"../help/CoolFlowRateHelp.html").resolve() 
             case 'kettle_heat_slope':
                 helpPopup.set_title("Vitesse de chauffe de la bouilloire")
-                filename="help/KettleHeatSlopeHelp.html"             
+                filename=(self.this_file_path/"../help/KettleHeatSlopeHelp.html").resolve()             
 
         text=open(filename,'r',encoding='utf-8').read()
         helpPopup.set_message(prepend+text)

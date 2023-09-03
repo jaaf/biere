@@ -57,6 +57,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         self.setupUi(self)
         self.WinBg=None
         path1=Path(__file__).parent.resolve()
+        self.this_file_path=Path(__file__).parent
         self.icon_path=str(path1)+"/base-data/icons/" #a string
         self.recipeListWidget=RecipeListWidget(self)
         self.recipeListWidget.setup_gui()
@@ -306,13 +307,13 @@ d’en avoir mémorisé le nom.</p>
     #------------------------------------------------------------------
     def show_contextual_help(self,what):
         helpPopup=HelpMessage()
-        filename="help/Head.html"
+        filename=(self.this_file_path/"help/Head.html").resolve()
         prepend=open(filename,'r',encoding="utf-8").read()
        
         match what:
             case "about":
                 helpPopup.set_title("À propos de ce logiciel")
-                filename="help/About.html"
+                filename=(self.this_file_path/"help/About.html").resolve()
 
 
         text=open(filename,'r',encoding="utf-8").read()

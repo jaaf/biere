@@ -18,6 +18,7 @@ import copy
 import jsonpickle
 from database.profiles.rest import Rest
 from PyQt6.QtGui import QDoubleValidator,QRegularExpressionValidator,QIntValidator
+from pathlib import Path
 
 class HelpWidget(QWidget):
     def __init__(self, parent=None):
@@ -25,6 +26,7 @@ class HelpWidget(QWidget):
         self.ui =hw()
         self.ui.setupUi(self)
         self.ui.groupBox.setTitle("Sommaire")
+        self.this_file_path=Path(__file__).parent
         
         self.resize(QSize(1600,800))
         self.vl=QVBoxLayout()
@@ -62,9 +64,12 @@ class HelpWidget(QWidget):
         self.Brew.clicked.connect(lambda: self.show_chapter('Brew'))
 
     def show_chapter(self,what):
-        filename="help/Head.html"
+        print(self.this_file_path)
+   
+        filename=(self.this_file_path/"help/Head.html").resolve()
         prepend=open(filename,'r',encoding="utf-8").read()
-        filename="help/GeneralHelp/"+what+".html"
+        full_what=what+".html"
+        filename=(self.this_file_path/"help/GeneralHelp/"/full_what).resolve()
           
         text=open(filename,'r',encoding="utf-8").read()
         self.ui.textEdit.setHtml(prepend+text) 

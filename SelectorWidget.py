@@ -38,6 +38,7 @@ from RecipeYeast import RecipeYeast
 from RecipeMisc import RecipeMisc
 from HelpMessage import HelpMessage
 from CheckableComboBox import CheckableComboBox,MyStandardItem
+from pathlib import Path
 
 class SelectorWidget(QWidget):
     def __init__(self, source_list,destination_list,what,context,parent=None):
@@ -50,6 +51,7 @@ class SelectorWidget(QWidget):
         self.source_list=source_list
         self.what=what
         self.context=context
+        self.this_file_path=Path(__file__).parent
        
         self.source_selection=None
         self.destination_selection=None
@@ -730,7 +732,7 @@ class SelectorWidget(QWidget):
 
     
     def show_contextual_help(self,what):
-        filename="help/Head.html"
+        filename=(self.this_file_path/"help/Head.html").resolve()
         prepend=open(filename,'r',encoding="utf-8").read()
         helpPopup=HelpMessage()  
 
@@ -739,47 +741,47 @@ class SelectorWidget(QWidget):
                 helpPopup.set_title('À propos du filtrage et de la recherche')
               
 
-                filename="help/FermentableSearchHelp.html"
+                filename=(self.this_file_path/"help/FermentableSearchHelp.html").resolve()
                 text=open(filename,'r',encoding="utf-8").read()
                 helpPopup.set_message(prepend+text)
             case 'filter_h':
                 helpPopup.set_title('À propos du filtrage et de la recherche')
-                filename="help/HopSearchHelp.html"
+                filename=(self.this_file_path/"help/HopSearchHelp.html").resolve()
                 text=open(filename,'r',encoding="utf-8").read()
                 helpPopup.set_message(prepend+text)            
             case 'steep_yield':
                 helpPopup.set_title('À propos du rendement au trempage')
-                filename="help/SteepYieldHelp.html"
+                filename=(self.this_file_path/"help/SteepYieldHelp.html").resolve()
                 text=open(filename,'r',encoding="utf-8").read()
                 helpPopup.set_message(prepend+text)
             case 'fermentable_unit':
                 helpPopup.set_title ("Pourquoi l'absence d'unité de masse de fermentable")
-                filename="help/FermentableUnitHelp.html"
+                filename=(self.this_file_path/"help/FermentableUnitHelp.html").resolve()
                 text=open(filename,'r',encoding="utf-8").read()
                 helpPopup.set_message(prepend+text)
             case 'loose_hop':
                 helpPopup.set_title("À quoi sert l'indicateur en vrac ?")    
-                filename="help/LooseHelp.html"
+                filename=(self.this_file_path/"help/LooseHelp.html").resolve()
                 text=open(filename,'r',encoding="utf-8").read()
                 helpPopup.set_message(prepend+text)
             case 'multiplicator':
                 helpPopup.set_title('Le multiplicateur')
-                filename="help/Multiplicator.html"
+                filename=(self.this_file_path/"help/Multiplicator.html").resolve()
                 text=open(filename,'r',encoding="utf-8").read()
                 helpPopup.set_message(prepend+text)
             case 'hop_stand':
                 helpPopup.set_title('Le houblonnage Hors Flamme')
-                filename="help/Hopstand.html"
+                filename=(self.this_file_path/"help/Hopstand.html").resolve()
                 text=open(filename,'r',encoding="utf-8").read()
                 helpPopup.set_message(prepend+text)
             case "water_additions":
                 helpPopup.set_title("Calcul des additions d'eau et de leur température")
-                filename="help/WaterAdditions.html"
+                filename=(self.this_file_path/"help/WaterAdditions.html").resolve()
                 text=open(filename,'r',encoding="utf-8").read()
                 helpPopup.set_message(prepend+text)
             case "rest":
                 helpPopup.set_title("Information sur les paliers d'empâtage")
-                filename="help/Rests.html"
+                filename=(self.this_file_path/"help/Rests.html").resolve()
                 text=open(filename,'r',encoding="utf-8").read()
                 helpPopup.set_message(prepend+text)  
         helpPopup.exec()

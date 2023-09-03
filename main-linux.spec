@@ -8,7 +8,7 @@ a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('cred/linux/*.*','cred/linux/'),('w20/*.*','w20'),('base-data','base-data'),('help/*.html','help')],
+    datas=[('cred/linux/*.*','cred/linux/'),('w20/*.*','w20'),('base-data','base-data'),('help','help')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

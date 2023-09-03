@@ -25,6 +25,7 @@ from fermentable.FermentableInventoryWidgetBase import \
 from HelpMessage import HelpMessage
 from parameters import (fermentable_categories, fermentable_forms,
                         get_fermentable_category_name, raw_ingredients)
+from pathlib import Path
 
 
 class FermentableInventoryWidget(QWidget):
@@ -34,6 +35,7 @@ class FermentableInventoryWidget(QWidget):
         self.ui =fermentableInventoryWgt()
         self.ui.setupUi(self)
         self.id=id
+        self.this_file_path=Path(__file__).parent
 
         #propage app font
         app = QtWidgets.QApplication.instance()
@@ -286,12 +288,12 @@ class FermentableInventoryWidget(QWidget):
     #------------------------------------------------------------------
     def show_contextual_help(self,what):
         helpPopup=HelpMessage() 
-        filename="help/Head.html"
+        filename=(self.this_file_path/"../help/Head.html").resolve()
         prepend=open(filename,'r',encoding="utf-8").read()
         match what:
             case 'filter':
                 helpPopup.set_title('À propos du filtrage et de la recherche')
-                filename="help/FermentableSearchHelp.html"
+                filename=(self.this_file_path/"../help/FermentableSearchHelp.html").resolve()
                 text=open(filename,'r',encoding="utf-8").read()
                 helpPopup.set_message(prepend+text)
            

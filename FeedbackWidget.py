@@ -18,6 +18,7 @@ from HelpMessage import HelpMessage
 from BrewUtils import BrewUtils
 from FeedbackObject import FeedbackObject
 import jsonpickle
+from pathlib import Path
 
 class FeedbackWidget(QWidget):
     def __init__(self,parent=None):
@@ -31,6 +32,7 @@ class FeedbackWidget(QWidget):
         self.note_selection=None
         self.ui.deleteButton.setVisible(False)
         self.ui.updateButton.setVisible(False)
+        self.this_file_path=Path(__file__).parent
         
         
 
@@ -106,25 +108,25 @@ class FeedbackWidget(QWidget):
         pass
     def show_contextual_help(self,what):
         helpPopup=HelpMessage()
-        filename="help/Head.html"
+        filename=(self.this_file_path/"help/Head.html").resolve()
         prepend=open(filename,'r',encoding="utf-8").read()
        
         match what:
             case 'additional_boil_time':
                 helpPopup.set_title("Temps d'ébullition additionnel")
-                filename='help/AdditionalBoilTimeHelp.html'
+                filename=(self.this_file_path/'help/AdditionalBoilTimeHelp.html').resolve()
                 
             case 'additional_water':
                 helpPopup.set_title('Eau correctrice additionnelle')
-                filename="help/AdditionalWaterHelp.html"
+                filename=(self.this_file_path/"help/AdditionalWaterHelp.html").resolve()
 
             case 'after_sparge_gravity':
                 helpPopup.set_title("Densité après rinçage")
-                filename="help/AfterSpargeGravityHelp.html"
+                filename=(self.this_file_path/"help/AfterSpargeGravityHelp.html").resolve()
 
             case 'before_boil_volume':
                 helpPopup.set_title("Volume maximum du môut avant ébullition")
-                filename="help/BeforeBoilVolumeHelp.html"
+                filename=(self.this_file_path/"help/BeforeBoilVolumeHelp.html").resolve()
 
         text=open(filename,'r',encoding="utf-8").read()
         helpPopup.set_message(prepend+text)
