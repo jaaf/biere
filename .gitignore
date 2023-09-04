@@ -11,5 +11,6 @@ build/
 *.rpm
 *.log
 *.pdf
+*.installer.exe
 cred/*/*.bin
 cred/*/*.txt
