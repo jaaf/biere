@@ -74,7 +74,7 @@ try: #check is a db choice has already been done
 except Exception as e:
     choice=input("""
     Bienvenue dans Bière.\n
-    Vous avez le choix entre une base de données mysql ou sqlite. Donnez votre choix en tapant mysql ou sqlite\n """) 
+    Vous avez le choix entre une base de données mysql ou sqlite. Indiquez votre choix en tapant mysql ou sqlite\n """) 
     while choice != "mysql" and choice != 'sqlite':
         choice=input("Vous avez saisi "+str(choice)+" .Ce doit être mysq ou sqlite. Veuillez saisir votre choix à nouveau.\n")
     with open(path_to_cred/'db-choice.txt','w') as fileObj:
