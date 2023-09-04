@@ -49,15 +49,16 @@ import sys
 from pathlib import Path
 from ConfirmationDialog import ConfirmationDialog
 import logging
+from database.db_connection_local import logger
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
     keyboard_signal=pyqtSignal(SignalObject)
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
+        print("starting init")
         self.setupUi(self)
         self.WinBg=None
-        log=logging.getLogger(__name__)
         path1=Path(__file__).parent.resolve()
         self.this_file_path=Path(__file__).parent
         self.icon_path=str(path1)+"/base-data/icons/" #a string
@@ -215,7 +216,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindowBase):
         self.toggleHeaderViewAction.triggered.connect(lambda: self.shortcut_triggered('toggle_header'))
         QtGui.QShortcut(QtGui.QKeySequence("Alt+C"), self, activated=  lambda todo="toggle_calculations": self.shortcut_triggered(todo))
         self.toggleCalculationsViewAction.triggered.connect(lambda: self.shortcut_triggered('toggle_calculations'))
-        log.info("mainwindow initialized")
+        logging.info("mainwindow initialized")
     #---------------------------------------------------------------------------    
     def shortcut_triggered(self,todo)    :
         print('key is '+todo)
@@ -248,7 +249,9 @@ d’en avoir mémorisé le nom.</p>
                 path1=Path.home()
                 path_to_cred=(path1/".biere"/"cred").resolve() #a string                 
             else:
-                path_to_cred=Path('./cred/windows')
+                path1=Path.home()
+                #path_to_cred=Path('./cred/windows')
+                path_to_cred=(path1/"AppData"/"Local"/".biere"/"cred").resolve()# a string
 
         path=path_to_cred/"db-choice.txt"
         path.unlink(missing_ok=True)    
@@ -256,7 +259,9 @@ d’en avoir mémorisé le nom.</p>
         path.unlink(missing_ok=True)
         path=path_to_cred/"dbname.bin"
         path.unlink(missing_ok=True)
-        exit()
+        logger.info("Les choix initiaux ont été éffacés")
+        logger.info("Application terminée sur effacement des choix initiaux \n\n")
+        sys.exit()
       
  
 

@@ -36,7 +36,6 @@ sys.excepthook = handle_unhandled_exception
 
 
 now=datetime.datetime.now()
-logging.info('Application démarrée' )
 print('logger initialized')
 app = QtWidgets.QApplication(sys.argv)
 app.setStyle('Fusion')
@@ -58,10 +57,12 @@ for item in settings:
         new_font.setPointSize(11)
 
 app.setFont( new_font )
+print("initializing mainwindow")
 window = MainWindow()
+print("resizing")
 window.resize(1280,720)
 window.show()
 app.exec()
-logging.info('Application terminée \n\n')
+logger.info('Application terminée par bouton de fermeture \n\n')
 
 

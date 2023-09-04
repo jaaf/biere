@@ -12,6 +12,7 @@ from getpass import getpass
 from shutil import which
 import logging
 import logging.handlers as handlers
+
 import sqlite3
 from pathlib import Path
 
@@ -19,21 +20,36 @@ from pathlib import Path
 #Creating a logger
 home_path=Path.home()
 logger = logging.getLogger("ROOT")
-filename=(home_path/".biere/bière.log").resolve()
-
-logging.basicConfig(filename=filename, filemode='a', level=logging.DEBUG,
-    format="%(name)s: %(asctime)s | %(levelname)s | %(filename)s:%(lineno)s | %(process)d >>> %(message)s",
-    datefmt="%Y-%m-%d à %H:%M:%SZ",
-)
-logHandler = handlers.RotatingFileHandler(filename, maxBytes=5000, backupCount=2)
-logger.addHandler(logHandler)
-print("Home dir is "+str(home_path.resolve()))
-p=home_path/".biere"/"cred"
-p.mkdir(mode=0o777,parents=True,exist_ok=True)
 if sys.platform.startswith('linux'):
+    p=home_path/".biere"
+else:
+    p=home_path/"AppData/Local/.biere"
+p.mkdir(mode=0o777,parents=True,exist_ok=True)
+
+filename=(p/"bière.log").resolve()
+
+logging.basicConfig( filemode='a', level=logging.DEBUG,
+    format="%(name)s: %(asctime)s | %(levelname)s | %(filename)s:%(lineno)s | %(process)d >>> %(message)s",
+    datefmt="le %d %m %Y à %H:%M:%S",
+)
+formatter = logging.Formatter("%(name)s: %(asctime)s | %(levelname)s | %(filename)s:%(lineno)s | %(process)d >>> %(message)s",
+    datefmt="le %d %m %Y à %H:%M:%S")
+
+logHandler = handlers.RotatingFileHandler(filename, maxBytes=5000, backupCount=2)
+logHandler.setFormatter(formatter)
+logger.addHandler(logHandler)
+
+print("Home dir is "+str(home_path.resolve()))
+
+
+if sys.platform.startswith('linux'):
+    p=home_path/".biere"/"cred"
+    p.mkdir(mode=0o777,parents=True,exist_ok=True)
     path_to_cred=(home_path/".biere"/"cred").resolve() #a string
 else:
-    path_to_cred=Path('./cred/windows')
+    p=home_path/"AppData/Local/.biere/cred"
+    p.mkdir(mode=0o777,parents=True,exist_ok=True)
+    path_to_cred=Path(p.resolve())
 
 try:
     with open(path_to_cred/'key.bin','rb') as fileObj : 
@@ -65,7 +81,7 @@ except Exception as e:
             fileObj.write(choice)
             fileObj.close()    
             
-
+logger.info("Application démarée")
 
 if choice =='mysql':
     logger.info("L'application utilise une base de données "+choice)
@@ -147,7 +163,7 @@ Corrigez cela et réessayez sion vous allez boucler sur ces demandes. Merci de s
     print ("Vous travaillez avec une base de données mysql dont le nom est "+dbname)
     
 if choice =='sqlite':
-    logging.info("L'application utilise une base de données "+choice)
+    logger.info("L'application utilise une base de données "+choice)
     print('le choix est '+choice)
     try:
     #try to retrieve database name
@@ -168,7 +184,7 @@ if choice =='sqlite':
     if sys.platform.startswith("linux"):   
         db_url="sqlite:///"+str(home_path/".biere"/dbname)
     else:
-        db_url="sqlite:///"+str(home_path/"AppData/Local/biere"/dbname)
+        db_url="sqlite:///"+str(home_path/"AppData/Local/.biere"/dbname)
         
         
     print ("Vous travaillez avec une base de données sqlite dont le nom est "+dbname)
